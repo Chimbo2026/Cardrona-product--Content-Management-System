@@ -137,7 +137,7 @@ function AppRouteGate() {
   const { pathname } = useLocation();
   const customerPaths = new Set([
     '/', '/passes', '/configure-pass', '/bike-configure', '/book', '/checkout', '/cart', '/shop', '/retail',
-    '/orders', '/account', '/login', '/register', '/lessons', '/transport',
+    '/orders', '/account', '/login', '/register', '/lessons', '/transport', '/resort',
     '/ski', '/support',
   ]);
 
