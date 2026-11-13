@@ -1,0 +1,75 @@
+{
+  "name": "Equipment",
+  "description": "Demo rental inventory item",
+  "type": "object",
+  "properties": {
+    "item_code": {
+      "type": "string"
+    },
+    "name": {
+      "type": "string"
+    },
+    "category": {
+      "type": "string",
+      "enum": [
+        "Skis",
+        "Snowboards",
+        "Boots",
+        "Helmets",
+        "Poles",
+        "Jackets",
+        "Pants",
+        "Accessories",
+        "Mountain Bikes",
+        "Safety Equipment"
+      ]
+    },
+    "size": {
+      "type": "string"
+    },
+    "condition": {
+      "type": "string",
+      "enum": [
+        "Excellent",
+        "Good",
+        "Fair",
+        "Damaged"
+      ]
+    },
+    "quantity_total": {
+      "type": "number",
+      "default": 0
+    },
+    "quantity_available": {
+      "type": "number",
+      "default": 0
+    },
+    "daily_rate": {
+      "type": "number"
+    },
+    "maintenance_status": {
+      "type": "string",
+      "enum": [
+        "OK",
+        "In Service",
+        "Damaged",
+        "Retired"
+      ]
+    },
+    "location": {
+      "type": "string"
+    },
+    "notes": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "item_code",
+    "name",
+    "category",
+    "quantity_total",
+    "quantity_available",
+    "daily_rate",
+    "maintenance_status"
+  ]
+}

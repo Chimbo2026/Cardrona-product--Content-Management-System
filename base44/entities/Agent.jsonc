@@ -1,0 +1,59 @@
+{
+  "name": "Agent",
+  "description": "Travel trade partner selling Cardrona & Treble Cone products",
+  "type": "object",
+  "properties": {
+    "agent_code": {
+      "type": "string"
+    },
+    "company_name": {
+      "type": "string"
+    },
+    "market": {
+      "type": "string"
+    },
+    "contact_name": {
+      "type": "string"
+    },
+    "email": {
+      "type": "string"
+    },
+    "phone": {
+      "type": "string"
+    },
+    "discount_rate": {
+      "type": "number",
+      "description": "Net rate discount percentage: 5, 10 or 15",
+      "default": 10
+    },
+    "currency": {
+      "type": "string"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "Active",
+        "Onboarding",
+        "Paused"
+      ],
+      "default": "Active"
+    },
+    "contract_start": {
+      "type": "string",
+      "format": "date"
+    },
+    "photo_url": {
+      "type": "string"
+    },
+    "notes": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "agent_code",
+    "company_name",
+    "market",
+    "discount_rate",
+    "status"
+  ]
+}

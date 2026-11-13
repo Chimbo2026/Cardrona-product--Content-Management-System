@@ -1,0 +1,64 @@
+{
+  "name": "Incident",
+  "description": "Demo operational incident or safety alert",
+  "type": "object",
+  "properties": {
+    "title": {
+      "type": "string"
+    },
+    "incident_type": {
+      "type": "string",
+      "enum": [
+        "Safety",
+        "Injury",
+        "Equipment",
+        "Weather",
+        "Guest",
+        "Facility"
+      ]
+    },
+    "severity": {
+      "type": "string",
+      "enum": [
+        "Low",
+        "Medium",
+        "High",
+        "Critical"
+      ]
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "Open",
+        "Investigating",
+        "Resolved"
+      ]
+    },
+    "location": {
+      "type": "string"
+    },
+    "reported_by": {
+      "type": "string"
+    },
+    "reported_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "description": {
+      "type": "string"
+    },
+    "resolution": {
+      "type": "string"
+    },
+    "related_asset": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "title",
+    "incident_type",
+    "severity",
+    "status",
+    "reported_at"
+  ]
+}

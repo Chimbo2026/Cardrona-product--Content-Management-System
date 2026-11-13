@@ -1,0 +1,194 @@
+{
+  "name": "Booking",
+  "description": "Resort booking linking a guest to a resort product",
+  "type": "object",
+  "properties": {
+    "booking_ref": {
+      "type": "string",
+      "description": "Unique reference such as CRD-2418"
+    },
+    "guest_id": {
+      "type": "string"
+    },
+    "guest_name": {
+      "type": "string"
+    },
+    "email": {
+      "type": "string"
+    },
+    "phone": {
+      "type": "string"
+    },
+    "visit_date": {
+      "type": "string",
+      "format": "date"
+    },
+    "guests_count": {
+      "type": "number",
+      "default": 1
+    },
+    "activity": {
+      "type": "string",
+      "enum": [
+        "Lift Pass",
+        "Lesson",
+        "Rental",
+        "Accommodation",
+        "Event",
+        "Transport",
+        "Food & Beverage",
+        "Gift Voucher"
+      ]
+    },
+    "lesson_id": {
+      "type": "string"
+    },
+    "lesson_title": {
+      "type": "string"
+    },
+    "instructor_id": {
+      "type": "string"
+    },
+    "instructor_name": {
+      "type": "string"
+    },
+    "pass_type": {
+      "type": "string"
+    },
+    "lesson_type": {
+      "type": "string"
+    },
+    "rental_notes": {
+      "type": "string"
+    },
+    "amount": {
+      "type": "number"
+    },
+    "currency": {
+      "type": "string",
+      "enum": [
+        "NZD",
+        "AUD",
+        "TWD",
+        "HKD",
+        "CNY"
+      ],
+      "default": "NZD",
+      "description": "Currency the guest is charged in, based on their region"
+    },
+    "payment_status": {
+      "type": "string",
+      "enum": [
+        "Paid",
+        "Pending",
+        "Partially Paid",
+        "Refunded"
+      ]
+    },
+    "payment_method": {
+      "type": "string",
+      "enum": [
+        "WeChat Pay",
+        "Visa",
+        "Mastercard",
+        "Alipay",
+        "Cash",
+        "Account",
+        "Card",
+        "Gift Voucher"
+      ]
+    },
+    "payment_terms": {
+      "type": "string",
+      "enum": [
+        "Pay now",
+        "Pay later"
+      ],
+      "default": "Pay now",
+      "description": "Whether the guest settles at booking or is invoiced to pay later"
+    },
+    "payment_due_date": {
+      "type": "string",
+      "format": "date",
+      "description": "Date the balance must be settled when paying later"
+    },
+    "amount_paid": {
+      "type": "number",
+      "description": "Amount already settled in NZD, including card and WeChat payments"
+    },
+    "voucher_code": {
+      "type": "string",
+      "description": "Gift voucher applied to this booking"
+    },
+    "voucher_amount": {
+      "type": "number",
+      "description": "Gift voucher credit applied in NZD"
+    },
+    "booking_status": {
+      "type": "string",
+      "enum": [
+        "Confirmed",
+        "Pending",
+        "Completed",
+        "Cancelled",
+        "No-show"
+      ]
+    },
+    "season": {
+      "type": "string",
+      "enum": [
+        "Winter",
+        "Summer"
+      ]
+    },
+    "channel": {
+      "type": "string",
+      "enum": [
+        "Online",
+        "Phone",
+        "Walk-in",
+        "Agent"
+      ]
+    },
+    "agent_id": {
+      "type": "string"
+    },
+    "agent_name": {
+      "type": "string"
+    },
+    "agent_discount": {
+      "type": "number",
+      "description": "Net-rate discount percentage applied by the agent"
+    },
+    "guest_dob": {
+      "type": "string",
+      "format": "date"
+    },
+    "guest_country": {
+      "type": "string"
+    },
+    "pinyin_name": {
+      "type": "string",
+      "description": "Pinyin or romanised name matching the guest passport"
+    },
+    "waiver_signed": {
+      "type": "boolean",
+      "default": false
+    },
+    "waiver_signed_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "notes": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "booking_ref",
+    "guest_name",
+    "visit_date",
+    "activity",
+    "booking_status",
+    "payment_status"
+  ]
+}

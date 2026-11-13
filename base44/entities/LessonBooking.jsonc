@@ -1,0 +1,54 @@
+{
+  "name": "LessonBooking",
+  "description": "Guest seat reserved on a Snow School lesson",
+  "type": "object",
+  "properties": {
+    "lesson_id": {
+      "type": "string"
+    },
+    "lesson_title": {
+      "type": "string"
+    },
+    "lesson_date": {
+      "type": "string",
+      "format": "date"
+    },
+    "booking_id": {
+      "type": "string"
+    },
+    "booking_ref": {
+      "type": "string"
+    },
+    "guest_name": {
+      "type": "string"
+    },
+    "guest_email": {
+      "type": "string"
+    },
+    "seats": {
+      "type": "number",
+      "default": 1
+    },
+    "instructor_name": {
+      "type": "string"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "Booked",
+        "Attended",
+        "Cancelled"
+      ],
+      "default": "Booked"
+    },
+    "notes": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "lesson_id",
+    "guest_name",
+    "seats",
+    "status"
+  ]
+}

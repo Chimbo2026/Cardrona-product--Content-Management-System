@@ -1,0 +1,68 @@
+{
+  "name": "AccommodationUnit",
+  "description": "Demonstration accommodation unit and reservation",
+  "type": "object",
+  "properties": {
+    "unit_name": {
+      "type": "string"
+    },
+    "unit_type": {
+      "type": "string",
+      "enum": [
+        "Studio Apartment",
+        "Two Bedroom Apartment",
+        "Three Bedroom Apartment",
+        "Four Bedroom Apartment",
+        "Three Bedroom Loft"
+      ]
+    },
+    "capacity": {
+      "type": "number",
+      "default": 2
+    },
+    "rate_per_night": {
+      "type": "number"
+    },
+    "image_url": {
+      "type": "string",
+      "description": "Photo of the room shown on the accommodation board"
+    },
+    "check_in": {
+      "type": "string",
+      "format": "date"
+    },
+    "check_out": {
+      "type": "string",
+      "format": "date"
+    },
+    "guest_name": {
+      "type": "string"
+    },
+    "guest_count": {
+      "type": "number"
+    },
+    "booking_ref": {
+      "type": "string"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "Available",
+        "Occupied",
+        "Cleaning",
+        "Maintenance",
+        "Reserved"
+      ]
+    },
+    "notes": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "unit_name",
+    "unit_type",
+    "capacity",
+    "rate_per_night",
+    "status"
+  ]
+}

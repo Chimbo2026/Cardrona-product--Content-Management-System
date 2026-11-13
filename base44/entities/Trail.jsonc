@@ -1,0 +1,48 @@
+{
+  "name": "Trail",
+  "description": "Demo ski trail or terrain area",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string"
+    },
+    "difficulty": {
+      "type": "string",
+      "enum": [
+        "Beginner",
+        "Intermediate",
+        "Advanced",
+        "Expert",
+        "Terrain Park"
+      ]
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "Open",
+        "Closed",
+        "Delayed",
+        "Maintenance"
+      ]
+    },
+    "area": {
+      "type": "string"
+    },
+    "length_km": {
+      "type": "number"
+    },
+    "note": {
+      "type": "string"
+    },
+    "groomed": {
+      "type": "boolean",
+      "default": false
+    }
+  },
+  "required": [
+    "name",
+    "difficulty",
+    "status",
+    "area"
+  ]
+}

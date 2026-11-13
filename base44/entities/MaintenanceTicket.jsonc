@@ -1,0 +1,78 @@
+{
+  "name": "MaintenanceTicket",
+  "description": "Demo maintenance work order",
+  "type": "object",
+  "properties": {
+    "ticket_number": {
+      "type": "string"
+    },
+    "asset": {
+      "type": "string"
+    },
+    "category": {
+      "type": "string",
+      "enum": [
+        "Lift",
+        "Rental Equipment",
+        "Building",
+        "Vehicle",
+        "Facility",
+        "Snowmaking"
+      ]
+    },
+    "location": {
+      "type": "string"
+    },
+    "description": {
+      "type": "string"
+    },
+    "priority": {
+      "type": "string",
+      "enum": [
+        "Low",
+        "Medium",
+        "High",
+        "Critical"
+      ]
+    },
+    "assigned_to": {
+      "type": "string"
+    },
+    "reported_by": {
+      "type": "string"
+    },
+    "reported_date": {
+      "type": "string",
+      "format": "date"
+    },
+    "due_date": {
+      "type": "string",
+      "format": "date"
+    },
+    "completed_date": {
+      "type": "string",
+      "format": "date"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "Open",
+        "In Progress",
+        "On Hold",
+        "Resolved",
+        "Closed"
+      ]
+    },
+    "resolution_notes": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "ticket_number",
+    "asset",
+    "category",
+    "priority",
+    "status",
+    "reported_date"
+  ]
+}

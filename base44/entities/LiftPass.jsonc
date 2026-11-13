@@ -1,0 +1,119 @@
+{
+  "name": "LiftPass",
+  "description": "Demo lift pass or bike rental booking issued to a guest",
+  "type": "object",
+  "properties": {
+    "pass_number": {
+      "type": "string"
+    },
+    "product": {
+      "type": "string",
+      "enum": [
+        "Lift Pass",
+        "Bike Rental"
+      ],
+      "default": "Lift Pass",
+      "description": "Which product the booked days belong to"
+    },
+    "guest_id": {
+      "type": "string"
+    },
+    "guest_name": {
+      "type": "string"
+    },
+    "pass_type": {
+      "type": "string",
+      "enum": [
+        "Single Day",
+        "Multi-Day",
+        "Season Pass",
+        "Learner Pass",
+        "Sightseeing Pass"
+      ]
+    },
+    "pass_product": {
+      "type": "string",
+      "description": "Season pass product sold, e.g. Winter Unlimited Season Pass or Winter Saver Season Pass"
+    },
+    "season": {
+      "type": "string",
+      "enum": [
+        "Winter",
+        "Summer"
+      ]
+    },
+    "price": {
+      "type": "number"
+    },
+    "days_valid": {
+      "type": "number",
+      "default": 1
+    },
+    "valid_from": {
+      "type": "string",
+      "format": "date"
+    },
+    "valid_to": {
+      "type": "string",
+      "format": "date"
+    },
+    "bike_type": {
+      "type": "string",
+      "enum": [
+        "Enduro",
+        "Downhill",
+        "Full Suspension"
+      ],
+      "description": "Mountain bike type chosen for a bike rental booking"
+    },
+    "bike_size": {
+      "type": "string",
+      "enum": [
+        "XS",
+        "S",
+        "M",
+        "L",
+        "XL"
+      ],
+      "description": "Frame size chosen by the rider"
+    },
+    "bike_insurance": {
+      "type": "string",
+      "enum": [
+        "Yes",
+        "No"
+      ],
+      "default": "No",
+      "description": "Whether damage and liability insurance was added to the rental"
+    },
+    "issue_status": {
+      "type": "string",
+      "enum": [
+        "Issued",
+        "Pending",
+        "Cancelled"
+      ]
+    },
+    "usage_status": {
+      "type": "string",
+      "enum": [
+        "Active",
+        "Unused",
+        "Expired"
+      ]
+    },
+    "notes": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "pass_number",
+    "guest_name",
+    "pass_type",
+    "price",
+    "valid_from",
+    "valid_to",
+    "issue_status",
+    "usage_status"
+  ]
+}

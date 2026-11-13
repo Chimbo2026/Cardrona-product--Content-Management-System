@@ -1,0 +1,36 @@
+{
+  "name": "CoverageRequirement",
+  "description": "Minimum staffing target per department and shift window",
+  "type": "object",
+  "properties": {
+    "department": {
+      "type": "string"
+    },
+    "shift_label": {
+      "type": "string",
+      "enum": [
+        "Morning",
+        "Afternoon",
+        "Evening"
+      ]
+    },
+    "min_staff": {
+      "type": "number",
+      "default": 2
+    },
+    "start_time": {
+      "type": "string"
+    },
+    "end_time": {
+      "type": "string"
+    },
+    "notes": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "department",
+    "shift_label",
+    "min_staff"
+  ]
+}

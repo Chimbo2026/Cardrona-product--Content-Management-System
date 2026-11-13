@@ -1,0 +1,228 @@
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { CalendarDays, Check, Minus, Plus } from 'lucide-react';
+
+const PRODUCTS = {
+  'earlybird-summer': {
+    name: 'Earlybird Summer Season pass',
+    description: "Lock in your Summer Season Pass for the best price. Ride your bike all summer long at Cardrona, home to NZ's highest bike park.",
+    adult: 359,
+    child: 219,
+    under6: 0,
+    over75: 0,
+    needsDate: false,
+    options: ['Cardrona Summer Season Pass'],
+  },
+  'summer-day-passes': {
+    name: 'Summer Day Passes',
+    description: 'Choose a full-day, afternoon, or Friday evening Cardrona bike park pass.',
+    adult: 99,
+    child: 79,
+    needsDate: true,
+    options: ['1 Day Pass', 'Afternoon Pass', 'TGIF Pass'],
+    optionDetails: {
+      '1 Day Pass': { description: 'Full Day MTB Lift Pass', adult: 99, child: 79 },
+      'Afternoon Pass': { description: 'Valid from 1pm until close', adult: 79, child: 79 },
+      'TGIF Pass': { description: 'Valid from 4pm - 8pm on Fridays', adult: 65, child: 79 },
+    },
+  },
+  'peak-to-pub': {
+    name: 'Peak to Pub · Lift Pass and Shuttle',
+    description: 'Pair mountain time with a return shuttle after your day out.',
+    adult: 49,
+    child: 49,
+    needsDate: true,
+    options: ['Lift pass + return shuttle'],
+  },
+  'summer-carting': {
+    name: 'Summer Mountain Carting',
+    description: 'Three wheels, three times the fun, and one summer activity for your bucket list. Cardrona is the only place in New Zealand where you can go mountain carting.',
+    adult: 175,
+    child: 95,
+    needsDate: true,
+    options: ['2 Hour Mountain Carting Pass'],
+  },
+};
+
+const AGE_BANDS = [
+  { value: 'Adult: 18 - 74 yrs', priceKey: 'adult' },
+  { value: 'Child: 6 - 17 yrs', priceKey: 'child' },
+  { value: 'Under 6 yrs: Free of Charge', priceKey: 'under6' },
+  { value: 'Over 75 yrs: Free of Charge', priceKey: 'over75' },
+];
+
+const SUMMER_DONATIONS = [
+  { id: 'plant-a-seed', title: 'Plant a Seed', description: 'Help us plant natives to regenerate our environment and offset your carbon emissions*.' },
+  { id: 'karearea-project', title: 'The Kārearea Project', description: 'Help fund our scientific conservation of the magnificent and threatened NZ Falcon.' },
+];
+
+const money = (value) => `NZ$${Number(value).toFixed(2)}`;
+const SUMMER_START = '2026-12-12';
+const SUMMER_END = '2027-02-28';
+const formatDate = (value) => value ? new Intl.DateTimeFormat('en-NZ', { weekday: 'long', day: '2-digit', month: 'long', year: 'numeric', timeZone: 'UTC' }).format(new Date(`${value}T00:00:00Z`)) : 'No date selected';
+const CART_SIZES = [
+  { name: 'Large', height: 'Height - 170 - 195cm' },
+  { name: 'Medium', height: 'Height - 155 - 180cm' },
+  { name: 'Small', height: 'Height - 120 - 165cm' },
+  { name: 'X-Large', height: 'Height - 180 - 210 cm' },
+  { name: 'X-Small', height: 'Height - 100 -120cm' },
+];
+const CARTING_TIMES = ['10:00am', '11:00am', '12:00pm', '1:00pm', '2:00pm'];
+const CARTING_CLOSED_DATES = new Set(['2026-12-15', '2026-12-16', '2026-12-22', '2026-12-23', '2026-12-25']);
+const toDateValue = (year, month, day) => `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+
+export default function SummerProductConfigurator({ productId, onAdd, onCheckout, cartTotal = 0 }) {
+  const navigate = useNavigate();
+  const product = PRODUCTS[productId] || PRODUCTS['summer-day-passes'];
+  const isEarlybird = productId === 'earlybird-summer';
+  const isPeakToPub = productId === 'peak-to-pub';
+  const isCarting = productId === 'summer-carting';
+  const [date, setDate] = useState('');
+  const [age, setAge] = useState(isEarlybird ? AGE_BANDS[0].value : isCarting ? 'Adult: 18 +' : 'Adult');
+  const [option, setOption] = useState(product.options[0]);
+  const [shuttleDeparture, setShuttleDeparture] = useState('Depart Cardrona Valley at 9.00am');
+  const [quantity, setQuantity] = useState(1);
+  const [cartingTime, setCartingTime] = useState('');
+  const [cartSize, setCartSize] = useState('Large');
+  const [cartingBuddy, setCartingBuddy] = useState(false);
+  const [calendarMonth, setCalendarMonth] = useState(new Date(2026, 11, 1));
+  const [plan, setPlan] = useState('Pay Now');
+  const [itemAdded, setItemAdded] = useState(false);
+  const [expandedDescription, setExpandedDescription] = useState(false);
+  const [selectedDonations, setSelectedDonations] = useState([]);
+
+  const ageBand = AGE_BANDS.find((band) => band.value === age);
+  const dayPassOption = product.optionDetails?.[option];
+  const agePrice = isEarlybird
+    ? product[ageBand?.priceKey || 'adult']
+    : isCarting
+      ? age === 'Child: 8 - 17 yrs' ? product.child : product.adult
+    : age.includes('Under 6')
+      ? 0
+    : dayPassOption
+      ? dayPassOption[age === 'Child' ? 'child' : 'adult']
+      : age === 'Child' ? product.child : product.adult;
+  const price = agePrice + (isCarting && cartingBuddy ? 25 : 0);
+  const allowsDonations = isEarlybird || productId === 'summer-day-passes';
+  const donationTotal = allowsDonations ? selectedDonations.length * 20 : 0;
+  const unitTotal = price + donationTotal;
+  const total = unitTotal * (isPeakToPub ? quantity : 1);
+  const canAdd = (!product.needsDate || Boolean(date)) && (!isCarting || Boolean(cartingTime));
+  const summaryName = isEarlybird ? `${product.name} - ${age}` : isCarting ? `${product.name} · ${age.replace(': ', ' ')} · ${cartSize}` : `${product.name} · ${option} · ${age}`;
+
+  const selectCalendarDate = (value) => {
+    setDate(value);
+    setCartingTime('');
+  };
+
+  const calendarDays = () => {
+    const year = calendarMonth.getFullYear();
+    const month = calendarMonth.getMonth();
+    const firstWeekday = new Date(year, month, 1).getDay();
+    const dayCount = new Date(year, month + 1, 0).getDate();
+    return [...Array(firstWeekday).fill(null), ...Array.from({ length: dayCount }, (_, index) => index + 1)];
+  };
+
+  const addProduct = () => {
+    const visitDate = product.needsDate ? date : '';
+    const details = [visitDate, isCarting ? cartingTime : '', isCarting ? `Cart size: ${cartSize}` : '', isCarting && cartingBuddy ? 'Carting With Kids tandem add-on (+NZ$25)' : '', isCarting && cartingBuddy ? 'Child 6–8 yrs; max combined weight 110kg; child max height 100cm' : '', option, age, isPeakToPub ? shuttleDeparture : '', product.hasPlan ? plan : ''].filter(Boolean).join(' · ');
+    onAdd({
+      id: productId,
+      name: isEarlybird ? `${product.name} - ${age}` : `${product.name} · ${age}`,
+      price,
+      quantity: isPeakToPub ? quantity : 1,
+      visitDate,
+      ageBand: age,
+      detail: isEarlybird ? '' : details,
+      variant: `${visitDate}-${age}-${option}-${isPeakToPub ? shuttleDeparture : ''}-${isCarting ? `${cartingTime}-${cartSize}-${cartingBuddy}` : ''}-${plan}`,
+    });
+    if (allowsDonations) {
+      SUMMER_DONATIONS.filter((item) => selectedDonations.includes(item.id)).forEach((item) => onAdd({
+        id: `summer-donation-${item.id}`,
+        name: item.title,
+        price: 20,
+        detail: 'Optional conservation donation',
+        variant: `${productId}-${item.id}`,
+      }));
+    }
+    setItemAdded(true);
+  };
+
+  return <main className="space-y-5 px-4 pb-[150px] pt-5 sm:px-8 sm:pb-[220px]">
+    <section><h2 className="font-serif text-[25px] font-bold text-[#202b3a]">{product.name}</h2><div className="mt-2 border-y border-[#cbd7e4] py-4 text-[12px] leading-5 text-[#718096]"><p>{product.description}</p>{(isEarlybird || isCarting) && <><button type="button" onClick={() => setExpandedDescription((expanded) => !expanded)} className="mt-2 text-[#202020] underline">{expandedDescription ? 'See less' : 'See more'}</button>{expandedDescription && <p className="mt-2">Enjoy a two-hour mountain carting experience with unlimited uplifts. Choose your age band, a cart size, and an available start time.</p>}</>}</div></section>
+    {product.hasPlan && <fieldset className="space-y-2"><legend className="mb-2 text-[13px] font-semibold text-[#344a64]">Payment plan</legend>{['Pay Now', 'Buy Now, Pay Later'].map((item) => <button key={item} type="button" onClick={() => setPlan(item)} className={`flex min-h-12 w-full items-center justify-between rounded-xl border p-3 text-left text-[12px] ${plan === item ? 'border-[#c8102e] bg-white' : 'border-[#dce4ed] bg-white'}`}><span><b>{item}</b>{item === 'Buy Now, Pay Later' && <small className="mt-1 block text-[10px] text-[#718096]">$100 deposit now, balance in four instalments</small>}</span><span className={`h-4 w-4 rounded-full border ${plan === item ? 'border-[5px] border-[#5b8199]' : 'border-[#a0a7b0]'}`} /></button>)}</fieldset>}
+
+    {isCarting ? <section>
+      <h3 className="text-[13px] font-semibold text-[#202b3a]">Choose your start date</h3>
+      {!date && <p className="mt-1 text-[12px] text-[#c8102e]">Select One (Required)</p>}
+      <div className="mt-2 w-full max-w-[490px] rounded-xl border border-[#a0a0a0] bg-white p-3">
+        <div className="mb-3 flex items-center justify-between">
+          <button type="button" aria-label="Previous month" disabled={calendarMonth.getFullYear() === 2026 && calendarMonth.getMonth() === 11} onClick={() => setCalendarMonth((current) => new Date(current.getFullYear(), current.getMonth() - 1, 1))} className="px-2 text-lg text-[#777] disabled:opacity-30">‹</button>
+          <b className="text-[13px]">{new Intl.DateTimeFormat('en', { month: 'long', year: 'numeric' }).format(calendarMonth)}</b>
+          <button type="button" aria-label="Next month" disabled={calendarMonth.getFullYear() === 2027 && calendarMonth.getMonth() === 1} onClick={() => setCalendarMonth((current) => new Date(current.getFullYear(), current.getMonth() + 1, 1))} className="px-2 text-lg text-[#777] disabled:opacity-30">›</button>
+        </div>
+        <div className="grid grid-cols-7 text-center text-[10px] font-semibold">{['SU', 'MO', 'TU', 'WE', 'TH', 'FR', 'SA'].map((day) => <span key={day} className="py-2">{day}</span>)}
+          {calendarDays().map((day, index) => {
+            if (!day) return <span key={`blank-${index}`} />;
+            const value = toDateValue(calendarMonth.getFullYear(), calendarMonth.getMonth(), day);
+            const isClosed = value < SUMMER_START || value > SUMMER_END || CARTING_CLOSED_DATES.has(value);
+            return <button key={value} type="button" disabled={isClosed} onClick={() => selectCalendarDate(value)} aria-pressed={date === value} className={`h-12 border text-[12px] ${isClosed ? 'border-transparent text-[#b5b5b5]' : date === value ? 'border-[#5b8199] font-semibold text-[#202b3a]' : 'border-[#cbd7e4] text-[#333] hover:bg-[#f4f7fa]'}`}>{day}</button>;
+          })}
+        </div>
+      </div>
+    </section> : product.needsDate && <label className="block text-[13px] font-semibold text-[#344a64]">Choose your start date <span className="text-[#c8102e]">(Required)</span><span className="relative mt-2 block"><CalendarDays className="pointer-events-none absolute right-3 top-3.5 h-4 w-4 text-[#718096]"/><input type="date" min={SUMMER_START} max={SUMMER_END} required value={date} onChange={(event) => setDate(event.target.value)} className="h-12 w-full rounded-xl border border-[#cbd7e4] bg-white px-3 pr-10 text-[13px] font-normal text-[#344a64]"/></span></label>}
+
+    {isCarting && <label className="block text-[13px] font-semibold text-[#344a64]">Start Time {!cartingTime && <span className="text-[#c8102e]">(Required)</span>}<select value={cartingTime} onChange={(event) => setCartingTime(event.target.value)} className="mt-2 h-12 w-full rounded-xl border border-[#cbd7e4] bg-white px-3 text-[13px] font-normal text-[#344a64]"><option value="">Select a Time</option>{CARTING_TIMES.map((time, index) => <option key={time} value={time}>{time} • {index === 0 ? 23 : 30} left</option>)}</select></label>}
+
+    {isPeakToPub ? <fieldset><legend className="mb-2 text-[13px] font-semibold text-[#344a64]">Age</legend><div className="flex gap-2">{['Adult', 'Child'].map((item) => <button key={item} type="button" aria-pressed={age === item} onClick={() => setAge(item)} className={`min-h-11 rounded-xl border px-4 text-[13px] ${age === item ? 'border-[#5b8199] font-semibold text-[#202b3a]' : 'border-[#cbd7e4] text-[#526d8b]'}`}>{item === 'Child' ? 'Child (6-17yrs)' : item}</button>)}</div></fieldset> : <label className="block text-[13px] font-semibold text-[#344a64]">{isEarlybird || isCarting ? 'Age' : 'Adult or Child'}<select value={age} onChange={(event) => { setAge(event.target.value); if (isCarting && event.target.value.startsWith('Child')) setCartingBuddy(false); }} className="mt-2 h-12 w-full rounded-xl border border-[#cbd7e4] bg-white px-3 text-[13px] font-normal text-[#344a64]">{(isEarlybird ? AGE_BANDS.map((band) => band.value) : isCarting ? ['Adult: 18 +', 'Child: 8 - 17'] : productId === 'summer-day-passes' ? ['Adult', 'Child', 'Under 6 yrs: Free of Charge'] : ['Adult', 'Child']).map((item) => <option key={item}>{item}</option>)}</select></label>}
+
+    {isCarting && <>
+      <section>
+        <h3 className="text-[13px] font-semibold text-[#202b3a]">Cart Size</h3><p className="mt-1 text-[12px] text-[#718096]">Choose your cart size:</p>
+        <div className="mt-2 space-y-2">{CART_SIZES.map((size) => <button key={size.name} type="button" aria-pressed={cartSize === size.name} onClick={() => setCartSize(size.name)} className={`w-full rounded-xl border p-3 text-left ${cartSize === size.name ? 'border-2 border-[#5b8199]' : 'border-[#a0a0a0]'}`}><b className="block text-[13px]">{size.name}</b><span className="mt-1 block text-[10px] text-[#777]">{size.height}</span></button>)}</div>
+      </section>
+      <section>
+        <h3 className="text-[13px] font-semibold text-[#202b3a]">Mountain Carting Buddy Add On</h3><p className="mt-1 text-[12px]">Select One (Optional)</p>
+        <label className={`mt-2 flex cursor-pointer gap-3 rounded-xl border p-4 ${cartingBuddy ? 'border-[#5b8199]' : 'border-[#a0a0a0]'} ${age.startsWith('Child') ? 'cursor-not-allowed opacity-60' : ''}`}><span className="min-w-0 flex-1"><b className="text-[13px]">Carting With Kids</b><span className="mt-1 block text-[11px] leading-4 text-[#777]">Add a child between 6 and 8 yrs to ride tandem with an adult. Combined weight per cart must not exceed 110kg and the child must not exceed 100cm tall.</span><span className="mt-2 block text-[13px]">+ NZ$25</span>{age.startsWith('Child') && <span className="mt-1 block text-[10px] text-[#718096]">Available with an adult booking.</span>}</span><input type="checkbox" checked={cartingBuddy} disabled={age.startsWith('Child')} onChange={(event) => setCartingBuddy(event.target.checked)} className="mt-1 h-4 w-4 accent-[#5b8199]" /></label>
+      </section>
+    </>}
+
+    {isPeakToPub && <section>
+      <h3 className="text-[13px] font-semibold text-[#202b3a]">Cardrona Valley Shuttle - up options</h3>
+      <p className="mt-1 text-[12px] text-[#718096]">What time do you want to catch the shuttle?</p>
+      <div className="mt-2 space-y-2">{[
+        'Depart Cardrona Valley at 9.00am',
+        'Depart Cardrona Valley at 11.00am',
+        'Depart Cardrona Valley at 1.00pm',
+        'Depart Cardrona Valley at 5.00pm (TGIF Fridays only)',
+      ].map((departure) => <button key={departure} type="button" aria-pressed={shuttleDeparture === departure} onClick={() => setShuttleDeparture(departure)} className={`flex min-h-12 w-full items-center justify-between gap-3 rounded-xl border p-3 text-left text-[12px] font-semibold ${shuttleDeparture === departure ? 'border-[#5b8199] bg-white' : 'border-[#cbd7e4] bg-white'}`}><span>{departure}</span><span className={`h-5 w-5 shrink-0 rounded-full border ${shuttleDeparture === departure ? 'border-[6px] border-[#5b8199]' : 'border-[#9ca3af]'}`} /></button>)}</div>
+    </section>}
+
+    {allowsDonations && <>
+      <section>
+        <h3 className="text-[13px] font-semibold text-[#344a64]">Plant a Seed</h3>
+        <p className="mt-1 text-[12px]">Select One (Optional)</p>
+        {SUMMER_DONATIONS.filter((item) => item.id === 'plant-a-seed').map((item) => <label key={item.id} className={`mt-2 flex cursor-pointer gap-3 rounded-xl border p-4 ${selectedDonations.includes(item.id) ? 'border-[#343434]' : 'border-[#a0a0a0]'}`}>
+          <span className="min-w-0 flex-1"><b className="text-[13px]">{item.title}</b><span className="mt-2 block text-[11px] leading-4 text-[#777]">{item.description}</span><span className="mt-2 block text-[13px]">+ NZ$20</span></span>
+          <input type="checkbox" checked={selectedDonations.includes(item.id)} onChange={() => setSelectedDonations((current) => current.includes(item.id) ? current.filter((id) => id !== item.id) : [...current, item.id])} className="mt-1 h-4 w-4 accent-[#5b8199]" />
+        </label>)}
+      </section>
+      <section>
+        <h3 className="text-[13px] font-semibold text-[#344a64]">The Kārearea Project</h3>
+        <p className="mt-1 text-[12px]">Select One (Optional)</p>
+        {SUMMER_DONATIONS.filter((item) => item.id === 'karearea-project').map((item) => <label key={item.id} className={`mt-2 flex cursor-pointer gap-3 rounded-xl border p-4 ${selectedDonations.includes(item.id) ? 'border-[#343434]' : 'border-[#a0a0a0]'}`}>
+          <span className="min-w-0 flex-1"><b className="text-[13px]">{item.title}</b><span className="mt-2 block text-[11px] leading-4 text-[#777]">{item.description}</span><span className="mt-2 block text-[13px]">+ NZ$20</span></span>
+          <input type="checkbox" checked={selectedDonations.includes(item.id)} onChange={() => setSelectedDonations((current) => current.includes(item.id) ? current.filter((id) => id !== item.id) : [...current, item.id])} className="mt-1 h-4 w-4 accent-[#5b8199]" />
+        </label>)}
+      </section>
+    </>}
+
+    {product.options.length > 1 && <fieldset className="space-y-2"><legend className="mb-2 text-[13px] font-semibold text-[#344a64]">{productId === 'summer-day-passes' ? 'Number of Days' : 'Choose your option'}</legend>{product.options.map((item) => <button key={item} type="button" onClick={() => setOption(item)} className={`flex min-h-12 w-full items-center justify-between rounded-xl border p-3 text-left text-[12px] font-semibold ${option === item ? 'border-[#5b8199] bg-white' : 'border-[#dce4ed] bg-white'}`}><span><b className="block">{item}</b>{product.optionDetails?.[item] && <small className="mt-1 block font-normal text-[#718096]">{product.optionDetails[item].description}</small>}</span><span className={`h-4 w-4 shrink-0 rounded-full border ${option === item ? 'border-[5px] border-[#5b8199]' : 'border-[#a0a7b0]'}`} /></button>)}</fieldset>}
+
+    <section className="rounded-[18px] border border-[#dce4ed] bg-white p-4 shadow-sm"><h3 className="font-serif text-[17px] font-bold text-[#202b3a]">Item Summary</h3><div className="mt-3 border-b border-[#cbd7e4] pb-3 text-[12px]">{product.needsDate && <><b className="block">Start Date</b><span className="mt-1 block text-[#718096]">{formatDate(date)}</span></>}{isCarting && cartingTime && <><b className="mt-3 block">Start Time</b><span className="mt-1 block text-[#718096]">{cartingTime}</span></>}<b className="mt-3 block">({isPeakToPub ? quantity : 1}) {summaryName}</b><span className="mt-1 block">{money((isCarting ? agePrice : price) * (isPeakToPub ? quantity : 1))}</span>{isCarting && cartingBuddy && <div className="mt-3"><b className="block">(1) Carting With Kids</b><span className="mt-1 block">{money(25)}</span></div>}{isPeakToPub && <><b className="mt-3 block">Cardrona Valley Shuttle</b><span className="mt-1 block text-[#718096]">{shuttleDeparture}</span><div className="mt-3 flex items-center gap-3"><b className="mr-auto">Quantity</b><button type="button" aria-label="Decrease quantity" disabled={quantity <= 1} onClick={() => setQuantity((value) => Math.max(1, value - 1))} className="flex h-8 w-8 items-center justify-center rounded-md border border-[#cbd7e4] disabled:opacity-40"><Minus className="h-4 w-4"/></button><span className="min-w-4 text-center">{quantity}</span><button type="button" aria-label="Increase quantity" onClick={() => setQuantity((value) => value + 1)} className="flex h-8 w-8 items-center justify-center rounded-md border border-[#cbd7e4]"><Plus className="h-4 w-4"/></button></div></>}{allowsDonations && SUMMER_DONATIONS.filter((item) => selectedDonations.includes(item.id)).map((item) => <div key={item.id} className="mt-3"><b className="block">(1) {item.title}</b><span className="mt-1 block">{money(20)}</span></div>)}{product.hasPlan && <span className="mt-1 block text-[#718096]">{plan}</span>}</div><div className="mt-3 flex items-center justify-between text-[16px] font-semibold"><span>Total</span><span>{money(total)}</span></div><p className="mt-2 text-center text-[10px] text-[#718096]">Illustrative demo price · payment at checkout</p></section>
+
+    <div className="fixed inset-x-0 bottom-[64px] z-20 mx-auto flex w-full max-w-[430px] items-center gap-3 border-t border-[#dce4ed] bg-white/95 px-4 py-3 backdrop-blur sm:bottom-[120px]"><span className="mr-auto"><small className="block text-[10px] text-[#718096]">Total</small><b className="font-serif text-[20px] text-[#c8102e]">{money(total)}</b></span><button type="button" disabled={!canAdd} onClick={addProduct} className="h-11 flex-1 rounded-xl bg-[#5b8199] text-[13px] font-semibold tracking-wide text-white disabled:bg-[#c9c9c9]">Add to cart</button></div>
+
+    {itemAdded && <div className="fixed inset-0 z-40 flex items-end justify-center bg-black/25 p-2 sm:items-center"><section role="dialog" aria-modal="true" aria-labelledby="summer-item-added-title" className="w-full max-w-[430px] rounded-t-2xl border border-[#dce4ed] bg-white p-4 shadow-xl sm:rounded-2xl"><div className="flex items-center gap-2"><Check className="h-5 w-5 text-emerald-700"/><h2 id="summer-item-added-title" className="text-[17px] font-bold">Item Added</h2><button type="button" onClick={() => setItemAdded(false)} aria-label="Close" className="ml-auto px-2 text-xl">×</button></div><p className="mt-3 text-[13px] font-semibold">{product.needsDate ? formatDate(date) : isEarlybird ? 'Summer 2026/27 season' : 'Summer visit'}</p><div className="mt-3 flex justify-between gap-3 border-b border-[#dce4ed] pb-3 text-[12px]"><span>{isPeakToPub ? quantity : 1} {summaryName}</span><b className="shrink-0">{money((isCarting ? agePrice : price) * (isPeakToPub ? quantity : 1))}</b></div>{isCarting && <p className="border-b border-[#dce4ed] py-2 text-[11px] text-[#718096]">Start time: {cartingTime} · {cartSize} cart{cartingBuddy ? ' · Carting With Kids +NZ$25' : ''}</p>}{isPeakToPub && <p className="border-b border-[#dce4ed] py-2 text-[11px] text-[#718096]">{shuttleDeparture}</p>}{isCarting && cartingBuddy && <div className="flex justify-between gap-3 border-b border-[#dce4ed] py-2 text-[12px]"><span>1 Carting With Kids</span><b className="shrink-0">{money(25)}</b></div>}{allowsDonations && SUMMER_DONATIONS.filter((item) => selectedDonations.includes(item.id)).map((item) => <div key={item.id} className="flex justify-between gap-3 border-b border-[#dce4ed] py-2 text-[12px]"><span>1 {item.title}</span><b className="shrink-0">{money(20)}</b></div>)}<p className="flex justify-between py-3 text-[12px] font-semibold"><span>Cart total</span><span>{money(cartTotal + total)}</span></p><p className="bg-[#f7f8f9] px-2 py-3 text-center text-[11px]">Payment is available at checkout. No real charge is made.</p><div className="mt-3 grid grid-cols-2 gap-3"><button type="button" onClick={() => navigate('/cart')} className="h-11 rounded-xl border border-[#344a64] text-[12px]">View Cart</button><button type="button" onClick={onCheckout} className="h-11 rounded-xl bg-[#5b8199] text-[12px] font-semibold text-white">Checkout</button></div></section></div>}
+  </main>;
+}

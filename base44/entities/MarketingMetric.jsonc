@@ -1,0 +1,62 @@
+{
+  "name": "MarketingMetric",
+  "description": "Marketing metric logged by staff to track campaign sources, traffic and bounce rates",
+  "type": "object",
+  "properties": {
+    "metric_date": {
+      "type": "string",
+      "format": "date"
+    },
+    "campaign": {
+      "type": "string"
+    },
+    "source": {
+      "type": "string",
+      "enum": [
+        "Organic Search",
+        "Paid Search",
+        "Paid Social",
+        "Email",
+        "Referral",
+        "Affiliate",
+        "Display",
+        "Direct"
+      ]
+    },
+    "sessions": {
+      "type": "number",
+      "default": 0
+    },
+    "new_visitors": {
+      "type": "number",
+      "default": 0
+    },
+    "conversions": {
+      "type": "number",
+      "default": 0
+    },
+    "bounce_rate": {
+      "type": "number",
+      "default": 0,
+      "description": "Bounce rate as a percentage (0-100)"
+    },
+    "revenue": {
+      "type": "number",
+      "default": 0,
+      "description": "Attributed revenue in NZD"
+    },
+    "logged_by": {
+      "type": "string"
+    },
+    "notes": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "metric_date",
+    "campaign",
+    "source",
+    "sessions",
+    "bounce_rate"
+  ]
+}

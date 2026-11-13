@@ -1,0 +1,111 @@
+{
+  "name": "Guest",
+  "description": "Demo guest profile with pre-arrival check-in details",
+  "type": "object",
+  "properties": {
+    "full_name": {
+      "type": "string",
+      "description": "Guest full name"
+    },
+    "email": {
+      "type": "string",
+      "format": "email"
+    },
+    "phone": {
+      "type": "string"
+    },
+    "country": {
+      "type": "string"
+    },
+    "notes": {
+      "type": "string"
+    },
+    "last_visit": {
+      "type": "string",
+      "format": "date"
+    },
+    "visits": {
+      "type": "number",
+      "default": 0
+    },
+    "marketing_opt_in": {
+      "type": "boolean",
+      "default": false
+    },
+    "avatar_url": {
+      "type": "string",
+      "description": "Placeholder face photo used on guest cards and in the face check-in panel"
+    },
+    "face_checkin_status": {
+      "type": "string",
+      "enum": [
+        "Not checked in",
+        "Checked in"
+      ],
+      "default": "Not checked in",
+      "description": "Result of the front desk face check-in"
+    },
+    "face_checkin_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "checkin_status": {
+      "type": "string",
+      "enum": [
+        "Not started",
+        "Ready for arrival"
+      ],
+      "default": "Not started",
+      "description": "Pre-arrival check-in progress"
+    },
+    "checkin_photo_uri": {
+      "type": "string",
+      "description": "Private storage URI of the photo collected at pre-arrival check-in. Stored for guest identification by staff only."
+    },
+    "checkin_completed_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "waiver_signed": {
+      "type": "boolean",
+      "default": false
+    },
+    "waiver_signed_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "rental_profile_complete": {
+      "type": "boolean",
+      "default": false
+    },
+    "rental_discipline": {
+      "type": "string",
+      "enum": [
+        "Ski",
+        "Snowboard"
+      ]
+    },
+    "shoe_size": {
+      "type": "string"
+    },
+    "height_cm": {
+      "type": "number"
+    },
+    "weight_kg": {
+      "type": "number"
+    },
+    "ability_level": {
+      "type": "string",
+      "enum": [
+        "First Timer",
+        "Beginner",
+        "Intermediate",
+        "Advanced",
+        "Expert"
+      ]
+    }
+  },
+  "required": [
+    "full_name"
+  ]
+}

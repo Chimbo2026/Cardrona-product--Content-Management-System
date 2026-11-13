@@ -1,0 +1,47 @@
+{
+  "name": "WeatherReport",
+  "description": "Simulated weather and snow observation",
+  "type": "object",
+  "properties": {
+    "recorded_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "temp_c": {
+      "type": "number"
+    },
+    "feels_like_c": {
+      "type": "number"
+    },
+    "wind_kmh": {
+      "type": "number"
+    },
+    "wind_direction": {
+      "type": "string"
+    },
+    "visibility": {
+      "type": "string"
+    },
+    "snow_depth_cm": {
+      "type": "number"
+    },
+    "new_snow_cm": {
+      "type": "number"
+    },
+    "conditions": {
+      "type": "string"
+    },
+    "source": {
+      "type": "string",
+      "default": "Simulated observation"
+    },
+    "notes": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "recorded_at",
+    "temp_c",
+    "conditions"
+  ]
+}

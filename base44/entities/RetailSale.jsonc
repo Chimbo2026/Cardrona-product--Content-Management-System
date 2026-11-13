@@ -1,0 +1,79 @@
+{
+  "name": "RetailSale",
+  "description": "Retail store sale of a shop product, recorded by staff and used for live sales reporting",
+  "type": "object",
+  "properties": {
+    "product_id": {
+      "type": "string"
+    },
+    "product_name": {
+      "type": "string"
+    },
+    "sku": {
+      "type": "string"
+    },
+    "vendor": {
+      "type": "string"
+    },
+    "category": {
+      "type": "string"
+    },
+    "quantity": {
+      "type": "number",
+      "default": 1
+    },
+    "unit_price": {
+      "type": "number",
+      "description": "Price per unit in NZD at the time of sale"
+    },
+    "total": {
+      "type": "number",
+      "description": "Quantity multiplied by unit price in NZD"
+    },
+    "currency": {
+      "type": "string",
+      "default": "NZD"
+    },
+    "sold_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "channel": {
+      "type": "string",
+      "enum": [
+        "In store",
+        "Click & collect",
+        "Online"
+      ],
+      "default": "In store"
+    },
+    "payment_method": {
+      "type": "string",
+      "enum": [
+        "Card",
+        "Cash",
+        "WeChat Pay",
+        "Alipay",
+        "Gift Voucher"
+      ],
+      "default": "Card"
+    },
+    "guest_name": {
+      "type": "string"
+    },
+    "sold_by": {
+      "type": "string"
+    },
+    "note": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "product_id",
+    "product_name",
+    "quantity",
+    "unit_price",
+    "total",
+    "sold_at"
+  ]
+}

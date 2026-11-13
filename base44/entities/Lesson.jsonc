@@ -1,0 +1,121 @@
+{
+  "name": "Lesson",
+  "description": "Snow School lesson session",
+  "type": "object",
+  "properties": {
+    "title": {
+      "type": "string"
+    },
+    "lesson_category": {
+      "type": "string",
+      "enum": [
+        "Group",
+        "Private",
+        "Kids"
+      ],
+      "default": "Group"
+    },
+    "lesson_type": {
+      "type": "string",
+      "enum": [
+        "Group",
+        "Private"
+      ]
+    },
+    "discipline": {
+      "type": "string",
+      "enum": [
+        "Ski",
+        "Snowboard"
+      ]
+    },
+    "level": {
+      "type": "string",
+      "enum": [
+        "First Timer",
+        "Beginner",
+        "Intermediate",
+        "Advanced",
+        "Expert"
+      ]
+    },
+    "age_group": {
+      "type": "string",
+      "enum": [
+        "Adult",
+        "Child"
+      ]
+    },
+    "instructor_id": {
+      "type": "string"
+    },
+    "instructor_name": {
+      "type": "string"
+    },
+    "date": {
+      "type": "string",
+      "format": "date"
+    },
+    "start_time": {
+      "type": "string"
+    },
+    "end_time": {
+      "type": "string"
+    },
+    "duration_mins": {
+      "type": "number",
+      "default": 120
+    },
+    "capacity": {
+      "type": "number",
+      "default": 8
+    },
+    "enrolled": {
+      "type": "number",
+      "default": 0
+    },
+    "price": {
+      "type": "number"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "Scheduled",
+        "In Progress",
+        "Completed",
+        "Cancelled"
+      ]
+    },
+    "meeting_point": {
+      "type": "string"
+    },
+    "guest_names": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "attended": {
+      "type": "number",
+      "default": 0
+    },
+    "attendance_marked": {
+      "type": "boolean",
+      "default": false
+    },
+    "notes": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "title",
+    "lesson_category",
+    "discipline",
+    "level",
+    "date",
+    "start_time",
+    "end_time",
+    "capacity",
+    "status"
+  ]
+}
