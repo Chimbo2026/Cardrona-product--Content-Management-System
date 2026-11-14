@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { CalendarDays, CableCar, Check, ChevronDown } from 'lucide-react';
+import { CableCar, Check, ChevronDown } from 'lucide-react';
+import DateAvailabilityCalendar from './DateAvailabilityCalendar';
 
 const AGE_OPTIONS = [
   { label: 'Adult: 18 - 74', price: 35 },
@@ -69,12 +70,11 @@ export default function SightseeingConfigurator({ onAdd, onCheckout, cartTotal =
     </section>
 
     <section className="space-y-4">
-      <label className="block text-[13px] font-semibold text-[#344a64]">Choose your start date <span className="text-[#c8102e]">(Required)</span>
-        <span className="relative mt-2 block">
-          <CalendarDays className="pointer-events-none absolute right-3 top-3.5 h-4 w-4 text-[#718096]" />
-          <input type="date" min={SUMMER_START} max={SUMMER_END} required value={startDate} onChange={(event) => setStartDate(event.target.value)} className="h-12 w-full rounded-xl border border-[#cbd7e4] bg-white px-3 pr-10 text-[13px] font-normal text-[#344a64] outline-none focus:border-[#5b8199]" />
-        </span>
-      </label>
+      <DateAvailabilityCalendar value={startDate} onChange={setStartDate} min={SUMMER_START} max={SUMMER_END} isUnavailable={(value) => {
+        const weekday = new Date(`${value}T00:00:00Z`).getUTCDay();
+        const peakSeason = value >= '2026-12-28' && value <= '2027-01-17';
+        return value === '2026-12-25' || (!peakSeason && (weekday === 2 || weekday === 3));
+      }} required />
 
       <label className="block text-[13px] font-semibold text-[#344a64]">Age
         <span className="relative mt-2 block">

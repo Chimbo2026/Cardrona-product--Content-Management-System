@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { CalendarDays, Check, Minus, Plus } from 'lucide-react';
+import { Check, Minus, Plus } from 'lucide-react';
+import DateAvailabilityCalendar from './DateAvailabilityCalendar';
 
 const PRODUCTS = {
   'earlybird-summer': {
@@ -68,8 +69,12 @@ const CART_SIZES = [
   { name: 'X-Small', height: 'Height - 100 -120cm' },
 ];
 const CARTING_TIMES = ['10:00am', '11:00am', '12:00pm', '1:00pm', '2:00pm'];
-const CARTING_CLOSED_DATES = new Set(['2026-12-15', '2026-12-16', '2026-12-22', '2026-12-23', '2026-12-25']);
-const toDateValue = (year, month, day) => `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+const summerDateUnavailable = (value) => {
+  const date = new Date(`${value}T00:00:00Z`);
+  const weekday = date.getUTCDay();
+  const peakSeason = value >= '2026-12-28' && value <= '2027-01-17';
+  return value === '2026-12-25' || (!peakSeason && (weekday === 2 || weekday === 3));
+};
 
 export default function SummerProductConfigurator({ productId, onAdd, onCheckout, cartTotal = 0 }) {
   const navigate = useNavigate();
@@ -85,7 +90,6 @@ export default function SummerProductConfigurator({ productId, onAdd, onCheckout
   const [cartingTime, setCartingTime] = useState('');
   const [cartSize, setCartSize] = useState('Large');
   const [cartingBuddy, setCartingBuddy] = useState(false);
-  const [calendarMonth, setCalendarMonth] = useState(new Date(2026, 11, 1));
   const [plan, setPlan] = useState('Pay Now');
   const [itemAdded, setItemAdded] = useState(false);
   const [expandedDescription, setExpandedDescription] = useState(false);
@@ -113,14 +117,6 @@ export default function SummerProductConfigurator({ productId, onAdd, onCheckout
   const selectCalendarDate = (value) => {
     setDate(value);
     setCartingTime('');
-  };
-
-  const calendarDays = () => {
-    const year = calendarMonth.getFullYear();
-    const month = calendarMonth.getMonth();
-    const firstWeekday = new Date(year, month, 1).getDay();
-    const dayCount = new Date(year, month + 1, 0).getDate();
-    return [...Array(firstWeekday).fill(null), ...Array.from({ length: dayCount }, (_, index) => index + 1)];
   };
 
   const addProduct = () => {
@@ -152,25 +148,7 @@ export default function SummerProductConfigurator({ productId, onAdd, onCheckout
     <section><h2 className="font-serif text-[25px] font-bold text-[#202b3a]">{product.name}</h2><div className="mt-2 border-y border-[#cbd7e4] py-4 text-[12px] leading-5 text-[#718096]"><p>{product.description}</p>{(isEarlybird || isCarting) && <><button type="button" onClick={() => setExpandedDescription((expanded) => !expanded)} className="mt-2 text-[#202020] underline">{expandedDescription ? 'See less' : 'See more'}</button>{expandedDescription && <p className="mt-2">Enjoy a two-hour mountain carting experience with unlimited uplifts. Choose your age band, a cart size, and an available start time.</p>}</>}</div></section>
     {product.hasPlan && <fieldset className="space-y-2"><legend className="mb-2 text-[13px] font-semibold text-[#344a64]">Payment plan</legend>{['Pay Now', 'Buy Now, Pay Later'].map((item) => <button key={item} type="button" onClick={() => setPlan(item)} className={`flex min-h-12 w-full items-center justify-between rounded-xl border p-3 text-left text-[12px] ${plan === item ? 'border-[#c8102e] bg-white' : 'border-[#dce4ed] bg-white'}`}><span><b>{item}</b>{item === 'Buy Now, Pay Later' && <small className="mt-1 block text-[10px] text-[#718096]">$100 deposit now, balance in four instalments</small>}</span><span className={`h-4 w-4 rounded-full border ${plan === item ? 'border-[5px] border-[#5b8199]' : 'border-[#a0a7b0]'}`} /></button>)}</fieldset>}
 
-    {isCarting ? <section>
-      <h3 className="text-[13px] font-semibold text-[#202b3a]">Choose your start date</h3>
-      {!date && <p className="mt-1 text-[12px] text-[#c8102e]">Select One (Required)</p>}
-      <div className="mt-2 w-full max-w-[490px] rounded-xl border border-[#a0a0a0] bg-white p-3">
-        <div className="mb-3 flex items-center justify-between">
-          <button type="button" aria-label="Previous month" disabled={calendarMonth.getFullYear() === 2026 && calendarMonth.getMonth() === 11} onClick={() => setCalendarMonth((current) => new Date(current.getFullYear(), current.getMonth() - 1, 1))} className="px-2 text-lg text-[#777] disabled:opacity-30">‹</button>
-          <b className="text-[13px]">{new Intl.DateTimeFormat('en', { month: 'long', year: 'numeric' }).format(calendarMonth)}</b>
-          <button type="button" aria-label="Next month" disabled={calendarMonth.getFullYear() === 2027 && calendarMonth.getMonth() === 1} onClick={() => setCalendarMonth((current) => new Date(current.getFullYear(), current.getMonth() + 1, 1))} className="px-2 text-lg text-[#777] disabled:opacity-30">›</button>
-        </div>
-        <div className="grid grid-cols-7 text-center text-[10px] font-semibold">{['SU', 'MO', 'TU', 'WE', 'TH', 'FR', 'SA'].map((day) => <span key={day} className="py-2">{day}</span>)}
-          {calendarDays().map((day, index) => {
-            if (!day) return <span key={`blank-${index}`} />;
-            const value = toDateValue(calendarMonth.getFullYear(), calendarMonth.getMonth(), day);
-            const isClosed = value < SUMMER_START || value > SUMMER_END || CARTING_CLOSED_DATES.has(value);
-            return <button key={value} type="button" disabled={isClosed} onClick={() => selectCalendarDate(value)} aria-pressed={date === value} className={`h-12 border text-[12px] ${isClosed ? 'border-transparent text-[#b5b5b5]' : date === value ? 'border-[#5b8199] font-semibold text-[#202b3a]' : 'border-[#cbd7e4] text-[#333] hover:bg-[#f4f7fa]'}`}>{day}</button>;
-          })}
-        </div>
-      </div>
-    </section> : product.needsDate && <label className="block text-[13px] font-semibold text-[#344a64]">Choose your start date <span className="text-[#c8102e]">(Required)</span><span className="relative mt-2 block"><CalendarDays className="pointer-events-none absolute right-3 top-3.5 h-4 w-4 text-[#718096]"/><input type="date" min={SUMMER_START} max={SUMMER_END} required value={date} onChange={(event) => setDate(event.target.value)} className="h-12 w-full rounded-xl border border-[#cbd7e4] bg-white px-3 pr-10 text-[13px] font-normal text-[#344a64]"/></span></label>}
+    {product.needsDate && <DateAvailabilityCalendar value={date} onChange={selectCalendarDate} min={SUMMER_START} max={SUMMER_END} isUnavailable={summerDateUnavailable} required />}
 
     {isCarting && <label className="block text-[13px] font-semibold text-[#344a64]">Start Time {!cartingTime && <span className="text-[#c8102e]">(Required)</span>}<select value={cartingTime} onChange={(event) => setCartingTime(event.target.value)} className="mt-2 h-12 w-full rounded-xl border border-[#cbd7e4] bg-white px-3 text-[13px] font-normal text-[#344a64]"><option value="">Select a Time</option>{CARTING_TIMES.map((time, index) => <option key={time} value={time}>{time} • {index === 0 ? 23 : 30} left</option>)}</select></label>}
 
