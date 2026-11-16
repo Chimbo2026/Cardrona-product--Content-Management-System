@@ -2,7 +2,10 @@ import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { AlertTriangle, ArrowUpRight, CloudSnow, Mountain, Thermometer, Wind } from 'lucide-react';
 
-const mountainPhoto = 'https://assets.simpleviewinc.com/simpleview/image/upload/c_fill%2Cf_jpg%2Cg_xy_center%2Ch_852%2Cq_65%2Cw_640%2Cx_1530%2Cy_1210/v1/clients/queenstownnz/Do_not_use_before_Winter_2025_Family_Ski_Cardrona_93772c40-e340-4b4a-bcd2-7c72598f67a7.jpg';
+const MOUNTAIN_PHOTOS = {
+  Cardrona: 'https://images.ctfassets.net/2atbvuhykqrn/zqD6u143cOKQ9cE4ab6FK/b9a946a427d1b3ec31dde64e4e71cb8d/W24-Mountains_Imagery-Cardrona_Half_Page_Image.webp?w=1200&h=700&fit=fill&fm=webp&q=80',
+  'Treble Cone': 'https://images.ctfassets.net/2atbvuhykqrn/21XEVqbsE99Ohb1AXWAZQu/2a8b0a5694e29c906caa75b7ebe232d1/W24-Mountains_Imagery-Treble_Cone_Half_Page_Image.webp?w=1200&h=700&fit=fill&fm=webp&q=80',
+};
 const OFFICIAL_REPORT = 'https://cardrona-treblecone.com/snow-report';
 
 const REPORTS = {
@@ -19,7 +22,7 @@ const REPORTS = {
     roadStatus: 'Closed',
     roadTitle: 'No Public Access',
     roadDetail: 'Access road closed. Active road hazard on access roads.',
-    statusCards: [['LIFTS', '0 / 10', 'Lifts open', 'text-emerald-600'], ['TERRAIN', '0 / 9', 'Terrain open', 'text-amber-600']],
+    statusCards: [['LIFT', '0 / 10', 'Lifts & terrain', 'text-emerald-600'], ['CARPARK', '0 / 6', 'Car parks & park', 'text-amber-600']],
   },
   'Treble Cone': {
     summary: 'Closed for the season',
@@ -34,7 +37,7 @@ const REPORTS = {
     roadStatus: 'Chain Free',
     roadTitle: 'Gate is locked',
     roadDetail: 'See website for summer access info. Active road hazard on access roads.',
-    statusCards: [['LIFTS', '0 / 3', 'Lifts open', 'text-emerald-600'], ['CARPARKS', '0 / 5', 'Carparks open', 'text-amber-600']],
+    statusCards: [['LIFT', '0 / 10', 'Lifts & terrain', 'text-emerald-600'], ['CARPARK', '0 / 6', 'Car parks & park', 'text-amber-600']],
   },
 };
 
@@ -45,7 +48,7 @@ export default function MountainReport({ mountain }) {
 
   return <section className="mx-4 mt-1" aria-label={`${mountain} mountain report`}>
     <div className="relative h-[227px] overflow-hidden rounded-[18px] bg-[#24364d] text-white">
-      <img src={mountainPhoto} alt={`Snow-covered ${mountain} mountain`} className="absolute inset-0 h-full w-full object-cover" />
+      <img src={MOUNTAIN_PHOTOS[mountain] || MOUNTAIN_PHOTOS.Cardrona} alt={`${mountain} mountain`} className="absolute inset-0 h-full w-full object-cover" />
       <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/25 to-black/15" />
       <span className="absolute right-3 top-2 rounded-full bg-[#172334]/85 px-3 py-1 text-[9px]">CLOSED</span>
       <div className="absolute inset-x-4 bottom-3 top-[48px] flex flex-col">
@@ -82,7 +85,7 @@ export default function MountainReport({ mountain }) {
     </div>
 
     <div className="mt-2.5 grid grid-cols-2 gap-2.5">
-      {report.statusCards.map(([label, value, action, color]) => <Link key={label} to="/ski" className="rounded-[16px] bg-white px-4 py-3 shadow-sm"><span className="block text-[7px] tracking-[0.2em] text-[#718096]">{label}</span><b className={`mt-1 block text-[22px] leading-7 ${color}`}>{value}</b><span className={`mt-1 flex items-center gap-1 text-[9px] ${color}`}>{action}<ArrowUpRight className="h-3 w-3"/></span></Link>)}
+      {report.statusCards.map(([label, value, action, color]) => <Link key={label} to={`/snow-report?mountainId=${mountain === 'Treble Cone' ? 'treblecone' : 'cardrona'}&view=${label === 'LIFT' ? 'lifts' : 'carparks'}`} className="rounded-[16px] bg-white px-4 py-3 shadow-sm"><span className="block text-[7px] tracking-[0.2em] text-[#718096]">{label}</span><b className={`mt-1 block text-[22px] leading-7 ${color}`}>{value}</b><span className={`mt-1 flex items-center gap-1 text-[9px] ${color}`}>{action}<ArrowUpRight className="h-3 w-3"/></span></Link>)}
     </div>
   </section>;
 }
