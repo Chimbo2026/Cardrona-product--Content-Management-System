@@ -1,7 +1,7 @@
 import { Toaster } from "@/components/ui/toaster"
 import { QueryClientProvider } from '@tanstack/react-query'
 import { queryClientInstance } from '@/lib/query-client'
-import { BrowserRouter as Router, Route, Routes, Navigate, useLocation } from 'react-router-dom';
+import { BrowserRouter, HashRouter, Route, Routes, Navigate, useLocation } from 'react-router-dom';
 import PageNotFound from './lib/PageNotFound';
 import { LangProvider } from '@/lib/i18n';
 import { AuthProvider, useAuth } from '@/lib/AuthContext';
@@ -14,6 +14,7 @@ import ForgotPassword from '@/pages/ForgotPassword';
 import ResetPassword from '@/pages/ResetPassword';
 import AppShell from '@/components/layout/AppShell';
 import Dashboard from '@/pages/Dashboard';
+import CustomerHome from '@/pages/CustomerHome';
 import BookingDetail from '@/pages/BookingDetail';
 import BookingManagement from '@/pages/BookingManagement';
 import Agents from '@/pages/Agents';
@@ -43,6 +44,9 @@ import SiteShell from '@/components/site/SiteShell';
 import SiteHome from '@/pages/SiteHome';
 import SitePageDetail from '@/pages/SitePageDetail';
 import CustomerExperience from '@/pages/CustomerExperience';
+
+// GitHub Pages cannot serve application routes directly; keep them in the hash.
+const Router = import.meta.env.BASE_URL === '/Cardrona-project/' ? HashRouter : BrowserRouter;
 
 const AuthenticatedApp = () => {
   const { isLoadingAuth, isLoadingPublicSettings, authError, navigateToLogin } = useAuth();

@@ -1,0 +1,30 @@
+import { test } from 'node:test';
+import assert from 'node:assert/strict';
+const storage = new Map();
+globalThis.localStorage = { getItem: key => storage.get(key) ?? null, setItem: (key, value) => storage.set(key, value) };
+globalThis.window = { addEventListener() {}, removeEventListener() {} };
+const { localClient } = await import('../src/api/localClient.js');
+test('local records persist, filter, sort, update and delete without a network', async () => {
+  globalThis.fetch = () => { throw new Error('Unexpected network access'); };
+  const db = localClient.entities.Guest;
+  const changes = [];
+  const stop = db.subscribe(event => changes.push(event.type));
+  const a = await db.create({ full_name: 'Alice', age: 20 });
+  await db.create({ full_name: 'Bob', age: 30 });
+  assert.equal((await db.filter({ $or: [{ full_name: { $regex: 'alice', $options: 'i' } }] }))[0].id, a.id);
+  assert.equal((await db.filter({}, { sort: '-age', limit: 1 }))[0].full_name, 'Bob');
+  await db.updateMany({ age: { $gte: 20 } }, { active: true });
+  await db.bulkUpdate([{ id: a.id, age: 21 }]);
+  assert.equal((await db.get(a.id)).age, 21);
+  assert.equal((await db.get(a.id)).active, true);
+  const { localClient: reloaded } = await import('../src/api/localClient.js?reload');
+  assert.equal((await reloaded.entities.Guest.get(a.id)).age, 21);
+  await db.delete(a.id);
+  await assert.rejects(db.get(a.id), /not found/);
+  assert.ok(changes.includes('create') && changes.includes('update') && changes.includes('delete'));
+  stop();
+});
+test('local administrator works; external payments fail explicitly', async () => {
+  assert.equal((await localClient.auth.me()).role, 'admin');
+  await assert.rejects(localClient.functions.invoke('createStripeCheckout', {}), /Unavailable in local mode/);
+});

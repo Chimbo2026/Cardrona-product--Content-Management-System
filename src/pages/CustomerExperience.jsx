@@ -218,6 +218,11 @@ export default function CustomerExperience() {
   const [state, setState] = useState(readStore);
   const [mountain, setMountain] = useState('Cardrona');
   const [filter, setFilter] = useState('All');
+  useEffect(() => {
+    if (location.pathname === '/passes' && new URLSearchParams(location.search).get('season') === 'summer') {
+      setFilter('Summer');
+    }
+  }, [location.pathname, location.search]);
   useEffect(() => { if (['Sightseeing', 'Lessons', 'Rentals'].includes(filter)) setFilter('All'); }, [filter]);
   const [expandedLiftPass, setExpandedLiftPass] = useState('');
   const [dateFrom, setDateFrom] = useState('2026-11-13');
@@ -343,7 +348,7 @@ export default function CustomerExperience() {
         {[['Lessons', GraduationCap, 'Private, group & kids', '/lessons'], ['Rentals', Package, 'Skis, boards & gear', '/rentals'], ['Transport', Bus, 'Pickup & return travel', '/transport'], ['Stay', BedDouble, 'On-mountain escapes', '/resort?tab=stays']].map(([label, Icon, detail, to]) => <Link key={label} to={to} className="rounded-[16px] border border-[#dce4ed] bg-white p-3.5 text-[#344a64]"><div className="flex items-center justify-between"><Icon className="h-4 w-4 text-[#c8102e]"/><ArrowUpRight className="h-3.5 w-3.5 text-[#9aa8b8]"/></div><b className="mt-2 block text-[12px]">{label}</b><small className="mt-1 block text-[10px] text-[#718096]">{detail}</small></Link>)}
       </section>
 
-      <Link to="/passes" className="flex items-center gap-3 rounded-[16px] border border-[#dce4ed] bg-[#eaf0f6] p-3 text-[#344a64]"><Bike className="h-5 w-5 text-[#526d8b]"/><span className="min-w-0 flex-1"><b className="block text-[11px]">Planning a summer visit?</b><small className="block text-[10px] text-[#718096]">Mountain biking, carting & sightseeing</small></span><ChevronRight className="h-4 w-4"/></Link>
+      <Link to="/passes?season=summer" className="flex items-center gap-3 rounded-[16px] border border-[#dce4ed] bg-[#eaf0f6] p-3 text-[#344a64]"><Bike className="h-5 w-5 text-[#526d8b]"/><span className="min-w-0 flex-1"><b className="block text-[11px]">Planning a summer visit?</b><small className="block text-[10px] text-[#718096]">Mountain biking, carting & sightseeing</small></span><ChevronRight className="h-4 w-4"/></Link>
       <div className="flex items-center justify-between px-1 text-[10px] text-[#718096]"><span>Just need a lift pass?</span><Link to="/passes" className="font-semibold text-[#c8102e]">Find your pass <ArrowRight className="ml-1 inline h-3 w-3"/></Link></div>
       <section className="grid grid-cols-2 gap-2">{[['Ski booking', Ticket, 'Passes · Lessons · Rentals', '/passes'], ['Mountain shop', ShoppingBag, 'New arrivals · Apparel accessories', '/shop']].map(([label, Icon, detail, to]) => <Link key={label} to={to} className="min-h-[150px] rounded-[16px] bg-gradient-to-br from-[#58778e] to-[#1d2b40] p-3.5 text-white"><div className="flex items-center justify-between"><span className="flex h-9 w-9 items-center justify-center rounded-xl bg-white/15"><Icon className="h-5 w-5"/></span><ArrowUpRight className="h-4 w-4 text-white/60"/></div><b className="mt-4 block font-serif text-[16px]">{label}</b><small className="mt-1 block text-[10px] text-white/75">{detail}</small>{label === 'Ski booking' && <span className="mt-2 inline-block rounded-full bg-white/15 px-2.5 py-1 text-[9px]">Live inventory</span>}{label === 'Mountain shop' && <span className="mt-2 inline-block rounded-full bg-white/15 px-2.5 py-1 text-[9px]">Retail</span>}</Link>)}</section>
     </main>;

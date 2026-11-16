@@ -1,6 +1,6 @@
 import Panel from '@/components/common/Panel';
 import { useLang } from '@/lib/i18n';
-import { PAYMENT_PLAN_DETAILS, SEASON_PASS_TYPES, shortPassName } from '@/lib/seasonPasses';
+import { PAYMENT_PLAN_DETAILS, SEASON_PASS_TYPES } from '@/lib/seasonPasses';
 
 export default function SeasonPassInfo() {
   const { t } = useLang();

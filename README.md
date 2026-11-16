@@ -1,62 +1,44 @@
-# Base44 Project
+# Cardrona Resort Management — local edition
 
-Use this repository to run and edit the app locally, then publish changes back through Base44.
+Runs independently of Base44. No Base44 account, CLI, environment variables, SDK, or hosted backend is required.
 
-Any change pushed to the repo will also be reflected in the Base44 Builder.
+## Run locally
 
-## Prerequisites
-
-1. Clone the repository using the project's Git URL.
-2. Navigate to the project directory.
-3. Install dependencies: `npm install`.
-4. Install the Base44 CLI: `npm install -g base44@latest`.
-5. Install [Deno](https://docs.deno.com/runtime/getting_started/installation/) — the local Base44 backend runs on it.
-
-Run `base44 --help` (or see the [CLI reference](https://docs.base44.com/developers/references/cli/commands/introduction)) for the full command surface.
-
-## Run Locally
-
-Three commands, from the project root:
+Use Node.js 22.12 or newer:
 
 ```bash
-base44 login   # one-time per machine
-base44 link    # one-time per clone
-base44 dev     # local backend + frontend together
+npm install
+npm run dev -- --host 127.0.0.1
 ```
 
-Open the frontend URL that `base44 dev` prints (typically `http://localhost:5173`).
+Open the localhost URL printed by Vite. The customer storefront is at `/`; the management dashboard is at `/dashboard`.
 
-Notes:
+The dashboard opens as a local demo administrator. There is no server authentication or access control. Customer demo accounts are part of the existing storefront simulation.
 
-- **Every fresh clone needs `base44 link`.** It writes `base44/.app.jsonc` (the app-id pointer), which is deliberately gitignored. Your app id is in the Builder URL (`app.base44.com/apps/<id>/...`); `base44 link --help` shows the non-interactive flags.
-- **`base44 dev` runs the frontend for you** (via `site.serveCommand` in this repo's `base44/config.jsonc`) — never run `npm run dev` yourself: alone it serves a UI with no backend behind it (`[base44] Proxy not enabled`, every `/api` call fails), and alongside `base44 dev` the second Vite silently takes the next port and you end up looking at the wrong one.
-- **The app must be published at least once for the UI to load under `base44 dev`.** The frontend boots by fetching app settings from the hosted app; before the first publish that fails and every page redirects to login. The local API works regardless.
-- Entities, functions, and auth run locally — entity data is **in-memory only**, wiped when `base44 dev` restarts. Everything else (Core integrations, OAuth login) is forwarded to your deployed app. Full breakdown: [Local development overview](https://docs.base44.com/developers/backend/overview/local-dev/local-development-overview).
+## Data and files
 
-## Frontend Only, Hosted Backend
+Dashboard records and uploaded files are saved in this browser's localStorage under `cardrona_local_v1:` keys. The existing storefront keeps its separate local demo state. Changes persist across reloads on the same origin, but do not sync between browsers or between storefront and dashboard. Dashboard collections start empty; create records through the management screens. Existing Base44 data is not downloaded or migrated.
 
-To work on just the frontend against your app's live hosted backend:
+Clearing site data removes local records. Browser storage limits apply, particularly to uploaded photos. Use demo data only: localStorage is not secure storage for guest documents or payment details.
+
+Real Stripe payments/refunds, social sign-in, email, OTP and MFA require independent backend services and are unavailable in this local edition. The storefront's checkout remains a simulation and does not charge a card. External images and fonts may still require internet access; the app logic and local records do not require Base44.
+
+## Build and check
 
 ```bash
-base44 dev --remote
+npm run build
+npm run preview -- --host 127.0.0.1
+npm run lint
+npm run typecheck
+node --test tests/localClient.test.mjs
 ```
 
-⚠️ In this mode writes go to your app's **production data** — plain `base44 dev` keeps everything local.
+`dist/` contains the standalone frontend build. A static host must serve `index.html` for application routes.
 
-## Publish Your Changes
+## GitHub Pages
 
-After pushing your changes to git, open the Base44 dashboard and publish the app:
+In GitHub Settings → Pages, select GitHub Actions as the source. The workflow in `.github/workflows/deploy.yml` builds and publishes `dist/` on pushes to `main`, or when run manually in Actions. It sets `GITHUB_PAGES=true` to build with the `/Cardrona-project/` asset path and hash routing so refreshing an application page works on GitHub Pages. Local development continues to use normal routes.
 
-```bash
-base44 dashboard open
-```
+To check this build locally, run `GITHUB_PAGES=true npm run build`, then `npm run preview` and open `http://localhost:4173/Cardrona-project/`.
 
-This repo syncs to Base44 through git, so publish from the dashboard rather than `base44 deploy` — a CLI deploy ships your local tree directly, bypassing the sync, and the deployed state silently diverges from the repo.
-
-## Docs & Support
-
-GitHub integration: [https://docs.base44.com/developers/app-code/local-development/github](https://docs.base44.com/developers/app-code/local-development/github)
-
-Local development: [https://docs.base44.com/developers/backend/overview/local-dev/local-development-overview](https://docs.base44.com/developers/backend/overview/local-dev/local-development-overview)
-
-Support: [https://app.base44.com/support](https://app.base44.com/support)
+The `base44/` folder preserves the old entity definitions and function source as migration references; it is not used by the local app.
