@@ -41,7 +41,7 @@ const REPORTS = {
   },
 };
 
-export default function MountainReport({ mountain }) {
+export default function MountainReport({ mountain, accent = '#5b8199' }) {
   const [tab, setTab] = useState('Conditions');
   const report = REPORTS[mountain] || REPORTS.Cardrona;
   const officialUrl = `${OFFICIAL_REPORT}${mountain === 'Treble Cone' ? '?mountainId=treblecone' : ''}`;
@@ -63,7 +63,7 @@ export default function MountainReport({ mountain }) {
 
     <div className="mt-2.5 overflow-hidden rounded-[18px] bg-white shadow-sm">
       <div role="tablist" aria-label="Mountain information" className="grid h-[44px] grid-cols-3 border-b border-[#e2e7ee]">
-        {['Conditions', 'Weather', 'Road'].map((name) => <button key={name} type="button" role="tab" id={`report-tab-${name}`} aria-selected={tab === name} aria-controls={`report-panel-${name}`} onClick={() => setTab(name)} className={`relative text-[11px] ${tab === name ? 'font-semibold text-[#344a64]' : 'text-[#60738d]'}`}>{name}{tab === name && <span className="absolute bottom-0 left-1/2 h-0.5 w-11 -translate-x-1/2 bg-[#c8102e]"/>}</button>)}
+        {['Conditions', 'Weather', 'Road'].map((name) => <button key={name} type="button" role="tab" id={`report-tab-${name}`} aria-selected={tab === name} aria-controls={`report-panel-${name}`} onClick={() => setTab(name)} className={`relative text-[11px] ${tab === name ? 'font-semibold text-[#344a64]' : 'text-[#60738d]'}`}>{name}{tab === name && <span className="absolute bottom-0 left-1/2 h-0.5 w-11 -translate-x-1/2" style={{ backgroundColor: accent }}/>}</button>)}
       </div>
       <div role="tabpanel" id={`report-panel-${tab}`} aria-labelledby={`report-tab-${tab}`} className="min-h-[104px] px-4 py-3">
         {tab === 'Conditions' ? <>

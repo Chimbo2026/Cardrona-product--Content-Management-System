@@ -55,7 +55,7 @@ function OptionCard({ icon: Icon, title, subtitle, price, priceNote, details, ac
           <p className="mt-0.5 text-[10px] leading-4 text-[#718096]">{subtitle}</p>
         </div>
         <div className="shrink-0 text-right">
-          <strong className={`block text-[14px] ${price === 'FREE' ? 'text-[#47775d]' : 'text-[#d31328]'}`}>{price}</strong>
+          <strong className={`block text-[14px] ${price === 'FREE' ? 'text-[#47775d]' : 'text-[#5b8199]'}`}>{price}</strong>
           {priceNote && <small className="block text-[9px] text-[#718096]">{priceNote}</small>}
         </div>
       </div>
@@ -89,7 +89,7 @@ export default function TransportPlanner() {
           {['Winter', 'Summer'].map((option) => {
             const active = season === option;
             const Icon = option === 'Winter' ? Mountain : Sun;
-            return <button key={option} type="button" aria-pressed={active} onClick={() => { setSeason(option); if (option === 'Summer') setDestination('Cardrona'); }} className={`flex h-9 items-center justify-center gap-1.5 rounded-full text-[12px] font-medium ${active ? 'bg-[#d31328] text-white shadow-sm' : 'text-[#526981]'}`}><Icon className="h-3.5 w-3.5" />{option}</button>;
+            return <button key={option} type="button" aria-pressed={active} onClick={() => { setSeason(option); if (option === 'Summer') setDestination('Cardrona'); }} className={`flex h-9 items-center justify-center gap-1.5 rounded-full text-[12px] font-medium ${active ? 'bg-[#5b8199] text-white shadow-sm' : 'text-[#526981]'}`}><Icon className="h-3.5 w-3.5" />{option}</button>;
           })}
         </div>
         <div className="mt-3 flex items-end gap-2.5">
@@ -122,7 +122,7 @@ export default function TransportPlanner() {
       </section>
 
       <p className="px-1 text-[9px] leading-4 text-[#718096]">Fares, schedules and road conditions may change. Confirm current information on the official Cardrona & Treble Cone site before you travel.</p>
-      <a href={TRANSPORT_URL} target="_blank" rel="noreferrer" className="flex items-center justify-center gap-1 py-1 text-[10px] font-semibold text-[#d31328]">Official transport information <ArrowUpRight className="h-3 w-3" /></a>
+      <a href={TRANSPORT_URL} target="_blank" rel="noreferrer" className="flex items-center justify-center gap-1 py-1 text-[10px] font-semibold text-[#5b8199]">Official transport information <ArrowUpRight className="h-3 w-3" /></a>
     </main>
   );
 }

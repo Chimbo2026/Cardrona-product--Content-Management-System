@@ -4,8 +4,8 @@ import { CalendarDays, ChevronLeft, ChevronRight } from 'lucide-react';
 const dateValue = (year, month, day) => `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
 const displayDate = (value) => value ? `${value.slice(8, 10)}/${value.slice(5, 7)}/${value.slice(0, 4)}` : 'dd/mm/yyyy';
 
-export default function DateAvailabilityCalendar({ value, onChange, min, max, isUnavailable = () => false, required = false, label = 'Choose your start date' }) {
-  const [open, setOpen] = useState(false);
+export default function DateAvailabilityCalendar({ value, onChange, min, max, isUnavailable = () => false, required = false, label = 'Choose your start date', defaultOpen = false, unavailableLabel = 'UNAVAILABLE' }) {
+  const [open, setOpen] = useState(defaultOpen);
   const [month, setMonth] = useState(() => {
     const initial = value || min || '2026-12-01';
     const [year, monthNumber] = initial.split('-').map(Number);
@@ -20,12 +20,16 @@ export default function DateAvailabilityCalendar({ value, onChange, min, max, is
     ...Array.from({ length: firstWeekday }, (_, index) => ({ key: `blank-${index}`, day: null })),
     ...Array.from({ length: daysInMonth }, (_, index) => ({ key: dateValue(year, monthIndex, index + 1), day: index + 1 })),
   ];
-  const canGoPrevious = !min || dateValue(year, monthIndex, 1) > min.slice(0, 7) + '-01';
-  const canGoNext = !max || dateValue(year, monthIndex + 1, 1) <= max.slice(0, 7) + '-01';
+  const previousMonth = new Date(year, monthIndex - 1, 1);
+  const nextMonth = new Date(year, monthIndex + 1, 1);
+  const previousMonthStart = dateValue(previousMonth.getFullYear(), previousMonth.getMonth(), 1);
+  const nextMonthStart = dateValue(nextMonth.getFullYear(), nextMonth.getMonth(), 1);
+  const canGoPrevious = !min || previousMonthStart >= min.slice(0, 7) + '-01';
+  const canGoNext = !max || nextMonthStart <= max.slice(0, 7) + '-01';
 
   return <div className="w-full">
     <div className="text-[13px] font-semibold text-[#344a64]">
-      <span>{label} {required && <span className="text-[#c8102e]">(Required)</span>}</span>
+      <span>{label} {required && <span className="text-[#5b8199]">(Required)</span>}</span>
       <button type="button" aria-haspopup="dialog" aria-expanded={open} onClick={() => setOpen((current) => !current)} className="mt-2 flex h-12 w-full items-center justify-between rounded-xl border border-[#cbd7e4] bg-white px-3 text-left text-[13px] font-normal text-[#344a64] outline-none focus:border-[#5b8199]">
         <span className={value ? '' : 'text-[#718096]'}>{displayDate(value)}</span>
         <CalendarDays className="h-4 w-4 text-[#718096]" />
@@ -46,7 +50,7 @@ export default function DateAvailabilityCalendar({ value, onChange, min, max, is
           return <button key={key} type="button" disabled={unavailable} aria-pressed={value === date} aria-label={`${day} ${new Intl.DateTimeFormat('en', { month: 'long' }).format(month)}${unavailable ? ', unavailable' : ''}`} onClick={() => { onChange(date); setOpen(false); }} className={`h-11 border text-[12px] ${unavailable ? 'border-[#c6c6c6] bg-[#dedede] text-[#757575]' : value === date ? 'border-[#5b8199] bg-[#5b8199] text-white' : 'border-[#cbd7e4] bg-white text-[#333] hover:bg-[#f2f6f9]'}`}>{day}</button>;
         })}
       </div>
-      <div className="mt-3 flex items-center gap-1.5 border-t border-dashed border-[#dce4ed] pt-2 text-[11px] text-[#444]"><span className="h-3 w-3 bg-[#dedede]" /> UNAVAILABLE</div>
+      <div className="mt-3 flex items-center gap-1.5 border-t border-dashed border-[#dce4ed] pt-2 text-[11px] text-[#444]"><span className="h-3 w-3 bg-[#dedede]" /> {unavailableLabel}</div>
     </section>}
   </div>;
 }

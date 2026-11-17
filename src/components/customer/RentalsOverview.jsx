@@ -78,7 +78,7 @@ export default function RentalsOverview() {
           <div className="flex items-start justify-between gap-2">
             <h3 className="font-serif text-[16px] font-bold leading-5 text-[#334a64]">{option.name}</h3>
             <div className="shrink-0 text-right">
-              <strong className="font-serif text-[21px] font-normal text-[#c8102e]">{option.price}</strong>
+              <strong className="font-serif text-[21px] font-normal text-[#5b8199]">{option.price}</strong>
               <small className="mt-0.5 block text-[8px] text-[#8492a4]">{option.label}</small>
             </div>
           </div>
@@ -103,7 +103,7 @@ export default function RentalsOverview() {
         <p className="mt-2 flex items-start gap-1.5 text-[9px] leading-4 text-[#718096]"><PackageCheck className="mt-0.5 h-3 w-3 shrink-0" />Return equipment to the pickup location unless another arrangement is confirmed.</p>
       </section>
 
-      <a href={RENTALS_URL} target="_blank" rel="noreferrer" className="flex items-center justify-center gap-1 py-1 text-[10px] font-semibold text-[#c8102e]">View all rental details on Cardrona’s website <ArrowUpRight className="h-3 w-3" /></a>
+      <a href={RENTALS_URL} target="_blank" rel="noreferrer" className="flex items-center justify-center gap-1 py-1 text-[10px] font-semibold text-[#5b8199]">View all rental details on Cardrona’s website <ArrowUpRight className="h-3 w-3" /></a>
     </main>
   );
 }

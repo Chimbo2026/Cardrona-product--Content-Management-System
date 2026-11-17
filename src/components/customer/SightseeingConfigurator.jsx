@@ -12,13 +12,6 @@ const AGE_OPTIONS = [
 const SUMMER_START = '2026-12-12';
 const SUMMER_END = '2027-02-28';
 
-const DONATIONS = [
-  { id: 'seed', title: 'Plant a Seed', description: 'Help regenerate native plants and offset carbon emissions.' },
-  { id: 'tamariki', title: 'Ride Tamariki', description: 'Help children and families experience the mountains.' },
-  { id: 'karearea', title: 'Kārearea Project', description: 'Support conservation of the New Zealand falcon.' },
-  { id: 'all-in', title: 'All In', description: 'Support an inclusive mountain community.' },
-];
-
 const money = (value) => `NZ$${Number(value).toFixed(2)}`;
 const formatDate = (value) => value ? new Intl.DateTimeFormat('en-NZ', { weekday: 'long', day: '2-digit', month: 'long', year: 'numeric', timeZone: 'UTC' }).format(new Date(`${value}T00:00:00Z`)) : 'No date selected';
 
@@ -27,35 +20,26 @@ export default function SightseeingConfigurator({ onAdd, onCheckout, cartTotal =
   const [startDate, setStartDate] = useState('');
   const [age, setAge] = useState(AGE_OPTIONS[0].label);
   const [uplift, setUplift] = useState(true);
-  const [foundation, setFoundation] = useState(false);
-  const [foundationAmount, setFoundationAmount] = useState('');
-  const [selectedDonations, setSelectedDonations] = useState([]);
   const [showMore, setShowMore] = useState(false);
   const [itemAdded, setItemAdded] = useState(false);
 
   const agePrice = AGE_OPTIONS.find((option) => option.label === age)?.price ?? 35;
-  const addOnTotal = selectedDonations.length * 20;
-  const donation = foundation ? Math.max(0, Number(foundationAmount) || 0) : 0;
-  const total = agePrice + (uplift ? 0 : -20) + addOnTotal + donation;
-
-  const toggleDonation = (id) => setSelectedDonations((current) =>
-    current.includes(id) ? current.filter((item) => item !== id) : [...current, id],
-  );
+  const sightseeingPassPrice = Math.max(0, agePrice + (uplift ? 0 : -20));
+  const referencePrice = age === 'Child: 6 - 17' ? 25 : 35;
+  const savings = Math.max(0, referencePrice - sightseeingPassPrice);
+  const discountPercent = referencePrice ? Math.round((savings / referencePrice) * 100) : 0;
+  const total = sightseeingPassPrice;
 
   const addPass = () => {
-    const selected = [
-      uplift ? '1 uplift · McDougall’s Chondola' : 'Sightseeing pass only',
-      ...DONATIONS.filter((item) => selectedDonations.includes(item.id)).map((item) => `${item.title} +$20`),
-      ...(donation ? [`Cardrona Foundation donation ${money(donation)}`] : []),
-    ];
+    const selected = uplift ? "1 uplift - McDougall's Chondola" : 'Sightseeing pass only';
     onAdd({
       id: 'summer-sightseeing-pass',
-      name: `Summer Sightseeing Pass · ${age}`,
+      name: 'Summer Sightseeing Pass',
       price: total,
       visitDate: startDate,
       ageBand: age,
-      detail: `${startDate} · ${selected.join(' · ')}`,
-      variant: `${startDate}-${age}-${uplift}-${selectedDonations.join(',')}-${donation}`,
+      detail: [startDate, age.replace(': ', ' '), selected].join(' · '),
+      variant: `${startDate}-${age}-${uplift}`,
     });
   };
 
@@ -86,58 +70,37 @@ export default function SightseeingConfigurator({ onAdd, onCheckout, cartTotal =
       </label>
 
       <fieldset>
-        <legend className="mb-2 text-[13px] font-semibold text-[#344a64]">Gondola ride</legend>
+        <legend className="mb-2 text-[13px] font-semibold text-[#344a64]">Gondola Ride</legend>
         <button type="button" aria-pressed={uplift} onClick={() => setUplift((selected) => !selected)} className={`flex min-h-12 w-full items-center gap-2 rounded-xl border px-3 text-left text-[13px] font-semibold ${uplift ? 'border-[#5b8199] bg-white text-[#344a64]' : 'border-[#cbd7e4] bg-white text-[#718096]'}`}>
-          <CableCar className="h-5 w-5 text-[#5b8199]" />1 uplift · McDougall’s Chondola
+          <CableCar className="h-5 w-5 text-[#5b8199]" />1 uplift - McDougall's Chondola
           {uplift && <Check className="ml-auto h-4 w-4 text-[#5b8199]" />}
         </button>
       </fieldset>
-    </section>
-
-    <section className="space-y-3 border-t border-[#cbd7e4] pt-4">
-      <div>
-        <h3 className="text-[14px] font-semibold text-[#344a64]">Would you like to support the Cardrona Foundation?</h3>
-        <p className="mt-1 text-[12px] leading-5 text-[#718096]">Help support conservation and our mountain communities.</p>
-      </div>
-      <label className="flex min-h-12 items-center gap-3 rounded-xl border border-[#cbd7e4] bg-white px-3 text-[12px] font-semibold text-[#344a64]">
-        <input type="checkbox" checked={foundation} onChange={(event) => setFoundation(event.target.checked)} className="h-4 w-4 accent-[#5b8199]" />
-        Yes, I’d like to make a donation
-      </label>
-      {foundation && <label className="block text-[11px] text-[#718096]">Donation amount (NZD)
-        <input type="number" min="0" step="1" value={foundationAmount} onChange={(event) => setFoundationAmount(event.target.value)} placeholder="Enter an amount" className="mt-1.5 h-10 w-full rounded-lg border border-[#cbd7e4] px-3 text-[12px] text-[#344a64]" />
-      </label>}
-      <div className="space-y-3">
-        {DONATIONS.map((item) => <label key={item.id} className={`flex cursor-pointer items-start gap-3 rounded-xl border p-3 ${selectedDonations.includes(item.id) ? 'border-[#5b8199] bg-[#f5f8fb]' : 'border-[#dce4ed] bg-white'}`}>
-          <input type="checkbox" checked={selectedDonations.includes(item.id)} onChange={() => toggleDonation(item.id)} className="mt-1 h-4 w-4 shrink-0 accent-[#5b8199]" />
-          <span><b className="block text-[12px] text-[#344a64]">{item.title}</b><small className="mt-1 block text-[10px] leading-4 text-[#718096]">{item.description}</small><span className="mt-1.5 block text-[11px] text-[#344a64]">+ NZ$20.00</span></span>
-        </label>)}
-      </div>
     </section>
 
     <section className="rounded-[18px] border border-[#dce4ed] bg-white p-4 shadow-sm">
       <h3 className="font-serif text-[17px] font-bold text-[#202b3a]">Item Summary</h3>
       <div className="mt-3 border-b border-[#cbd7e4] pb-3 text-[12px]">
         <b className="block">Start Date</b><span className="mt-1 block text-[#718096]">{formatDate(startDate)}</span>
-        <b className="mt-3 block">(1) Summer Sightseeing Pass · {age}{uplift ? ' · 1 uplift to McDougall’s Chondola' : ''}</b>
-        <span className="mt-1 block">{money(agePrice + (uplift ? 0 : -20))}</span>
-        {selectedDonations.map((id) => <span key={id} className="mt-1 block text-[#718096]">{DONATIONS.find((item) => item.id === id)?.title} + NZ$20.00</span>)}
-        {donation > 0 && <span className="mt-1 block text-[#718096]">Cardrona Foundation donation {money(donation)}</span>}
+        <b className="mt-3 block">(1) Summer Sightseeing Pass - {age.replace(': ', ' ')}{uplift ? " - 1 Uplift To McDougall's Chondola" : ''}</b>
+        <span className="mt-1 block">{money(sightseeingPassPrice)}</span>
       </div>
       <div className="mt-3 flex items-center justify-between text-[16px] font-semibold"><span>Total</span><span>{money(total)}</span></div>
       <p className="mt-2 text-center text-[10px] text-[#718096]">Demo checkout · no real charge is made.</p>
     </section>
 
     <div className="fixed inset-x-0 bottom-[64px] z-20 mx-auto flex w-full max-w-[430px] items-center gap-3 border-t border-[#dce4ed] bg-white/95 px-4 py-3 backdrop-blur sm:bottom-[120px]">
-      <span className="mr-auto"><small className="block text-[10px] text-[#718096]">Total</small><b className="font-serif text-[20px] text-[#c8102e]">{money(total)}</b></span>
-      <button type="button" disabled={!startDate} onClick={() => { addPass(); setItemAdded(true); }} className="h-11 flex-1 rounded-xl bg-[#5b8199] text-[13px] font-semibold tracking-wide text-white disabled:cursor-not-allowed disabled:bg-[#c9c9c9]">Add to cart</button>
+      <span className="mr-auto"><small className="block text-[10px] text-[#718096]">Total</small><b className="font-serif text-[20px] text-[#5b8199]">{money(total)}</b></span>
+      <button type="button" disabled={!startDate} onClick={() => { addPass(); setItemAdded(true); }} className="h-11 flex-1 rounded-xl bg-[#5b8199] text-[13px] font-semibold tracking-wide text-white disabled:cursor-not-allowed disabled:bg-[#c9c9c9]">Add To Cart</button>
     </div>
     {itemAdded && <div className="fixed inset-0 z-40 flex items-end justify-center bg-black/25 p-2 sm:items-center">
       <section role="dialog" aria-modal="true" aria-labelledby="item-added-title" className="w-full max-w-[430px] rounded-t-2xl border border-[#dce4ed] bg-white p-4 shadow-xl sm:rounded-2xl">
         <div className="flex items-center gap-2"><Check className="h-5 w-5 text-emerald-700"/><h2 id="item-added-title" className="text-[17px] font-bold">Item Added</h2><button type="button" onClick={() => setItemAdded(false)} aria-label="Close" className="ml-auto px-2 text-xl">×</button></div>
         <p className="mt-3 text-[13px] font-semibold">{formatDate(startDate)}</p>
-        <div className="mt-3 flex justify-between gap-3 border-b border-[#dce4ed] pb-3 text-[12px]"><span>1 Summer Sightseeing Pass · {age}{uplift ? ' · 1 uplift to McDougall’s Chondola' : ''}</span><b className="shrink-0">{money(total)}</b></div>
-        <div className="space-y-1 py-3 text-[12px]"><p className="flex justify-between"><span>Per item subtotal</span><span>{money(total)}</span></p><p className="flex justify-between font-semibold"><span>Per item total</span><span>{money(total)}</span></p><p className="flex justify-between font-semibold"><span>Cart total</span><span>{money(cartTotal + total)}</span></p></div>
-        <p className="bg-[#f7f8f9] px-2 py-3 text-center text-[11px]">Got a discount code? Apply it at checkout.</p>
+        <div className="mt-3 flex justify-between gap-3 border-b border-[#dce4ed] pb-3 text-[12px]"><span>1 Summer Sightseeing Pass - {age.replace(': ', ' ')}{uplift ? " - 1 Uplift To McDougall's Chondola" : ''}</span><b className="flex shrink-0 items-center gap-2">{savings > 0 && <del className="text-[#68717f]">{money(referencePrice)}</del>}{money(total)}</b></div>
+        {savings > 0 && <div className="mt-2 flex items-center gap-2"><span className="rounded bg-emerald-700 px-2 py-1 text-[10px] font-bold text-white">{discountPercent}% OFF</span><span className="text-[11px] text-[#68717f]">ⓘ</span></div>}
+        <div className="space-y-1 py-3 text-[12px]"><p className="flex justify-between"><span>Per Item Subtotal</span><span>{money(total)}</span></p><p className="flex justify-between font-semibold"><span>Per Item Total</span><span>{savings > 0 && <del className="mr-2 font-normal text-[#68717f]">{money(referencePrice)}</del>}{money(total)}</span></p><p className="flex justify-between font-semibold"><span>Cart Total</span><span>{money(cartTotal + total)}</span></p></div>
+        {savings > 0 && <p className="bg-[#f7f8f9] px-2 py-3 text-center text-[11px]">You Save <b className="text-emerald-700">{money(savings)}</b><br/>Got a discount code? Apply it at checkout.</p>}
         <div className="mt-3 grid grid-cols-2 gap-3"><button type="button" onClick={() => navigate('/cart')} className="h-11 rounded-xl border border-[#344a64] text-[12px]">View Cart</button><button type="button" onClick={onCheckout} className="h-11 rounded-xl bg-[#5b8199] text-[12px] font-semibold text-white">Checkout</button></div>
       </section>
     </div>}
