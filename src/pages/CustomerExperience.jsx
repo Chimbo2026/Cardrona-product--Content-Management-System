@@ -260,7 +260,7 @@ function WinterSeasonPassBooking({ onAdd }) {
     variant: `${passType}-${age}-${paymentPlan}-${foundation}-${donations.join(',')}`,
   });
 
-  return <main className="grid items-start gap-6 px-4 pb-8 pt-5 sm:px-8 lg:grid-cols-[minmax(0,1.2fr)_minmax(360px,1fr)]">
+  return <main className="grid grid-cols-1 items-start gap-6 px-4 pb-8 pt-5 sm:px-8">
     <div className="space-y-6">
       <section>
         <h3 className="text-[16px] font-bold">Payment Plan</h3>
@@ -289,7 +289,7 @@ function WinterSeasonPassBooking({ onAdd }) {
       <WinterDonationOptions foundation={foundation} onFoundationChange={setFoundation} selected={donations} onToggle={toggleDonation}/>
     </div>
 
-    <aside className="rounded-[20px] border border-[#ddd] bg-white p-5 shadow-[0_8px_18px_rgba(0,0,0,0.10)] lg:sticky lg:top-5">
+    <aside className="w-full min-w-0 rounded-[20px] border border-[#ddd] bg-white p-5 shadow-[0_8px_18px_rgba(0,0,0,0.10)]">
       <h2 className="font-serif text-[23px] font-bold">Item Summary</h2>
       {canAdd && <div className="mt-4 border-b border-[#cbd7e4] pb-4 text-[15px]">
         <b className="block">(1) {summaryName}</b>
