@@ -69,7 +69,7 @@ export default function EarlybirdMultiDayPassConfigurator({ image, onAdd }) {
     </button>;
   };
 
-  return <LocalizeCustomerTree lang={lang}><main className="grid grid-cols-1 items-start gap-6 px-4 pb-8 pt-5 sm:grid-cols-[minmax(0,1fr)_minmax(300px,0.72fr)] sm:px-8">
+  return <LocalizeCustomerTree lang={lang}><main className="grid grid-cols-1 items-start gap-6 px-4 pb-8 pt-5 sm:px-8">
     <div className="space-y-6">
       <section className="border-b border-[#cbd7e4] pb-5">
         <h1 className="font-serif text-[24px] font-bold text-[#344a64]">Earlybird Multi-Day Passes</h1>
@@ -106,7 +106,7 @@ export default function EarlybirdMultiDayPassConfigurator({ image, onAdd }) {
       {foundation && DONATIONS.map((option) => <section key={option.id}><h2 className="mb-2 text-[16px] font-bold">{option.name}</h2>{donationCard(option)}</section>)}
     </div>
 
-    <aside className="rounded-[20px] border border-[#ddd] bg-white p-5 shadow-[0_8px_18px_rgba(0,0,0,0.10)] sm:sticky sm:top-16">
+    <aside className="rounded-[20px] border border-[#ddd] bg-white p-5 shadow-[0_8px_18px_rgba(0,0,0,0.10)]">
       <h2 className="font-serif text-[23px] font-bold">Item Summary</h2>
       <div className="mt-4 border-b border-[#cbd7e4] pb-4 text-[15px]"><b className="block">({quantity}) Earlybird Multi-Day Pass - {age} - {days} Days - {paymentPlan}</b><span className="mt-2 block">{money(paymentPlan === 'Buy Now, Pay Later' ? 50 : passPrice)}</span>{donations.map((id) => <div key={id} className="mt-4"><b className="block">({quantity}) {DONATIONS.find((item) => item.id === id)?.name}</b><span className="mt-2 block">{money(20 * quantity)}</span></div>)}</div>
       {paymentPlan === 'Buy Now, Pay Later' ? <div className="mt-4"><div className="flex justify-between text-[14px] text-[#777]"><span>Total</span><span>{money(total)}</span></div><div className="mt-1 flex justify-between text-[23px]"><span>Due Today</span><b>{money(dueToday)}</b></div><button type="button" onClick={() => setScheduleOpen((value) => !value)} className="mt-4 flex w-full items-center justify-between text-[15px]"><span>View Payment Schedule ›</span><span>4 remaining</span></button>{scheduleOpen && <div className="mt-3 space-y-2 rounded-lg bg-[#f5f6f7] p-3 text-[13px]"><div className="flex justify-between"><span>Due today</span><span>{money(dueToday)}</span></div>{Array.from({ length: 4 }, (_, index) => <div key={index} className="flex justify-between"><span>Instalment {index + 1}</span><span>{money(perInstalment)}</span></div>)}</div>}</div> : <div className="mt-4 flex justify-between text-[23px]"><span>Total</span><b>{money(total)}</b></div>}
