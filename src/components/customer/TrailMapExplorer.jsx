@@ -1,5 +1,7 @@
 import { useState } from 'react';
 import { ArrowUpRight, Minus, Plus } from 'lucide-react';
+import { useLang } from '@/lib/i18n';
+import { LocalizeCustomerTree } from '@/lib/customerLocale';
 
 const MAPS = {
   Summer: {
@@ -15,11 +17,12 @@ const MAPS = {
 };
 
 export default function TrailMapExplorer() {
+  const { lang } = useLang();
   const [season, setSeason] = useState('Summer');
   const [zoom, setZoom] = useState(1);
   const map = MAPS[season];
 
-  return <main className="space-y-3 px-4 pb-6 pt-4 sm:px-8">
+  return <LocalizeCustomerTree lang={lang}><main className="space-y-3 px-4 pb-6 pt-4 sm:px-8">
     <section>
       <h2 className="font-serif text-[19px] font-bold text-[#344a64]">Trail map</h2>
       <p className="mt-1 text-[10px] leading-4 text-[#718096]">{map.description}</p>
@@ -33,5 +36,5 @@ export default function TrailMapExplorer() {
     </section>
     <a href="https://cardrona-treblecone.com/mountains/maps" target="_blank" rel="noreferrer" className="inline-flex items-center gap-1 text-[10px] font-medium text-[#5b8199]">Official trail maps and mountain details <ArrowUpRight className="h-3 w-3"/></a>
     <p className="text-[9px] leading-4 text-[#718096]">Map artwork is supplied by Cardrona & Treble Cone. Check the official mountain information for current trail and lift status.</p>
-  </main>;
+  </main></LocalizeCustomerTree>;
 }

@@ -2,6 +2,8 @@ import { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { Bike, CalendarDays, Check, ShieldCheck } from 'lucide-react';
 import DateAvailabilityCalendar from './DateAvailabilityCalendar';
+import { useLang } from '@/lib/i18n';
+import { LocalizeCustomerTree } from '@/lib/customerLocale';
 
 const BIKE_TYPES = ['Enduro', 'Downhill', 'Full Suspension'];
 const SIZES = {
@@ -33,6 +35,7 @@ const formatDate = (value) => value ? new Intl.DateTimeFormat('en-NZ', { weekday
 const defaultSize = (type, age) => type === 'Full Suspension' && age === 'Child' ? SIZES[type][0] : SIZES[type][SIZES[type].length - 1];
 
 export default function BikePackageConfigurator({ onAdd, onCheckout, cartTotal = 0 }) {
+  const { lang } = useLang();
   const navigate = useNavigate();
   const location = useLocation();
   const rentalOnly = new URLSearchParams(location.search).get('product') === 'bike-rental';
@@ -105,7 +108,7 @@ export default function BikePackageConfigurator({ onAdd, onCheckout, cartTotal =
     setItemAdded(true);
   };
 
-  return <main className="space-y-5 px-4 pb-[150px] pt-5 sm:px-8 sm:pb-[220px]">
+  return <LocalizeCustomerTree lang={lang}><main className="space-y-5 px-4 pb-[150px] pt-5 sm:px-8 sm:pb-[220px]">
     <section>
       <h2 className="font-serif text-[25px] font-bold text-[#202b3a]">{rentalOnly ? 'Bike Rental' : 'Lift Pass + Bike Rental'}</h2>
       {rentalOnly ? <>
@@ -197,5 +200,5 @@ export default function BikePackageConfigurator({ onAdd, onCheckout, cartTotal =
       <p className="bg-[#f7f8f9] px-2 py-3 text-center text-[11px]">Payment is available at checkout. No real charge is made.</p>
       <div className="mt-3 grid grid-cols-2 gap-3"><button type="button" onClick={() => navigate('/cart')} className="h-11 rounded-xl border border-[#344a64] text-[12px]">View Cart</button><button type="button" onClick={onCheckout} className="h-11 rounded-xl bg-[#5b8199] text-[12px] font-semibold text-white">Checkout</button></div>
     </section></div>}
-  </main>;
+  </main></LocalizeCustomerTree>;
 }

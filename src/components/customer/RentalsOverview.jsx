@@ -1,4 +1,6 @@
 import { ArrowUpRight, Check, MapPin, PackageCheck } from 'lucide-react';
+import { useLang } from '@/lib/i18n';
+import { LocalizeCustomerTree } from '@/lib/customerLocale';
 
 const RENTALS_URL = 'https://cardrona-treblecone.com/rentals';
 
@@ -64,8 +66,9 @@ const rentalOptions = [
 ];
 
 export default function RentalsOverview() {
+  const { lang } = useLang();
   return (
-    <main className="space-y-4 px-4 pb-8 pt-5 sm:px-8">
+    <LocalizeCustomerTree lang={lang}><main className="space-y-4 px-4 pb-8 pt-5 sm:px-8">
       <section>
         <h2 className="font-serif text-[25px] font-bold text-[#2e435d]">Ski &amp; snowboard rentals</h2>
         <p className="mt-1 text-[11px] leading-5 text-[#687b92]">Choose your equipment, clothing and pickup location for your mountain day.</p>
@@ -104,6 +107,6 @@ export default function RentalsOverview() {
       </section>
 
       <a href={RENTALS_URL} target="_blank" rel="noreferrer" className="flex items-center justify-center gap-1 py-1 text-[10px] font-semibold text-[#5b8199]">View all rental details on Cardrona’s website <ArrowUpRight className="h-3 w-3" /></a>
-    </main>
+    </main></LocalizeCustomerTree>
   );
 }

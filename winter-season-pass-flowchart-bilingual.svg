@@ -1,0 +1,122 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1400" height="3920" viewBox="0 0 1400 3920">
+<defs>
+  <marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0 0L10 5L0 10z" fill="#697681"/></marker>
+  <filter id="soft" x="-10%" y="-10%" width="120%" height="120%"><feDropShadow dx="0" dy="2" stdDeviation="3" flood-color="#25313b" flood-opacity=".12"/></filter>
+  <style>
+    .bg{fill:#f7f8fa}.title{font:700 31px 'PingFang SC','Noto Sans CJK SC',Arial,sans-serif;fill:#25313b}
+    .sub{font:15px 'PingFang SC','Noto Sans CJK SC',Arial,sans-serif;fill:#64717c}
+    .proc{fill:#edf7ef;stroke:#2f8b45;stroke-width:2.5}.decision{fill:#fff;stroke:#697681;stroke-width:2.5}
+    .branch{fill:#fff;stroke:#8b989f;stroke-width:2}.note{fill:#fff8e6;stroke:#d7a93a;stroke-width:2}
+    .done{fill:#eef3f7;stroke:#718492;stroke-width:2;stroke-dasharray:8 6}
+    .edge{fill:none;stroke:#697681;stroke-width:2.3;marker-end:url(#arrow)}
+    .label{font:600 14px 'PingFang SC','Noto Sans CJK SC',Arial,sans-serif;fill:#53616c}
+    .nodeText{font:15px 'PingFang SC','Noto Sans CJK SC',Arial,sans-serif;fill:#25313b}
+    .small{font:13px 'PingFang SC','Noto Sans CJK SC',Arial,sans-serif;fill:#53616c}
+  </style>
+</defs>
+<rect class="bg" width="1400" height="3920"/>
+<text class="title" x="700" y="56" text-anchor="middle">Winter 2027 Season Pass 购买流程 | Purchase Flow</text>
+<text class="sub" x="700" y="84" text-anchor="middle">普通流程图（无泳道）| Flowchart (no swimlanes) · 当前页面价格 / Prices shown on 18 Nov 2026</text>
+<path class="edge" d="M700 150V184"/>
+<path class="edge" d="M700 320V363"/>
+<path class="edge" d="M575 435V515H375V535"/>
+<text class="label" x="375" y="526" text-anchor="middle">Pay Now / 立即支付</text>
+<path class="edge" d="M825 435V515H1025V535"/>
+<text class="label" x="1025" y="526" text-anchor="middle">BNPL / 分期</text>
+<path class="edge" d="M375 635V665H700V690"/>
+<path class="edge" d="M1025 665H700V690"/>
+<path class="edge" d="M575 760V850H385V870"/>
+<text class="label" x="385" y="856" text-anchor="middle">Saver / 省价票</text>
+<path class="edge" d="M825 760V850H1015V870"/>
+<text class="label" x="1015" y="856" text-anchor="middle">Unlimited / 无限通行</text>
+<path class="edge" d="M385 1010V1040"/>
+<path class="edge" d="M1015 1010V1040"/>
+<path class="edge" d="M385 1245V1280H700V1300"/>
+<path class="edge" d="M1015 1245V1280H700"/>
+<path class="edge" d="M575 1370V1455H395V1480"/>
+<text class="label" x="395" y="1450" text-anchor="middle">Yes / 是</text>
+<path class="edge" d="M825 1370V1455H1005V1480"/>
+<text class="label" x="1005" y="1450" text-anchor="middle">No / 否</text>
+<path class="edge" d="M395 1580V1600H700V1620"/>
+<path class="edge" d="M1005 1580V1600H700"/>
+<path class="edge" d="M700 1710V1740"/>
+<path class="edge" d="M700 1860V1885"/>
+<path class="edge" d="M565 1960V2035H390V2065"/>
+<text class="label" x="390" y="2030" text-anchor="middle">No / 否：登录</text>
+<path class="edge" d="M835 1960V2035H1010V2065"/>
+<text class="label" x="1010" y="2030" text-anchor="middle">Yes / 是</text>
+<path class="edge" d="M390 2175V2205H700V2230"/>
+<path class="edge" d="M1010 2175V2205H700"/>
+<path class="edge" d="M700 2420V2435"/>
+<path class="edge" d="M575 2500V2575H390V2595"/>
+<text class="label" x="390" y="2570" text-anchor="middle">New / 新办</text>
+<path class="edge" d="M825 2500V2575H1010V2595"/>
+<text class="label" x="1010" y="2570" text-anchor="middle">Reload / 续用</text>
+<path class="edge" d="M390 2695V2720H700V2740"/>
+<path class="edge" d="M1010 2695V2720H700"/>
+<path class="edge" d="M700 2840V2880"/>
+<path class="edge" d="M700 3070V3105"/>
+<path class="edge" d="M700 3305V3335"/>
+<path class="edge" d="M700 3455V3490"/>
+<rect class="proc" x="560" y="105" width="280" height="45" rx="22" filter="url(#soft)"/>
+<text class="nodeText" x="700" y="133.45" text-anchor="middle" font-size="17"><tspan x="700" dy="0">开始 / Start</tspan></text>
+<rect class="proc" x="350" y="184" width="700" height="136" rx="14" filter="url(#soft)"/>
+<text class="nodeText" x="700" y="232.6" text-anchor="middle" font-size="16"><tspan x="700" dy="0">Winter 2027 整季票 / Winter 2027 season pass</tspan><tspan x="700" dy="25">不选单日或日期区间 / No day or date-range selection</tspan><tspan x="700" dy="25">无 Gondola Ride 选项 / No Gondola Ride option</tspan></text>
+<polygon class="decision" points="700,364 825,435 700,506 575,435" filter="url(#soft)"/>
+<text class="nodeText" x="700" y="429.6" text-anchor="middle" font-size="16"><tspan x="700" dy="0">选择付款方案</tspan><tspan x="700" dy="22">Choose payment plan</tspan></text>
+<rect class="branch" x="150" y="535" width="450" height="100" rx="14" filter="url(#soft)"/>
+<text class="nodeText" x="375" y="578.75" text-anchor="middle" font-size="15"><tspan x="375" dy="0">Pay Now / 立即支付</tspan><tspan x="375" dy="23">一次付清 / Pay in full at checkout</tspan></text>
+<rect class="branch" x="800" y="535" width="450" height="100" rx="14" filter="url(#soft)"/>
+<text class="nodeText" x="1025" y="568.9" text-anchor="middle" font-size="14"><tspan x="1025" dy="0">Buy Now, Pay Later / 先付后分期</tspan><tspan x="1025" dy="21">先付 NZ$100；余款 3–4 期</tspan><tspan x="1025" dy="21">NZ$100 now; 3–4 instalments</tspan></text>
+<polygon class="decision" points="700,690 825,760 700,830 575,760" filter="url(#soft)"/>
+<text class="nodeText" x="700" y="754.6" text-anchor="middle" font-size="16"><tspan x="700" dy="0">选择通行证类型</tspan><tspan x="700" dy="22">Choose pass type</tspan></text>
+<rect class="branch" x="125" y="870" width="520" height="140" rx="14" filter="url(#soft)"/>
+<text class="nodeText" x="385" y="911.9" text-anchor="middle" font-size="14"><tspan x="385" dy="0">Saver 省价票 / Saver Season Pass</tspan><tspan x="385" dy="22">Cardrona only；7/5–16 blackout</tspan><tspan x="385" dy="22">仅 Cardrona；7月5–16日停用</tspan><tspan x="385" dy="22">须接受 Saver 规则 / Accept Saver rules</tspan></text>
+<rect class="branch" x="755" y="870" width="520" height="140" rx="14" filter="url(#soft)"/>
+<text class="nodeText" x="1015" y="922.25" text-anchor="middle" font-size="15"><tspan x="1015" dy="0">Unlimited 无限通行 / Unlimited Pass</tspan><tspan x="1015" dy="23">Cardrona + Treble Cone</tspan><tspan x="1015" dy="23">整季无封闭日期 / No blackout dates</tspan></text>
+<rect class="branch" x="125" y="1040" width="520" height="205" rx="14" filter="url(#soft)"/>
+<text class="nodeText" x="385" y="1109.9" text-anchor="middle" font-size="14"><tspan x="385" dy="0">Saver 年龄票价 / Saver age prices</tspan><tspan x="385" dy="25">成人 18–64：NZ$1,029 / Adult: NZ$1,029</tspan><tspan x="385" dy="25">儿童 6–17：NZ$319 / Child: NZ$319</tspan><tspan x="385" dy="25">长者 65–74：NZ$689 / Senior: NZ$689</tspan></text>
+<rect class="branch" x="755" y="1040" width="520" height="205" rx="14" filter="url(#soft)"/>
+<text class="nodeText" x="1015" y="1089.55" text-anchor="middle" font-size="13"><tspan x="1015" dy="0">Unlimited 年龄票价 / Unlimited age prices</tspan><tspan x="1015" dy="23">成人 18–64：NZ$1,429 / Adult: NZ$1,429</tspan><tspan x="1015" dy="23">儿童 6–17：NZ$399 / Child: NZ$399</tspan><tspan x="1015" dy="23">长者 65–74：NZ$799 / Senior: NZ$799</tspan><tspan x="1015" dy="23">Under 6：免费 / Free</tspan><tspan x="1015" dy="23">Over 75：免费 / Free</tspan></text>
+<polygon class="decision" points="700,1300 825,1370 700,1440 575,1370" filter="url(#soft)"/>
+<text class="nodeText" x="700" y="1364.6" text-anchor="middle" font-size="16"><tspan x="700" dy="0">是否捐款？</tspan><tspan x="700" dy="22">Add a donation?</tspan></text>
+<rect class="branch" x="170" y="1480" width="450" height="100" rx="14" filter="url(#soft)"/>
+<text class="nodeText" x="395" y="1504.55" text-anchor="middle" font-size="13"><tspan x="395" dy="0">可选公益项目 / Optional causes</tspan><tspan x="395" dy="20">Plant a Seed · Ride Tamariki</tspan><tspan x="395" dy="20">Kārearea Project · All In</tspan><tspan x="395" dy="20">每项 NZ$20 / NZ$20 each</tspan></text>
+<rect class="branch" x="780" y="1480" width="450" height="100" rx="14" filter="url(#soft)"/>
+<text class="nodeText" x="1005" y="1535.25" text-anchor="middle" font-size="15"><tspan x="1005" dy="0">不捐款 / No donation</tspan></text>
+<rect class="proc" x="450" y="1620" width="500" height="90" rx="14" filter="url(#soft)"/>
+<text class="nodeText" x="700" y="1670.95" text-anchor="middle" font-size="17"><tspan x="700" dy="0">加入购物车 / Add to cart</tspan></text>
+<rect class="proc" x="350" y="1740" width="700" height="120" rx="14" filter="url(#soft)"/>
+<text class="nodeText" x="700" y="1782.25" text-anchor="middle" font-size="15"><tspan x="700" dy="0">核对商品与总价 / Review cart and total</tspan><tspan x="700" dy="23">优惠码可选 / Discount code optional</tspan><tspan x="700" dy="23">进入 Checkout / Continue to checkout</tspan></text>
+<polygon class="decision" points="700,1885 835,1960 700,2035 565,1960" filter="url(#soft)"/>
+<text class="nodeText" x="700" y="1954.6" text-anchor="middle" font-size="16"><tspan x="700" dy="0">已登录？</tspan><tspan x="700" dy="22">Signed in?</tspan></text>
+<rect class="branch" x="130" y="2065" width="520" height="110" rx="14" filter="url(#soft)"/>
+<text class="nodeText" x="390" y="2102.9" text-anchor="middle" font-size="14"><tspan x="390" dy="0">登录或创建账户 / Sign in or create account</tspan><tspan x="390" dy="22">Email + password；按页面提示验证</tspan><tspan x="390" dy="22">Complete any requested verification</tspan></text>
+<rect class="branch" x="750" y="2065" width="520" height="110" rx="14" filter="url(#soft)"/>
+<text class="nodeText" x="1010" y="2113.75" text-anchor="middle" font-size="15"><tspan x="1010" dy="0">已登录，继续结账</tspan><tspan x="1010" dy="23">Signed in; continue checkout</tspan></text>
+<rect class="proc" x="350" y="2230" width="700" height="190" rx="14" filter="url(#soft)"/>
+<text class="nodeText" x="700" y="2278.4" text-anchor="middle" font-size="13"><tspan x="700" dy="0">分配每张票给合资格组员 / Assign each ticket to eligible member</tspan><tspan x="700" dy="22">新增组员：名、姓、出生日期（日/月/年）</tspan><tspan x="700" dy="22">Add member: first name, last name, DOB (D/M/Y)</tspan><tspan x="700" dy="22">按年龄资格校验 / Age eligibility is checked</tspan><tspan x="700" dy="22">照片须护照规格、正面、无帽盔墨镜</tspan><tspan x="700" dy="22">Passport-quality photo; face forward, no hat/helmet/sunglasses</tspan></text>
+<polygon class="decision" points="700,2435 825,2500 700,2565 575,2500" filter="url(#soft)"/>
+<text class="nodeText" x="700" y="2494.6" text-anchor="middle" font-size="16"><tspan x="700" dy="0">选择 MyCARD</tspan><tspan x="700" dy="22">Choose MyCARD</tspan></text>
+<rect class="branch" x="160" y="2595" width="460" height="100" rx="14" filter="url(#soft)"/>
+<text class="nodeText" x="390" y="2638.9" text-anchor="middle" font-size="14"><tspan x="390" dy="0">Add New MyCARD / 新办</tspan><tspan x="390" dy="22">测试页显示 NZ$0 / Shown as NZ$0</tspan></text>
+<rect class="branch" x="780" y="2595" width="460" height="100" rx="14" filter="url(#soft)"/>
+<text class="nodeText" x="1010" y="2639.05" text-anchor="middle" font-size="13"><tspan x="1010" dy="0">Reload existing MyCARD / 续用</tspan><tspan x="1010" dy="21">如有可用旧卡 / If an existing card is available</tspan></text>
+<rect class="proc" x="400" y="2740" width="600" height="100" rx="14" filter="url(#soft)"/>
+<text class="nodeText" x="700" y="2783.75" text-anchor="middle" font-size="15"><tspan x="700" dy="0">签署免责条款 / Sign waiver</tspan><tspan x="700" dy="23">Terms and Conditions / 条款与条件</tspan></text>
+<rect class="proc" x="350" y="2880" width="700" height="190" rx="14" filter="url(#soft)"/>
+<text class="nodeText" x="700" y="2942.4" text-anchor="middle" font-size="14"><tspan x="700" dy="0">核对或修改账单地址 / Review or edit billing address</tspan><tspan x="700" dy="25">必填：街道、国家、城市、地区/省州、邮编</tspan><tspan x="700" dy="25">Required: street, country, city, region, postal code</tspan><tspan x="700" dy="25">地址第二行可选 / Address line 2 optional</tspan></text>
+<rect class="proc" x="350" y="3105" width="700" height="200" rx="14" filter="url(#soft)"/>
+<text class="nodeText" x="700" y="3170.9" text-anchor="middle" font-size="14"><tspan x="700" dy="0">信用卡支付（Windcave） / Credit card payment (Windcave)</tspan><tspan x="700" dy="26">卡号、卡面姓名、到期月/年、CVC</tspan><tspan x="700" dy="26">Card number, name, expiry MM/YY, CVC</tspan><tspan x="700" dy="26">点击 Continue / Click Continue</tspan></text>
+<rect class="note" x="400" y="3335" width="600" height="120" rx="14" filter="url(#soft)"/>
+<text class="nodeText" x="700" y="3376.9" text-anchor="middle" font-size="14"><tspan x="700" dy="0">核对金额并提交付款 / Review total and submit payment</tspan><tspan x="700" dy="23">Pay Now 流程实际看到信用卡表单</tspan><tspan x="700" dy="23">Pay Now page showed credit-card fields</tspan></text>
+<rect class="done" x="430" y="3490" width="540" height="90" rx="14" filter="url(#soft)"/>
+<text class="nodeText" x="700" y="3529.1" text-anchor="middle" font-size="16"><tspan x="700" dy="0">支付成功 / 订单确认</tspan><tspan x="700" dy="23">Payment success / order confirmation</tspan></text>
+<text class="small" x="700" y="3625" text-anchor="middle">支付成功页未核验：未输入卡片资料或提交付款。 / Success page unverified: no card data entered or payment submitted.</text>
+<text class="small" x="700" y="3655" text-anchor="middle">BNPL：2027/1/1 前购买：1/20、2/17、3/17、4/14；2027/1 购买：2/17、3/17、4/14、5/12。</text>
+<text class="small" x="700" y="3680" text-anchor="middle">BNPL: buy before 1 Jan 2027: 20 Jan, 17 Feb, 17 Mar, 14 Apr; buy in Jan: 17 Feb, 17 Mar, 14 Apr, 12 May.</text>
+<text class="small" x="700" y="3705" text-anchor="middle">2027/2 购买：3/17、4/7、4/28、5/19；2027/3：4/14、5/5、5/26；2027/4：5/5、5/19、6/2。</text>
+<text class="small" x="700" y="3730" text-anchor="middle">Buy in Feb 2027: 17 Mar, 7 Apr, 28 Apr, 19 May; Mar: 14 Apr, 5 May, 26 May; Apr: 5 May, 19 May, 2 Jun.</text>
+<text class="small" x="700" y="3755" text-anchor="middle">价格为 NZD，可能随销售阶段变化；购物车显示含 GST，未见独立刷卡费。 / NZD; may change by release; GST included; no separate card fee shown.</text>
+<text class="small" x="700" y="3785" text-anchor="middle">来源 / Source: Cardrona &amp; Treble Cone official purchase page. 夏季日票保留，测试季票已移除。 / Summer tickets left; test pass removed.</text>
+</svg>

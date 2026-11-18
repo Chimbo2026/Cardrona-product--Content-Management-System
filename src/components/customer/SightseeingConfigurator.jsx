@@ -1,4 +1,6 @@
 import { useState } from 'react';
+import { useLang } from '@/lib/i18n';
+import { LocalizeCustomerTree } from '@/lib/customerLocale';
 import { useNavigate } from 'react-router-dom';
 import { CableCar, Check, ChevronDown } from 'lucide-react';
 import DateAvailabilityCalendar from './DateAvailabilityCalendar';
@@ -16,6 +18,7 @@ const money = (value) => `NZ$${Number(value).toFixed(2)}`;
 const formatDate = (value) => value ? new Intl.DateTimeFormat('en-NZ', { weekday: 'long', day: '2-digit', month: 'long', year: 'numeric', timeZone: 'UTC' }).format(new Date(`${value}T00:00:00Z`)) : 'No date selected';
 
 export default function SightseeingConfigurator({ onAdd, onCheckout, cartTotal = 0 }) {
+  const { lang } = useLang();
   const navigate = useNavigate();
   const [startDate, setStartDate] = useState('');
   const [age, setAge] = useState(AGE_OPTIONS[0].label);
@@ -43,7 +46,7 @@ export default function SightseeingConfigurator({ onAdd, onCheckout, cartTotal =
     });
   };
 
-  return <main className="space-y-5 px-4 pb-[150px] pt-5 sm:px-8 sm:pb-[220px]">
+  return <LocalizeCustomerTree lang={lang}><main className="space-y-5 px-4 pb-[150px] pt-5 sm:px-8 sm:pb-[220px]">
     <section>
       <h2 className="font-serif text-[26px] font-bold text-[#202b3a]">Summer Sightseeing Pass</h2>
       <div className="mt-3 border-y border-[#cbd7e4] py-4 text-[13px] leading-6 text-[#718096]">
@@ -104,5 +107,5 @@ export default function SightseeingConfigurator({ onAdd, onCheckout, cartTotal =
         <div className="mt-3 grid grid-cols-2 gap-3"><button type="button" onClick={() => navigate('/cart')} className="h-11 rounded-xl border border-[#344a64] text-[12px]">View Cart</button><button type="button" onClick={onCheckout} className="h-11 rounded-xl bg-[#5b8199] text-[12px] font-semibold text-white">Checkout</button></div>
       </section>
     </div>}
-  </main>;
+  </main></LocalizeCustomerTree>;
 }

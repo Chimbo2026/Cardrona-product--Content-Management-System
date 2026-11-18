@@ -1,3 +1,6 @@
+import { useLang } from '@/lib/i18n';
+import { LocalizeCustomerTree } from '@/lib/customerLocale';
+
 const OPTIONS = [
   ['seed', 'Plant A Seed', 'Help us plant natives to regenerate our environment and offset your carbon emissions*.'],
   ['tamariki', 'Ride Tamariki', 'Help us provide life changing experiences in the mountains for disadvantaged children/families.'],
@@ -6,7 +9,8 @@ const OPTIONS = [
 ];
 
 export default function WinterDonationOptions({ foundation, onFoundationChange, selected, onToggle }) {
-  return <section className="space-y-3">
+  const { lang } = useLang();
+  return <LocalizeCustomerTree lang={lang}><section className="space-y-3">
     <div>
       <h3 className="text-[14px] font-semibold text-[#344a64]">Would you like to support the Cardrona Foundation?</h3>
       <p className="mt-1 text-[15px] text-[#777]">Help us spread goodness, guardianship and conservation throughout our communities.</p>
@@ -23,5 +27,5 @@ export default function WinterDonationOptions({ foundation, onFoundationChange, 
         <input type="checkbox" checked={selected.includes(id)} onChange={() => onToggle(id)} className="h-5 w-5 shrink-0 accent-[#5b8199]" />
       </label>
     </section>)}</div>
-  </section>;
+  </section></LocalizeCustomerTree>;
 }

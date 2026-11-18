@@ -2,6 +2,7 @@ import { Checkbox } from '@/components/ui/checkbox';
 import Panel from '@/components/common/Panel';
 import SelectTile from '@/components/ski/SelectTile';
 import { useLang } from '@/lib/i18n';
+import { LocalizeCustomerTree } from '@/lib/customerLocale';
 import { NZD } from '@/lib/format';
 import { AGE_OPTIONS, PAYMENT_PLANS, SEASON_PASS_TYPES, priceFor } from '@/lib/seasonPasses';
 
@@ -15,12 +16,12 @@ export default function SeasonPassConfigurator({
   rulesAccepted,
   onRulesChange,
 }) {
-  const { t } = useLang();
+  const { t, lang } = useLang();
   const selectedType = SEASON_PASS_TYPES.find((p) => p.value === passType);
   const requiresRules = passType === 'Winter Saver Season Pass';
 
   return (
-    <div className="space-y-4">
+    <LocalizeCustomerTree lang={lang}><div className="space-y-4">
       <Panel title={t('支付方式', 'Payment plan')} description={t('选择您的支付方式', 'Choose your Payment Option')}>
         <div className="grid gap-2.5 sm:grid-cols-2">
           {PAYMENT_PLANS.map((p) => (
@@ -85,6 +86,6 @@ export default function SeasonPassConfigurator({
           ))}
         </div>
       </Panel>
-    </div>
+    </div></LocalizeCustomerTree>
   );
 }

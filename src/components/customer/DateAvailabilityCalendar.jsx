@@ -1,10 +1,13 @@
 import { useState } from 'react';
 import { CalendarDays, ChevronLeft, ChevronRight } from 'lucide-react';
+import { useLang } from '@/lib/i18n';
+import { LocalizeCustomerTree } from '@/lib/customerLocale';
 
 const dateValue = (year, month, day) => `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
 const displayDate = (value) => value ? `${value.slice(8, 10)}/${value.slice(5, 7)}/${value.slice(0, 4)}` : 'dd/mm/yyyy';
 
 export default function DateAvailabilityCalendar({ value, onChange, min, max, isUnavailable = () => false, required = false, label = 'Choose your start date', defaultOpen = false, unavailableLabel = 'UNAVAILABLE' }) {
+  const { lang } = useLang();
   const [open, setOpen] = useState(defaultOpen);
   const [month, setMonth] = useState(() => {
     const initial = value || min || '2026-12-01';
@@ -27,7 +30,7 @@ export default function DateAvailabilityCalendar({ value, onChange, min, max, is
   const canGoPrevious = !min || previousMonthStart >= min.slice(0, 7) + '-01';
   const canGoNext = !max || nextMonthStart <= max.slice(0, 7) + '-01';
 
-  return <div className="w-full">
+  return <LocalizeCustomerTree lang={lang}><div className="w-full">
     <div className="text-[13px] font-semibold text-[#344a64]">
       <span>{label} {required && <span className="text-[#5b8199]">(Required)</span>}</span>
       <button type="button" aria-haspopup="dialog" aria-expanded={open} onClick={() => setOpen((current) => !current)} className="mt-2 flex h-12 w-full items-center justify-between rounded-xl border border-[#cbd7e4] bg-white px-3 text-left text-[13px] font-normal text-[#344a64] outline-none focus:border-[#5b8199]">
@@ -52,5 +55,5 @@ export default function DateAvailabilityCalendar({ value, onChange, min, max, is
       </div>
       <div className="mt-3 flex items-center gap-1.5 border-t border-dashed border-[#dce4ed] pt-2 text-[11px] text-[#444]"><span className="h-3 w-3 bg-[#dedede]" /> {unavailableLabel}</div>
     </section>}
-  </div>;
+  </div></LocalizeCustomerTree>;
 }

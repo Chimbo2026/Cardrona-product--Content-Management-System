@@ -1,5 +1,7 @@
 import { useState } from 'react';
 import { ArrowUpRight, Bus, CarFront, Check, ChevronDown, MapPin, Mountain, Sun } from 'lucide-react';
+import { useLang } from '@/lib/i18n';
+import { LocalizeCustomerTree } from '@/lib/customerLocale';
 
 const TRANSPORT_URL = 'https://cardrona-treblecone.com/mountains/transport';
 const SUMMER_BOOKING_URL = 'https://secure.cardrona-treblecone.com/s/summer';
@@ -70,6 +72,7 @@ function OptionCard({ icon: Icon, title, subtitle, price, priceNote, details, ac
 }
 
 export default function TransportPlanner() {
+  const { lang } = useLang();
   const [season, setSeason] = useState('Winter');
   const [origin, setOrigin] = useState('Wānaka');
   const [destination, setDestination] = useState('Cardrona');
@@ -77,7 +80,7 @@ export default function TransportPlanner() {
   const isSummer = season === 'Summer';
 
   return (
-    <main className="space-y-4 px-4 pb-8 pt-5 sm:px-8">
+    <LocalizeCustomerTree lang={lang}><main className="space-y-4 px-4 pb-8 pt-5 sm:px-8">
       <section>
         <h2 className="font-serif text-[25px] font-bold text-[#2e435d]">Plan your trip</h2>
         <p className="mt-1 text-[11px] leading-5 text-[#687b92]">Choose where you’re starting and which mountain you’re visiting to compare travel options.</p>
@@ -123,6 +126,6 @@ export default function TransportPlanner() {
 
       <p className="px-1 text-[9px] leading-4 text-[#718096]">Fares, schedules and road conditions may change. Confirm current information on the official Cardrona & Treble Cone site before you travel.</p>
       <a href={TRANSPORT_URL} target="_blank" rel="noreferrer" className="flex items-center justify-center gap-1 py-1 text-[10px] font-semibold text-[#5b8199]">Official transport information <ArrowUpRight className="h-3 w-3" /></a>
-    </main>
+    </main></LocalizeCustomerTree>
   );
 }
