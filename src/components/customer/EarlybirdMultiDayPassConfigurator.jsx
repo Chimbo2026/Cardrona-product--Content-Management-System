@@ -22,6 +22,7 @@ const LAYOUTS = [
   ['grouped', 'Grouped tickets'],
   ['age-first', 'Age first'],
   ['quantity-copy', 'Quantity + copy'],
+  ['one-tap', 'One-tap pair'],
 ];
 
 const DONATIONS = [
@@ -38,8 +39,8 @@ export default function EarlybirdMultiDayPassConfigurator({ image, onAdd }) {
   const { lang } = useLang();
   const [layout, setLayout] = useState('individual');
   const [ageStage, setAgeStage] = useState('counts');
+  const [oneTapAge, setOneTapAge] = useState('Adult');
   const [guests, setGuests] = useState([newGuest(1, 'Adult', 3), newGuest(2, 'Child', 4)]);
-  const [nextGuestId, setNextGuestId] = useState(3);
   const [foundation, setFoundation] = useState(false);
   const [donations, setDonations] = useState([]);
   const [showMore, setShowMore] = useState(false);
@@ -60,10 +61,11 @@ export default function EarlybirdMultiDayPassConfigurator({ image, onAdd }) {
   const donationPerGuest = foundation ? donations.length * 20 : 0;
   const total = guests.reduce((sum, guest) => sum + PRICES[guest.age][guest.days] + donationPerGuest, 0);
   const toggleDonation = (id) => setDonations((current) => current.includes(id) ? current.filter((item) => item !== id) : [...current, id]);
-  const addGuest = (age = 'Adult', days = 3, profile = {}) => {
-    setGuests((current) => [...current, newGuest(nextGuestId, age, days, profile)]);
-    setNextGuestId((current) => current + 1);
-  };
+  const addGuests = (count, age = 'Adult', days = 3, profile = {}) => setGuests((current) => {
+    const firstId = current.reduce((maxId, guest) => Math.max(maxId, guest.id), 0) + 1;
+    return [...current, ...Array.from({ length: count }, (_, index) => newGuest(firstId + index, age, days, profile))];
+  });
+  const addGuest = (age = 'Adult', days = 3, profile = {}) => addGuests(1, age, days, profile);
   const removeGuest = (id) => setGuests((current) => current.filter((guest) => guest.id !== id));
   const updateGuest = (id, updates) => setGuests((current) => current.map((guest) => guest.id === id ? { ...guest, ...updates } : guest));
   const guestsForAge = (age) => guests.filter((guest) => guest.age === age);
@@ -151,6 +153,15 @@ export default function EarlybirdMultiDayPassConfigurator({ image, onAdd }) {
       <div className="rounded-xl border border-[#dce4ed] bg-white p-4"><b className="text-[13px]">Earlybird Multi-Day Pass</b><span className="mt-1 block text-[12px] text-[#777]">Choose quantities by age group</span></div>
       {AGE_OPTIONS.map(([age, label]) => <div key={age} className="flex items-center justify-between gap-3 rounded-xl border border-[#dce4ed] bg-white p-3"><span className="min-w-0"><b className="block text-[14px]">{age}</b><small className="text-[11px] text-[#777]">{label.replace(`${age}: `, '')}</small></span><div className="flex h-10 items-center overflow-hidden rounded-lg border border-[#dce4ed]"><button type="button" aria-label={`Remove ${age}`} disabled={!guestsForAge(age).length || guestCount <= 1} onClick={() => setAgeCount(age, guestsForAge(age).length - 1)} className="h-full px-3 disabled:opacity-40"><Minus className="h-4 w-4"/></button><span className="min-w-8 text-center text-[14px]">{guestsForAge(age).length}</span><button type="button" aria-label={`Add ${age}`} onClick={() => setAgeCount(age, guestsForAge(age).length + 1)} className="h-full px-3"><Plus className="h-4 w-4"/></button></div></div>)}
       <section className="rounded-xl border border-[#dce4ed] bg-white p-4"><h3 className="text-[14px] font-bold">Pass days</h3><button type="button" aria-pressed={copyDaysToAll} onClick={() => { const next = !copyDaysToAll; setCopyDaysToAll(next); if (next && guests[0]) chooseSharedDays(guests[0].days); }} className="mt-2 flex w-full items-center gap-2 rounded-lg bg-[#eef6f1] px-3 py-3 text-left text-[12px] font-semibold text-[#34765a]"><span className="flex h-5 w-5 items-center justify-center rounded bg-[#379b72] text-white">{copyDaysToAll && <Check className="h-4 w-4"/>}</span>Use the same pass days for every ticket</button>{copyDaysToAll ? dayOptions(guests[0]?.days ?? 3, chooseSharedDays) : groupedByAge.map((group) => <div key={group.age} className="mt-3 text-[12px] font-semibold">{group.age} · {group.guests.length}{dayOptions(group.guests[0].days, (days) => setGroupDays(group.age, days), true)}</div>)}<p className="mt-2 text-[11px] text-[#8a969f]">{copyDaysToAll ? 'Changing the day count updates all guests together.' : 'Set a different day count for each age group.'}</p></section>
+    </section>}
+
+    {layout === 'one-tap' && <section className="space-y-4">
+      <div><h2 className="text-[17px] font-bold">Add passes in one tap</h2><p className="mt-1 text-[13px] text-[#777]">Most guests book in pairs. Add two together or add one pass.</p></div>
+      <div className="rounded-xl border border-[#dce4ed] bg-white p-4"><span className="text-[11px] text-[#8a969f]">Selected pass</span><b className="mt-1 block text-[13px]">Earlybird Multi-Day Pass · {guests[0]?.days ?? 3} Days</b></div>
+      <div className="rounded-xl border border-[#dce4ed] bg-white p-4"><h3 className="text-[12px] font-bold text-[#526982]">Guests</h3>{AGE_OPTIONS.map(([age]) => <div key={age} className="flex justify-between py-1.5 text-[13px]"><span className={guestsForAge(age).length ? 'text-[#20242b]' : 'text-[#9aa4af]'}>{age}</span><b>{guestsForAge(age).length}</b></div>)}</div>
+      <label className="block text-[12px] font-semibold">Add passes for<select value={oneTapAge} onChange={(event) => setOneTapAge(event.target.value)} className="mt-1 h-11 w-full rounded-lg border border-[#dce4ed] bg-white px-3 text-[14px]">{AGE_OPTIONS.map(([age, label]) => <option key={age} value={age}>{label}</option>)}</select></label>
+      <button type="button" onClick={() => addGuests(2, oneTapAge, guestsForAge(oneTapAge)[0]?.days ?? 3)} className="w-full rounded-xl border border-[#d44235] bg-[#fff8f6] px-4 py-3 text-center text-[14px] font-bold text-[#c4362a]">+ Add 2 {oneTapAge === 'Child' ? 'children' : `${oneTapAge.toLowerCase()}s`}<small className="mt-0.5 block text-[10px] font-normal">Most book in pairs</small></button>
+      <button type="button" onClick={() => addGuest(oneTapAge, guestsForAge(oneTapAge)[0]?.days ?? 3)} className="w-full rounded-xl border border-[#dce4ed] px-4 py-2 text-center text-[13px] text-[#526982]">+ Add 1 {oneTapAge.toLowerCase()}</button>
     </section>}
 
     <section>
