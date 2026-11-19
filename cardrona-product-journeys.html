@@ -1857,14 +1857,16 @@ html&gt;body{padding:0}&lt;/style&gt;
     #cardrona-journeys h2 { font-size:1.25em; }
     #cardrona-journeys h3 { font-size:1.05em; }
     #cardrona-journeys .cj-badge { display:inline-flex; border-radius:999px; padding:.2rem .6rem; background:var(--muted); color:var(--muted-foreground); }
-    #cardrona-journeys .cj-flow { display:grid; grid-template-columns:minmax(0,1fr); gap:.45rem; list-style:none; padding:0; margin:.65rem 0; counter-reset:journey; }
-    #cardrona-journeys .cj-flow li { position:relative; min-height:68px; padding:.75rem .9rem .75rem 3.2rem; border:1px solid var(--border); border-left:3px solid var(--viz-series-1); border-radius:.65rem; background:var(--card); counter-increment:journey; }
-    #cardrona-journeys .cj-flow li:before { content:counter(journey); position:absolute; left:.85rem; top:50%; transform:translateY(-50%); display:inline-grid; place-items:center; width:1.65rem; height:1.65rem; border-radius:50%; background:var(--viz-series-1); color:var(--primary-foreground); font-size:.85em; }
-    #cardrona-journeys .cj-flow li:not(:last-child):after { content:&quot;↓&quot;; position:absolute; z-index:1; bottom:-.55rem; left:50%; transform:translateX(-50%); padding:0 .3rem; background:var(--card); color:var(--muted-foreground); font-size:1.15em; }
-    #cardrona-journeys .cj-flow strong { font-weight:500; }
-    #cardrona-journeys .cj-flow small { display:block; margin:.3rem 0 0; color:var(--muted-foreground); }
-    #cardrona-journeys .cj-terminal { width:max-content; max-width:100%; margin:.5rem auto; padding:.55rem .95rem; border:1px solid var(--viz-series-2); border-radius:999px; background:color-mix(in srgb,var(--viz-series-2) 10%,var(--card)); text-align:center; }
-    #cardrona-journeys .cj-arrow { margin:-.45rem auto; color:var(--muted-foreground); text-align:center; line-height:1.5; }
+    #cardrona-journeys .cj-diagram-wrap { overflow-x:auto; margin:1rem 0; border-radius:.6rem; }
+    #cardrona-journeys .cj-diagram { display:block; width:100%; min-width:720px; height:auto; color:var(--foreground); }
+    #cardrona-journeys .cj-diagram .edge { fill:none; stroke:var(--muted-foreground); stroke-width:1.6; }
+    #cardrona-journeys .cj-diagram .action { fill:var(--card); stroke:var(--viz-series-1); stroke-width:1.6; }
+    #cardrona-journeys .cj-diagram .decision { fill:var(--muted); stroke:var(--foreground); stroke-width:1.5; }
+    #cardrona-journeys .cj-diagram .option { fill:color-mix(in srgb,var(--viz-series-1) 10%,var(--card)); stroke:var(--border); stroke-width:1.2; }
+    #cardrona-journeys .cj-diagram .terminal { fill:color-mix(in srgb,var(--viz-series-2) 12%,var(--card)); stroke:var(--viz-series-2); stroke-width:1.6; }
+    #cardrona-journeys .cj-diagram text { fill:var(--foreground); font:500 15px/1.2 system-ui,sans-serif; text-anchor:middle; }
+    #cardrona-journeys .cj-diagram .edge-label { fill:var(--muted-foreground); font-size:12px; font-weight:400; }
+    #cardrona-journeys .cj-terminal { text-align:center; }
     #cardrona-journeys .cj-note { padding:.7rem .85rem; border-left:3px solid var(--viz-series-2); border-radius:.3rem; background:var(--muted); color:var(--muted-foreground); }
     #cardrona-journeys .cj-table-wrap { overflow-x:auto; margin:.6rem 0 1rem; }
     #cardrona-journeys table { width:100%; border-collapse:collapse; }
@@ -1883,6 +1885,7 @@ html&gt;body{padding:0}&lt;/style&gt;
       &lt;select id=&quot;cj-category&quot; class=&quot;form-select&quot;&gt;
         &lt;option value=&quot;winter&quot;&gt;Winter Passes / 冬季通行证&lt;/option&gt;
         &lt;option value=&quot;summer&quot;&gt;Summer Biking / 夏季骑行&lt;/option&gt;
+        &lt;option value=&quot;sightseeing&quot;&gt;Summer Sightseeing / 夏季观光&lt;/option&gt;
       &lt;/select&gt;
     &lt;/div&gt;
     &lt;div class=&quot;cj-field&quot;&gt;
@@ -1894,18 +1897,7 @@ html&gt;body{padding:0}&lt;/style&gt;
 
   &lt;section class=&quot;cj-panel cj-section&quot; aria-labelledby=&quot;cj-checkout-title&quot;&gt;
     &lt;div class=&quot;cj-title&quot;&gt;&lt;h2 id=&quot;cj-checkout-title&quot;&gt;加入购物车后的共同流程 / Shared checkout journey&lt;/h2&gt;&lt;span class=&quot;cj-badge&quot;&gt;登录后结账 / Sign in at checkout&lt;/span&gt;&lt;/div&gt;
-    &lt;div class=&quot;cj-terminal&quot;&gt;开始：购物车 / Start: cart&lt;/div&gt;
-    &lt;div class=&quot;cj-arrow&quot; aria-hidden=&quot;true&quot;&gt;↓&lt;/div&gt;
-    &lt;ol class=&quot;cj-flow&quot;&gt;
-      &lt;li&gt;&lt;strong&gt;查看购物车 / Review cart&lt;/strong&gt;&lt;small&gt;检查日期、商品、数量和金额 / Verify dates, items, quantities and total&lt;/small&gt;&lt;/li&gt;
-      &lt;li&gt;&lt;strong&gt;登录或继续 / Sign in or continue&lt;/strong&gt;&lt;small&gt;未登录时填写邮箱和密码；若页面已显示 Jiao 账号则直接继续 / Enter email and password if signed out; continue if Jiao is already shown&lt;/small&gt;&lt;/li&gt;
-      &lt;li&gt;&lt;strong&gt;分配产品 / Assign products&lt;/strong&gt;&lt;small&gt;选择使用者；新增乘客时填写姓名、出生日期（日/月/年） / Choose each guest; add name and date of birth (day/month/year) when needed&lt;/small&gt;&lt;/li&gt;
-      &lt;li&gt;&lt;strong&gt;签署免责声明 / Sign waivers&lt;/strong&gt;&lt;small&gt;逐项确认条款并完成电子签名 / Accept terms and complete the e-signature&lt;/small&gt;&lt;/li&gt;
-      &lt;li&gt;&lt;strong&gt;选择付款 / Choose payment&lt;/strong&gt;&lt;small&gt;可用时添加或充值 MyCARD（新增卡余额默认为 $0），或选择银行卡 / Add or reload MyCARD (new card starts at $0), or pay by card&lt;/small&gt;&lt;/li&gt;
-      &lt;li&gt;&lt;strong&gt;账单及银行卡资料 / Billing and card details&lt;/strong&gt;&lt;small&gt;街道、国家、城市、州/地区、邮编；银行卡号、持卡人姓名、有效月/年、CVC / Street, country, city, region, postal code; card number, name, expiry, CVC&lt;/small&gt;&lt;/li&gt;
-      &lt;li&gt;&lt;strong&gt;确认付款 / Confirm payment&lt;/strong&gt;&lt;small&gt;提交后应显示订单确认和付款成功 / Submit and look for order confirmation&lt;/small&gt;&lt;/li&gt;
-    &lt;/ol&gt;
-    &lt;div class=&quot;cj-terminal&quot;&gt;结束：订单确认 / End: order confirmation&lt;/div&gt;
+    &lt;div id=&quot;cj-checkout-diagram&quot; class=&quot;cj-diagram-wrap&quot;&gt;&lt;/div&gt;
     &lt;p class=&quot;cj-note&quot;&gt;付款成功页面没有在本次核查中验证；流程图到“确认付款”这一步，未提交真实付款。&lt;br&gt;Payment success was not verified during this review; no real payment was submitted.&lt;/p&gt;
   &lt;/section&gt;
   &lt;p class=&quot;cj-meta cj-section&quot;&gt;价格为官网在 2026-11-18 核查时显示的 NZD 价格；有些产品需选日期、车辆或库存后才显示最终金额。&lt;br&gt;Prices are NZD as displayed on 18 Nov 2026; some totals depend on date, bike selection, and availability.&lt;/p&gt;
@@ -1925,10 +1917,96 @@ html&gt;body{padding:0}&lt;/style&gt;
       { id:&#x27;day&#x27;, name:&#x27;Summer Day Passes / 夏季日票&#x27;, url:&#x27;https://secure.cardrona-treblecone.com/l/summer/p/summer-day-multi-day-passes-2&#x27;, intro:&#x27;必须选使用日期；价格和库存随日期变化。只可在开放日使用。 / Select a date; price and availability vary. Valid only on operating days.&#x27;, steps:[[&#x27;选择日期 / Date&#x27;,&#x27;选择 start date；售罄日期不可选。公园安排为特定日期开放，圣诞节关闭。 / Choose an available start date; closed Christmas Day&#x27;],[&#x27;选择票种 / Pass&#x27;,&#x27;One Day（10am–close）、Afternoon（1pm–close）、TGIF（周五 4–8pm）&#x27;],[&#x27;选择年龄 / Age&#x27;,&#x27;Adult 18–74、Child 6–17、Under 6 免费、Over 75 免费 / Under 6 and over 75 are free&#x27;],[&#x27;可选捐赠 / Add-ons&#x27;,&#x27;Plant a Seed +NZ$20；The Kārearea Project +NZ$20&#x27;],[&#x27;购物车与付款 / Checkout&#x27;,&#x27;确认日期与票种，继续共同结账 / Verify date and pass type&#x27;]], table:[[&#x27;Adult 18–74&#x27;,&#x27;One Day&#x27;,&#x27;from NZ$99; sample 20 Dec 2026: $99&#x27;],[&#x27;Adult 18–74&#x27;,&#x27;Afternoon&#x27;,&#x27;sample 20 Dec 2026: $79&#x27;],[&#x27;Adult 18–74&#x27;,&#x27;TGIF&#x27;,&#x27;日期/Friday inventory dependent; final price shown after selection&#x27;],[&#x27;Child 6–17&#x27;,&#x27;All pass types&#x27;,&#x27;Date-specific amount shown after selection&#x27;],[&#x27;Under 6 / Over 75&#x27;,&#x27;All pass types&#x27;,&#x27;Free&#x27;]], note:&#x27;票种会限制可选日期：TGIF 仅周五。价格曾随日期变化（例如 Adult 一日票：12 Dec $119、18 Dec $99）；金额以选定日期的页面报价为准。 / TGIF is Friday-only; displayed price varies by date.&#x27;},
       { id:&#x27;bundle&#x27;, name:&#x27;Lift Pass and Bike Rental / 缆车票+租车&#x27;, url:&#x27;https://secure.cardrona-treblecone.com/l/summer/p/summer-bike-rental-plus-lift-pass&#x27;, intro:&#x27;将单日缆车票和自行车租赁合并预订；最终价格受日期和选择影响。 / Bundle a day lift pass with a bike rental; total depends on selected date and options.&#x27;, steps:[[&#x27;选择时长 / Duration&#x27;,&#x27;Full Day（1 day）或 Half Day（周六–周四 1pm 起；周五 TGIF 4pm 起）&#x27;],[&#x27;选日期与年龄 / Date and age&#x27;,&#x27;选择可用日期；Adult 或 Child / Choose available date and Adult or Child&#x27;],[&#x27;选车 / Bike&#x27;,&#x27;Enduro、Downhill 或 Full Suspension；再选车架尺寸 / Select bike type and size&#x27;],[&#x27;保险 / Insurance&#x27;,&#x27;可选 Bike Insurance：NZ$25 每日 / Optional NZ$25 per day&#x27;],[&#x27;购物车与付款 / Checkout&#x27;,&#x27;核对组合、日期与金额后继续共同结账 / Review bundle, date and price&#x27;]], table:[[&#x27;产品起价 / Starting from&#x27;,&#x27;All available configurations&#x27;,&#x27;NZ$139&#x27;]], note:&#x27;租车包括头盔和护具（官网说明）。样本日期日历中部分日期显示售罄；提交前需确认实时库存与年龄对应金额。 / Helmet and safety pads included in rental; date availability and age price are selected in the booking form.&#x27;},
       { id:&#x27;rental&#x27;, name:&#x27;Bike Rental / 自行车租赁&#x27;, url:&#x27;https://secure.cardrona-treblecone.com/l/summer/p/summer-bike-rental&#x27;, intro:&#x27;单独租赁自行车，不含缆车票。选择日期、车型、尺寸和保险。 / Bike rental only; lift pass is separate.&#x27;, steps:[[&#x27;选择租赁日期 / Date&#x27;,&#x27;选择可用日期 / Choose an available date&#x27;],[&#x27;选择车型 / Type&#x27;,&#x27;Downhill、Enduro 或 Full Suspension&#x27;],[&#x27;选择尺寸 / Size&#x27;,&#x27;按车型选择车架尺寸与适用身高 / Choose size by rider height&#x27;],[&#x27;保险 / Insurance&#x27;,&#x27;页面默认勾选 Bike Insurance；NZ$25 每日。可查看并按需调整。 / Default selected; NZ$25 per day&#x27;],[&#x27;购物车与付款 / Checkout&#x27;,&#x27;核对日期、车型、尺寸、保险和金额 / Review options and total&#x27;]], table:[[&#x27;产品起价 / Starting from&#x27;,&#x27;Bike rental&#x27;,&#x27;NZ$149&#x27;],[&#x27;可选加项 / Add-on&#x27;,&#x27;Bike Insurance&#x27;,&#x27;NZ$25 per day&#x27;]], note:&#x27;租赁包括头盔与安全护具。页面表单未显示年龄类别；最终金额取决于租赁日期和所选车型。 / Helmet and safety pads included. No age selector was shown; final price depends on date and bike.&#x27;},
-      { id:&#x27;peak&#x27;, name:&#x27;Peak to Pub - Lift Pass and Shuttle / Peak to Pub 缆车票+接驳&#x27;, url:&#x27;https://secure.cardrona-treblecone.com/l/summer/p/peak-to-pub-&#x27;, intro:&#x27;从 Cardrona Valley 乘接驳车上山，包含一次 McDougall’s Chondola 上行，骑 Peak to Pub 下山。 / Shuttle from Cardrona Valley, one McDougall’s Chondola uplift, then ride Peak to Pub.&#x27;, steps:[[&#x27;选择日期 / Date&#x27;,&#x27;选择有余位的日期 / Choose an available date&#x27;],[&#x27;选择年龄 / Age&#x27;,&#x27;Adult 或 Child 6–17 / Adult or Child (6–17)&#x27;],[&#x27;选择接驳时间 / Shuttle&#x27;,&#x27;9:00、11:00、13:00；或 17:00（仅周五 TGIF） / 9am, 11am, 1pm or 5pm (Friday TGIF only)&#x27;],[&#x27;选择人数 / Quantity&#x27;,&#x27;调整旅客数量 / Set number of guests&#x27;],[&#x27;购物车与付款 / Checkout&#x27;,&#x27;确认日期、年龄、出发时间与总额 / Verify date, age, departure and total&#x27;]], table:[[&#x27;产品起价 / Starting from&#x27;,&#x27;From&#x27;,&#x27;NZ$49&#x27;]], note:&#x27;具体年龄票价未在不选日期前显示；需以所选日期和班次页面报价为准。 / Age-specific price is displayed after date and departure selection.&#x27;}
+      { id:&#x27;peak&#x27;, name:&#x27;Peak to Pub - Lift Pass and Shuttle / Peak to Pub 缆车票+接驳&#x27;, url:&#x27;https://secure.cardrona-treblecone.com/l/summer/p/peak-to-pub-&#x27;, intro:&#x27;从 Cardrona Valley 乘接驳车上山，包含一次 McDougall’s Chondola 上行，骑 Peak to Pub 下山。 / Shuttle from Cardrona Valley, one McDougall’s Chondola uplift, then ride Peak to Pub.&#x27;, steps:[[&#x27;选择日期 / Date&#x27;,&#x27;选择有余位的日期 / Choose an available date&#x27;],[&#x27;选择年龄 / Age&#x27;,&#x27;Adult 或 Child 6–17 / Adult or Child (6–17)&#x27;],[&#x27;选择接驳时间 / Shuttle&#x27;,&#x27;9:00、11:00、13:00；或 17:00（仅周五 TGIF） / 9am, 11am, 1pm or 5pm (Friday TGIF only)&#x27;],[&#x27;选择人数 / Quantity&#x27;,&#x27;调整旅客数量 / Set number of guests&#x27;],[&#x27;购物车与付款 / Checkout&#x27;,&#x27;确认日期、年龄、出发时间与总额 / Verify date, age, departure and total&#x27;]], table:[[&#x27;产品起价 / Starting from&#x27;,&#x27;From&#x27;,&#x27;NZ$49&#x27;]], note:&#x27;具体年龄票价未在不选日期前显示；需以所选日期和班次页面报价为准。 / Age-specific price is displayed after date and departure selection.&#x27;},
+      { id:&#x27;summer-season&#x27;, name:&#x27;Earlybird Summer Season Pass / 早鸟夏季季票&#x27;, url:&#x27;https://secure.cardrona-treblecone.com/l/favourites/p/earlybird-summer-season-pass&#x27;, intro:&#x27;无需选具体使用日期；选择年龄并按需添加捐赠。骑行整个夏季。 / No visit date selection; choose age and optional donations for summer-long riding.&#x27;, steps:[[&#x27;日期 / Date&#x27;,&#x27;季票无需选择具体使用日期 / No individual visit date required&#x27;],[&#x27;选择年龄 / Age&#x27;,&#x27;Adult 18–74、Child 6–17、Under 6 免费、Over 75 免费&#x27;],[&#x27;可选捐赠 / Optional donations&#x27;,&#x27;Plant a Seed +NZ$20；Kārearea Project +NZ$20；两项可同时选 / Either or both can be selected&#x27;],[&#x27;购物车 / Cart&#x27;,&#x27;核对乘客与捐赠金额后继续付款 / Review guest and donation total&#x27;]], table:[[&#x27;Adult 18–74&#x27;,&#x27;Season pass&#x27;,&#x27;NZ$359&#x27;],[&#x27;Child 6–17&#x27;,&#x27;Season pass&#x27;,&#x27;NZ$219&#x27;],[&#x27;Under 6&#x27;,&#x27;Season pass&#x27;,&#x27;Free / NZ$0&#x27;],[&#x27;Over 75&#x27;,&#x27;Season pass&#x27;,&#x27;Free / NZ$0&#x27;],[&#x27;Optional add-on&#x27;,&#x27;Plant a Seed&#x27;,&#x27;+NZ$20&#x27;],[&#x27;Optional add-on&#x27;,&#x27;Kārearea Project&#x27;,&#x27;+NZ$20&#x27;]], note:&#x27;产品详情称 Earlybird 在线定价仅到 10 月 31 日；页面在 2026-11-18 仍显示上述价格。请在结账时以实时金额为准。营业时间：淡季 10am–4pm（周二、周三关闭）；旺季 10am–5pm；圣诞节关闭。 / Page says Earlybird online pricing runs until 31 October, yet showed these prices on 18 Nov 2026; verify at checkout.&#x27;},
+      { id:&#x27;carting&#x27;, name:&#x27;Summer Mountain Carting / 夏季山地卡丁车&#x27;, url:&#x27;https://secure.cardrona-treblecone.com/l/favourites/p/mountain-carting&#x27;, intro:&#x27;须选日期、场次、年龄和卡丁车尺寸；可选亲子 tandem add-on。 / Choose date, session, age and cart size; optional tandem buddy add-on.&#x27;, steps:[[&#x27;选择日期 / Date&#x27;,&#x27;选择有余位的使用日期 / Select an available date&#x27;],[&#x27;选择场次 / Session&#x27;,&#x27;样本日每小时一场：10am、11am、12pm、1pm、2pm；末场时间随营业时间变化 / Sample day hourly: 10am–2pm; last session varies with closing time&#x27;],[&#x27;选择年龄 / Age&#x27;,&#x27;Adult 18+ 或 Child 8–17 / Adult 18+ or Child 8–17&#x27;],[&#x27;选择尺寸 / Cart size&#x27;,&#x27;按身高选 XS、S、M、L 或 XL / Choose cart size by rider height&#x27;],[&#x27;亲子同行 / Carting buddy&#x27;,&#x27;可选 6–8 岁且身高不超过 100cm 的孩子与成人 tandem：+NZ$25 / Optional tandem child age 6–8 and no taller than 100cm: +NZ$25&#x27;],[&#x27;加入购物车 / Add to cart&#x27;,&#x27;确认日期、时间、年龄、尺寸及附加项 / Review booking details and add to cart&#x27;]], table:[[&#x27;Adult 18+&#x27;,&#x27;Sample: 13 Dec 2026, 10am, Large&#x27;,&#x27;NZ$175&#x27;],[&#x27;Child 8–17&#x27;,&#x27;Sample: 13 Dec 2026, 10am, Large&#x27;,&#x27;NZ$95&#x27;],[&#x27;Optional add-on&#x27;,&#x27;Carting With Kids tandem&#x27;,&#x27;+NZ$25&#x27;]], note:&#x27;尺寸：XS 100–120cm；S 120–165cm；M 155–180cm；L 170–195cm；XL 180–210cm。儿童须满 8 岁且身高至少 100cm 才能独自乘车；未满 12 岁必须与负责成人一起体验。每辆车总重不得超过 110kg。活动时长 2 小时，末场在当日关闭前 2 小时开始；含安全装备，需穿包脚鞋，手套不提供。样本日成人 $175、儿童 $95，实际价格按日期和场次确认。 / Carting lasts 2 hours; safety equipment is included, gloves are not.&#x27;}
+    ],
+    sightseeing: [
+      { id:&#x27;sightseeing-pass&#x27;, name:&#x27;Summer Sightseeing Pass / 夏季观光票&#x27;, url:&#x27;https://secure.cardrona-treblecone.com/l/sightseeing/p/summer-sightseeing-pass&#x27;, intro:&#x27;按所选日期购买观光票；包含 1 次 McDougall’s Chondola 上行。缆车运行受天气影响。 / Choose a date for a sightseeing pass with one McDougall’s Chondola uplift. Gondola operation is weather dependent.&#x27;, steps:[[&#x27;选择日期 / Date&#x27;,&#x27;必须选一个有效日期；售罄日期不可选 / One operating date is required; sold-out dates cannot be selected&#x27;],[&#x27;选择年龄 / Age&#x27;,&#x27;Adult 18–74、Child 6–17、Under 6、Over 75&#x27;],[&#x27;Gondola ride / 缆车上行&#x27;,&#x27;唯一选项：1 uplift – McDougall’s Chondola（约 4 分钟上山） / Only option: one uplift on McDougall’s Chondola (about 4 minutes)&#x27;],[&#x27;购物车 / Cart&#x27;,&#x27;免费年龄也需加入购物车领取卡片，再到 kiosk 或山上领取 / Free-age cards still need to be added and collected at a kiosk or on the mountain&#x27;]], table:[[&#x27;Adult 18–74&#x27;,&#x27;1 uplift&#x27;,&#x27;NZ$35 (sample: 13 Dec 2026)&#x27;],[&#x27;Child 6–17&#x27;,&#x27;1 uplift&#x27;,&#x27;NZ$25 (sample: 13 Dec 2026)&#x27;],[&#x27;Under 6&#x27;,&#x27;1 uplift&#x27;,&#x27;Free / NZ$0&#x27;],[&#x27;Over 75&#x27;,&#x27;1 uplift&#x27;,&#x27;Free / NZ$0&#x27;]], note:&#x27;官网目录起价 NZ$35；样本日期 13 Dec 2026 显示成人 $35、儿童 $25、Under 6 和 Over 75 免费。12/28 成人也显示 $35。开放安排：off-peak（12/12–27、1/19–2/28）周二/周三关闭，10am–4pm；peak（12/28–1/17）每日 10am–5pm；圣诞节关闭。以实时日期库存和天气为准。 / Prices observed on sample dates; hours and operation are subject to weather and live availability.&#x27;}
     ]
   };
   const escapeText = value =&gt; String(value).replace(/[&amp;&lt;&gt;&quot;&#x27;]/g, char =&gt; ({&#x27;&amp;&#x27;:&#x27;&amp;amp;&#x27;,&#x27;&lt;&#x27;:&#x27;&amp;lt;&#x27;,&#x27;&gt;&#x27;:&#x27;&amp;gt;&#x27;,&#x27;&quot;&#x27;:&#x27;&amp;quot;&#x27;,&quot;&#x27;&quot;:&#x27;&amp;#39;&#x27;}[char]));
+  const choices = {
+    season:{0:[&#x27;Unlimited&#x27;,&#x27;Saver&#x27;],1:[&#x27;Under 6: Free&#x27;,&#x27;Child 6–17&#x27;,&#x27;Adult 18–64&#x27;,&#x27;Senior 65–74&#x27;,&#x27;Over 75: Free&#x27;],2:[&#x27;Skip donation&#x27;,&#x27;Plant a Seed +$20&#x27;,&#x27;Ride Tamariki +$20&#x27;,&#x27;Kārearea +$20&#x27;,&#x27;All In +$20&#x27;]},
+    multi:{0:[&#x27;3 days&#x27;,&#x27;4 days&#x27;,&#x27;5 days&#x27;,&#x27;6 days&#x27;],1:[&#x27;Adult 18–64&#x27;,&#x27;Child 6–17&#x27;,&#x27;Senior 65–74&#x27;,&#x27;Student&#x27;],2:[&#x27;Pay Now&#x27;,&#x27;BNPL: $50 deposit&#x27;],3:[&#x27;Paid guest&#x27;,&#x27;Under 6: free&#x27;]},
+    day:{1:[&#x27;One Day&#x27;,&#x27;Afternoon&#x27;,&#x27;TGIF Friday&#x27;],2:[&#x27;Adult 18–74&#x27;,&#x27;Child 6–17&#x27;,&#x27;Under 6: free&#x27;,&#x27;Over 75: free&#x27;],3:[&#x27;No donation&#x27;,&#x27;Plant a Seed +$20&#x27;,&#x27;Kārearea +$20&#x27;]},
+    bundle:{0:[&#x27;Full Day: 1 day&#x27;,&#x27;Half Day: 1pm&#x27;,&#x27;Friday TGIF: 4pm&#x27;],1:[&#x27;Adult&#x27;,&#x27;Child&#x27;],2:[&#x27;Enduro&#x27;,&#x27;Downhill&#x27;,&#x27;Full Suspension&#x27;],3:[&#x27;Add insurance +$25/day&#x27;,&#x27;Skip insurance&#x27;]},
+    rental:{1:[&#x27;Downhill&#x27;,&#x27;Enduro&#x27;,&#x27;Full Suspension&#x27;],2:[&#x27;Choose size for height&#x27;,&#x27;Available sizes shown by bike&#x27;],3:[&#x27;Add insurance +$25/day&#x27;,&#x27;Skip insurance&#x27;]},
+    peak:{1:[&#x27;Adult&#x27;,&#x27;Child 6–17&#x27;],2:[&#x27;9:00 am&#x27;,&#x27;11:00 am&#x27;,&#x27;1:00 pm&#x27;,&#x27;5:00 pm Friday only&#x27;]},
+    &#x27;summer-season&#x27;:{1:[&#x27;Adult 18–74: $359&#x27;,&#x27;Child 6–17: $219&#x27;,&#x27;Under 6: Free&#x27;,&#x27;Over 75: Free&#x27;],2:[&#x27;No donation&#x27;,&#x27;Plant a Seed +$20&#x27;,&#x27;Kārearea Project +$20&#x27;,&#x27;Both +$40&#x27;]},
+    carting:{1:[&#x27;10:00 am&#x27;,&#x27;11:00 am&#x27;,&#x27;12:00 pm&#x27;,&#x27;1:00 pm&#x27;,&#x27;2:00 pm&#x27;],2:[&#x27;Adult 18+: $175&#x27;,&#x27;Child 8–17: $95&#x27;],3:[&#x27;XS: 100–120cm&#x27;,&#x27;S: 120–165cm&#x27;,&#x27;M: 155–180cm&#x27;,&#x27;L: 170–195cm&#x27;,&#x27;XL: 180–210cm&#x27;],4:[&#x27;No buddy&#x27;,&#x27;Tandem child age 6–8: +$25&#x27;]},
+    sightseeing:{1:[&#x27;Adult 18–74: $35&#x27;,&#x27;Child 6–17: $25&#x27;,&#x27;Under 6: Free&#x27;,&#x27;Over 75: Free&#x27;]}
+  };
+  const checkoutFlow = [
+    {type:&#x27;start&#x27;, label:&#x27;购物车 / Cart&#x27;},
+    {type:&#x27;action&#x27;, label:&#x27;检查商品与金额 / Review cart&#x27;, detail:&#x27;Verify dates, products and total&#x27;},
+    {type:&#x27;decision&#x27;, label:&#x27;已登录？ / Signed in?&#x27;, options:[&#x27;是：继续 / Yes: continue&#x27;,&#x27;否：邮箱 + 密码 / No: email + password&#x27;]},
+    {type:&#x27;action&#x27;, label:&#x27;分配给乘客 / Assign to guest&#x27;, detail:&#x27;New guest: name and date of birth&#x27;},
+    {type:&#x27;action&#x27;, label:&#x27;签署免责声明 / Sign waivers&#x27;, detail:&#x27;Accept terms and e-sign&#x27;},
+    {type:&#x27;decision&#x27;, label:&#x27;付款方式？ / Payment method?&#x27;, options:[&#x27;MyCARD: add / reload&#x27;,&#x27;银行卡 / Credit card&#x27;]},
+    {type:&#x27;action&#x27;, label:&#x27;账单与支付资料 / Billing and card details&#x27;, detail:&#x27;Address, cardholder, number, expiry, CVC&#x27;},
+    {type:&#x27;action&#x27;, label:&#x27;提交付款 / Submit payment&#x27;, detail:&#x27;Look for order confirmation&#x27;},
+    {type:&#x27;end&#x27;, label:&#x27;订单确认 / Order confirmed&#x27;}
+  ];
+  function textLines(value, max = 23) {
+    const parts = String(value).split(&#x27; / &#x27;);
+    const lines = [];
+    for (const part of parts) {
+      let rest = Array.from(part);
+      while (rest.length &gt; max) { lines.push(rest.splice(0, max).join(&#x27;&#x27;)); }
+      if (rest.length) lines.push(rest.join(&#x27;&#x27;));
+    }
+    return lines.slice(0, 3);
+  }
+  function makeDiagram(nodes, label) {
+    const width = 900, center = width / 2;
+    const edges = [], shapes = [];
+    const line = (x1,y1,x2,y2,arrow=true) =&gt; `&lt;path class=&quot;edge&quot; d=&quot;M ${x1} ${y1} L ${x2} ${y2}&quot; ${arrow?&#x27;marker-end=&quot;url(#cj-arrowhead)&quot;&#x27;:&#x27;&#x27;}/&gt;`;
+    const addShape = (node,x,y,w,h,type) =&gt; {
+      if (type === &#x27;decision&#x27;) shapes.push(`&lt;polygon class=&quot;decision&quot; points=&quot;${x},${y+h/2} ${x+w/2},${y} ${x+w},${y+h/2} ${x+w/2},${y+h}&quot;/&gt;`);
+      else if (type === &#x27;start&#x27; || type === &#x27;end&#x27;) shapes.push(`&lt;rect class=&quot;${type===&#x27;start&#x27;?&#x27;terminal&#x27;:&#x27;terminal&#x27;}&quot; x=&quot;${x}&quot; y=&quot;${y}&quot; width=&quot;${w}&quot; height=&quot;${h}&quot; rx=&quot;${h/2}&quot;/&gt;`);
+      else shapes.push(`&lt;rect class=&quot;${type===&#x27;option&#x27;?&#x27;option&#x27;:&#x27;action&#x27;}&quot; x=&quot;${x}&quot; y=&quot;${y}&quot; width=&quot;${w}&quot; height=&quot;${h}&quot; rx=&quot;10&quot;/&gt;`);
+      const lines = textLines(node.label, type === &#x27;decision&#x27; ? 19 : 25);
+      const detail = node.detail ? textLines(node.detail, 38).slice(0,1) : [];
+      const total = lines.length + detail.length;
+      const startY = y + h/2 - (total-1)*9;
+      const spans = [...lines.map((value,index)=&gt;`&lt;tspan x=&quot;${x+w/2}&quot; y=&quot;${startY+index*19}&quot;&gt;${escapeText(value)}&lt;/tspan&gt;`), ...detail.map(value=&gt;`&lt;tspan class=&quot;edge-label&quot; x=&quot;${x+w/2}&quot; y=&quot;${startY+(lines.length)*19+3}&quot;&gt;${escapeText(value)}&lt;/tspan&gt;`)].join(&#x27;&#x27;);
+      shapes.push(`&lt;text&gt;${spans}&lt;/text&gt;`);
+    };
+    let cursor = 26, prevBottom = null;
+    for (const node of nodes) {
+      const type = node.type || &#x27;action&#x27;;
+      const h = type === &#x27;decision&#x27; ? 90 : type === &#x27;start&#x27; || type === &#x27;end&#x27; ? 56 : 72;
+      const w = type === &#x27;decision&#x27; ? 270 : type === &#x27;start&#x27; || type === &#x27;end&#x27; ? 280 : 560;
+      const x = center-w/2, y = cursor+34;
+      if (prevBottom !== null) edges.push(line(center,prevBottom,center,y,true));
+      addShape(node,x,y,w,h,type);
+      if (node.options?.length) {
+        const options = node.options, rowY = y+h+105, boxW = Math.min(164, (width-64-(options.length-1)*14)/options.length), gap = options.length &gt; 1 ? (width-options.length*boxW)/(options.length+1) : 0;
+        const centers = options.map((_,i)=&gt;gap*(i+1)+boxW*i+boxW/2);
+        centers.forEach((cx,i)=&gt;{
+          edges.push(line(center,y+h,cx,rowY,true));
+          addShape({label:options[i]},cx-boxW/2,rowY,boxW,68,&#x27;option&#x27;);
+        });
+        const mergeY = rowY+96;
+        centers.forEach(cx=&gt;edges.push(line(cx,rowY+68,cx,mergeY,false)));
+        if (centers.length&gt;1) edges.push(line(Math.min(...centers),mergeY,Math.max(...centers),mergeY,false));
+        cursor = mergeY;
+        prevBottom = mergeY;
+      } else {
+        cursor = y+h;
+        prevBottom = cursor;
+      }
+    }
+    const height = cursor+72;
+    const last = nodes[nodes.length-1];
+    if (last?.type !== &#x27;end&#x27;) {
+      const endY = cursor+34;
+      edges.push(line(center,cursor,center,endY,true));
+      addShape({label:&#x27;加入购物车 / Add to cart&#x27;},center-140,endY,280,56,&#x27;end&#x27;);
+    }
+    return `&lt;div class=&quot;cj-diagram-wrap&quot;&gt;&lt;svg class=&quot;cj-diagram&quot; viewBox=&quot;0 0 ${width} ${height}&quot; role=&quot;img&quot; aria-label=&quot;${escapeText(label)}&quot;&gt;&lt;title&gt;${escapeText(label)}&lt;/title&gt;&lt;defs&gt;&lt;marker id=&quot;cj-arrowhead&quot; viewBox=&quot;0 0 10 10&quot; refX=&quot;8&quot; refY=&quot;5&quot; markerWidth=&quot;7&quot; markerHeight=&quot;7&quot; orient=&quot;auto-start-reverse&quot;&gt;&lt;path d=&quot;M 0 0 L 10 5 L 0 10 z&quot; fill=&quot;currentColor&quot;/&gt;&lt;/marker&gt;&lt;/defs&gt;${edges.join(&#x27;&#x27;)}${shapes.join(&#x27;&#x27;)}&lt;/svg&gt;&lt;/div&gt;`;
+  }
   function draw() {
     const list = products[category.value];
     product.replaceChildren(...list.map(item =&gt; { const option = document.createElement(&#x27;option&#x27;); option.value = item.id; option.textContent = item.name; return option; }));
@@ -1937,10 +2015,12 @@ html&gt;body{padding:0}&lt;/style&gt;
   function render() {
     const item = products[category.value].find(entry =&gt; entry.id === product.value) || products[category.value][0];
     product.value = item.id;
-    const steps = item.steps.map(([title, description]) =&gt; `&lt;li&gt;&lt;strong&gt;${escapeText(title)}&lt;/strong&gt;&lt;small&gt;${escapeText(description)}&lt;/small&gt;&lt;/li&gt;`).join(&#x27;&#x27;);
+    const flow = [{type:&#x27;start&#x27;,label:&#x27;打开产品页 / Open product&#x27;}, ...item.steps.map(([title,description],index)=&gt;({type:choices[item.id]?.[index]?&#x27;decision&#x27;:&#x27;action&#x27;,label:title,detail:choices[item.id]?.[index]?undefined:description,options:choices[item.id]?.[index]}))];
+    const diagram = makeDiagram(flow, `${item.name} customer journey`);
     const rows = item.table.map(row =&gt; `&lt;tr&gt;${row.map(cell =&gt; `&lt;td&gt;${escapeText(cell)}&lt;/td&gt;`).join(&#x27;&#x27;)}&lt;/tr&gt;`).join(&#x27;&#x27;);
-    detail.innerHTML = `&lt;div class=&quot;cj-title&quot;&gt;&lt;h2&gt;${escapeText(item.name)}&lt;/h2&gt;&lt;a class=&quot;cj-badge&quot; href=&quot;${item.url}&quot; target=&quot;_blank&quot; rel=&quot;noreferrer&quot;&gt;官网产品页 / Official page ↗&lt;/a&gt;&lt;/div&gt;&lt;p class=&quot;cj-meta&quot;&gt;${escapeText(item.intro)}&lt;/p&gt;&lt;div class=&quot;cj-terminal&quot;&gt;开始：打开产品页 / Start: open product&lt;/div&gt;&lt;div class=&quot;cj-arrow&quot; aria-hidden=&quot;true&quot;&gt;↓&lt;/div&gt;&lt;ol class=&quot;cj-flow&quot;&gt;${steps}&lt;/ol&gt;&lt;div class=&quot;cj-arrow&quot; aria-hidden=&quot;true&quot;&gt;↓&lt;/div&gt;&lt;div class=&quot;cj-terminal&quot;&gt;加入购物车 / Add to cart&lt;/div&gt;&lt;div class=&quot;cj-section&quot;&gt;&lt;h3&gt;价格 / Price (NZD)&lt;/h3&gt;&lt;div class=&quot;cj-table-wrap&quot;&gt;&lt;table class=&quot;table table-sm&quot;&gt;&lt;tbody&gt;${rows}&lt;/tbody&gt;&lt;/table&gt;&lt;/div&gt;&lt;/div&gt;&lt;p class=&quot;cj-note&quot;&gt;${escapeText(item.note)}&lt;/p&gt;`;
+    detail.innerHTML = `&lt;div class=&quot;cj-title&quot;&gt;&lt;h2&gt;${escapeText(item.name)}&lt;/h2&gt;&lt;a class=&quot;cj-badge&quot; href=&quot;${item.url}&quot; target=&quot;_blank&quot; rel=&quot;noreferrer&quot;&gt;官网产品页 / Official page ↗&lt;/a&gt;&lt;/div&gt;&lt;p class=&quot;cj-meta&quot;&gt;${escapeText(item.intro)}&lt;/p&gt;${diagram}&lt;div class=&quot;cj-section&quot;&gt;&lt;h3&gt;价格 / Price (NZD)&lt;/h3&gt;&lt;div class=&quot;cj-table-wrap&quot;&gt;&lt;table class=&quot;table table-sm&quot;&gt;&lt;tbody&gt;${rows}&lt;/tbody&gt;&lt;/table&gt;&lt;/div&gt;&lt;/div&gt;&lt;p class=&quot;cj-note&quot;&gt;${escapeText(item.note)}&lt;/p&gt;`;
   }
+  root.querySelector(&#x27;#cj-checkout-diagram&#x27;).innerHTML = makeDiagram(checkoutFlow, &#x27;Shared checkout journey&#x27;);
   category.addEventListener(&#x27;change&#x27;, draw);
   product.addEventListener(&#x27;change&#x27;, render);
   draw();
