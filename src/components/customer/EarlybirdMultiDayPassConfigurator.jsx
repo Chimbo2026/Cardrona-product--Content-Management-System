@@ -30,32 +30,27 @@ export default function EarlybirdMultiDayPassConfigurator({ image, onAdd }) {
   const { lang } = useLang();
   const [days, setDays] = useState(3);
   const [age, setAge] = useState('Adult');
-  const [paymentPlan, setPaymentPlan] = useState('Pay Now');
   const [quantity, setQuantity] = useState(1);
   const [foundation, setFoundation] = useState(false);
   const [donations, setDonations] = useState([]);
   const [showMore, setShowMore] = useState(false);
-  const [scheduleOpen, setScheduleOpen] = useState(false);
 
   const passPrice = PRICES[age][days];
   const donationTotal = foundation ? donations.length * 20 : 0;
   const total = (passPrice + donationTotal) * quantity;
-  const dueToday = (paymentPlan === 'Buy Now, Pay Later' ? 50 + donationTotal : passPrice + donationTotal) * quantity;
-  const remaining = total - dueToday;
-  const perInstalment = Math.ceil(remaining / 4);
   const toggleDonation = (id) => setDonations((current) => current.includes(id) ? current.filter((item) => item !== id) : [...current, id]);
 
   const addToCart = () => onAdd({
     id: 'earlybird-multi-day-pass',
-    name: `Earlybird Multi-Day Pass - ${age} - ${days} Days - ${paymentPlan}`,
-    price: paymentPlan === 'Buy Now, Pay Later' ? 50 + donationTotal : passPrice + donationTotal,
+    name: `Earlybird Multi-Day Pass - ${age} - ${days} Days - Pay Now`,
+    price: passPrice + donationTotal,
     quantity,
     image,
     ageBand: AGE_OPTIONS.find(([key]) => key === age)?.[1],
-    variant: `${age}-${days}-${paymentPlan}-${foundation}-${donations.join(',')}`,
+    variant: `${age}-${days}-Pay Now-${foundation}-${donations.join(',')}`,
     detail: [
       `${days} days · ${age}`,
-      paymentPlan === 'Buy Now, Pay Later' ? `Full pass total ${money(passPrice)}; $50 deposit, four remaining instalments` : 'Pay Now',
+      'Pay Now',
       ...donations.map((id) => `${DONATIONS.find((item) => item.id === id)?.name} +$20`),
     ].join(' · '),
   });
@@ -81,10 +76,7 @@ export default function EarlybirdMultiDayPassConfigurator({ image, onAdd }) {
       <section>
         <h2 className="text-[16px] font-bold">Payment Plan</h2>
         <p className="mt-1 text-[15px] text-[#777]">Choose your Payment Option</p>
-        <div className="mt-2 space-y-3">
-          <button type="button" aria-pressed={paymentPlan === 'Buy Now, Pay Later'} onClick={() => setPaymentPlan('Buy Now, Pay Later')} className={`${optionClass(paymentPlan === 'Buy Now, Pay Later')} min-h-[82px] w-full`}><span className="flex items-center justify-between"><b>Buy Now, Pay Later</b><span className={`h-5 w-5 rounded-full border ${paymentPlan === 'Buy Now, Pay Later' ? 'border-[5px] border-[#5b8199]' : 'border-[#a0a7b0]'}`}/></span><small className="mt-1 block text-[12px] font-normal text-[#777]">$50 deposit now &amp; the rest in 4 instalments</small></button>
-          <button type="button" aria-pressed={paymentPlan === 'Pay Now'} onClick={() => setPaymentPlan('Pay Now')} className={`${optionClass(paymentPlan === 'Pay Now')} flex min-h-[66px] w-full items-center justify-between`}><b>Pay Now</b><span className={`h-5 w-5 rounded-full border ${paymentPlan === 'Pay Now' ? 'border-[5px] border-[#5b8199]' : 'border-[#a0a7b0]'}`}/></button>
-        </div>
+        <div className="mt-2 flex min-h-[66px] w-full items-center justify-between rounded-xl border-2 border-[#5b8199] px-4 py-3"><b>Pay Now</b><span aria-hidden="true" className="h-5 w-5 rounded-full border-[5px] border-[#5b8199]"/></div>
       </section>
 
       <section>
@@ -108,8 +100,8 @@ export default function EarlybirdMultiDayPassConfigurator({ image, onAdd }) {
 
     <aside className="rounded-[20px] border border-[#ddd] bg-white p-5 shadow-[0_8px_18px_rgba(0,0,0,0.10)]">
       <h2 className="font-serif text-[23px] font-bold">Item Summary</h2>
-      <div className="mt-4 border-b border-[#cbd7e4] pb-4 text-[15px]"><b className="block">({quantity}) Earlybird Multi-Day Pass - {age} - {days} Days - {paymentPlan}</b><span className="mt-2 block">{money(paymentPlan === 'Buy Now, Pay Later' ? 50 : passPrice)}</span>{donations.map((id) => <div key={id} className="mt-4"><b className="block">({quantity}) {DONATIONS.find((item) => item.id === id)?.name}</b><span className="mt-2 block">{money(20 * quantity)}</span></div>)}</div>
-      {paymentPlan === 'Buy Now, Pay Later' ? <div className="mt-4"><div className="flex justify-between text-[14px] text-[#777]"><span>Total</span><span>{money(total)}</span></div><div className="mt-1 flex justify-between text-[23px]"><span>Due Today</span><b>{money(dueToday)}</b></div><button type="button" onClick={() => setScheduleOpen((value) => !value)} className="mt-4 flex w-full items-center justify-between text-[15px]"><span>View Payment Schedule ›</span><span>4 remaining</span></button>{scheduleOpen && <div className="mt-3 space-y-2 rounded-lg bg-[#f5f6f7] p-3 text-[13px]"><div className="flex justify-between"><span>Due today</span><span>{money(dueToday)}</span></div>{Array.from({ length: 4 }, (_, index) => <div key={index} className="flex justify-between"><span>Instalment {index + 1}</span><span>{money(perInstalment)}</span></div>)}</div>}</div> : <div className="mt-4 flex justify-between text-[23px]"><span>Total</span><b>{money(total)}</b></div>}
+      <div className="mt-4 border-b border-[#cbd7e4] pb-4 text-[15px]"><b className="block">({quantity}) Earlybird Multi-Day Pass - {age} - {days} Days - Pay Now</b><span className="mt-2 block">{money(passPrice)}</span>{donations.map((id) => <div key={id} className="mt-4"><b className="block">({quantity}) {DONATIONS.find((item) => item.id === id)?.name}</b><span className="mt-2 block">{money(20 * quantity)}</span></div>)}</div>
+      <div className="mt-4 flex justify-between text-[23px]"><span>Total</span><b>{money(total)}</b></div>
       <div className="mt-4 flex items-center justify-between text-[14px] text-[#526982]"><span>Quantity</span><div className="flex h-11 items-center overflow-hidden rounded-xl border border-[#dce4ed]"><button type="button" aria-label="Decrease quantity" disabled={quantity <= 1} onClick={() => setQuantity((value) => Math.max(1, value - 1))} className="h-full px-3 disabled:opacity-40"><Minus className="h-4 w-4"/></button><span className="min-w-8 text-center">{quantity}</span><button type="button" aria-label="Increase quantity" onClick={() => setQuantity((value) => value + 1)} className="h-full px-3"><Plus className="h-4 w-4"/></button></div></div>
       <button type="button" onClick={addToCart} className="mt-4 h-11 w-full rounded-lg bg-[#5b8199] text-[15px] tracking-[0.08em] text-white">Add To Cart</button>
     </aside>
