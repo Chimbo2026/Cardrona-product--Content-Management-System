@@ -17,14 +17,6 @@ const AGE_OPTIONS = [
   ['Student', 'Student: Tertiary ID required'],
 ];
 
-const LAYOUTS = [
-  ['individual', 'Guest cards'],
-  ['grouped', 'Grouped tickets'],
-  ['age-first', 'Age first'],
-  ['quantity-copy', 'Quantity + copy'],
-  ['one-tap', 'Quick quantities'],
-];
-
 const DONATIONS = [
   { id: 'karearea', name: 'The Kārearea Project', description: 'Help fund our scientific conservation of the magnificent and threatened NZ Falcon.' },
   { id: 'seed', name: 'Plant A Seed', description: 'Help us plant natives to regenerate our environment and offset your carbon emissions*.' },
@@ -37,14 +29,12 @@ const newGuest = (id, age = 'Adult', days = 3, profile = {}) => ({ id, age, days
 
 export default function EarlybirdMultiDayPassConfigurator({ image, onAdd }) {
   const { lang } = useLang();
-  const [layout, setLayout] = useState('individual');
   const [ageStage, setAgeStage] = useState('counts');
   const [guests, setGuests] = useState([newGuest(1, 'Adult', 3), newGuest(2, 'Child', 4)]);
   const [foundation, setFoundation] = useState(false);
   const [donations, setDonations] = useState([]);
   const [showMore, setShowMore] = useState(false);
   const [individualEditing, setIndividualEditing] = useState(false);
-  const [copyDaysToAll, setCopyDaysToAll] = useState(true);
 
   const groups = useMemo(() => {
     const grouped = new Map();
@@ -74,7 +64,6 @@ export default function EarlybirdMultiDayPassConfigurator({ image, onAdd }) {
     else if (count < currentCount) removeGuest(guestsForAge(age).at(-1)?.id);
   };
   const setGroupDays = (age, days) => setGuests((current) => current.map((guest) => guest.age === age ? { ...guest, days } : guest));
-  const chooseSharedDays = (days) => setGuests((current) => current.map((guest) => ({ ...guest, days })));
   const groupedByAge = AGE_OPTIONS.map(([age]) => ({ age, guests: guestsForAge(age) })).filter((group) => group.guests.length);
 
   const addToCart = () => groups.forEach((group) => {
@@ -109,32 +98,7 @@ export default function EarlybirdMultiDayPassConfigurator({ image, onAdd }) {
       <button type="button" onClick={() => setShowMore((value) => !value)} className="mt-2 text-[14px] underline">{showMore ? 'See less' : 'See more'}</button>
     </section>
 
-    <nav aria-label="Compare pass entry layouts" className="rounded-xl bg-[#e8edf3] p-1">
-      <div className="grid grid-cols-2 gap-1 sm:grid-cols-3">{LAYOUTS.map(([id, label]) => <button key={id} type="button" aria-pressed={layout === id} onClick={() => { setLayout(id); setAgeStage('counts'); }} className={`min-h-10 rounded-lg px-2 py-2 text-[11px] font-semibold ${layout === id ? 'bg-white text-[#344a64] shadow-sm' : 'text-[#68717f]'}`}>{label}</button>)}</div>
-    </nav>
-
-    {layout === 'individual' && <section className="space-y-4">
-      <div><h2 className="text-[17px] font-bold">Add each guest</h2><p className="mt-1 text-[13px] text-[#777]">Set age and pass days separately for each person.</p></div>
-      {guests.map((guest, index) => <article key={guest.id} className="rounded-xl border border-[#dce4ed] bg-white p-4">
-        <div className="flex items-center justify-between"><h3 className="font-serif text-[18px] font-bold text-[#344a64]">Guest {index + 1}</h3><button type="button" disabled={guestCount <= 1} onClick={() => removeGuest(guest.id)} className="text-[12px] text-[#5b8199] underline disabled:opacity-40">Remove</button></div>
-        <label className="mt-3 block text-[12px] font-semibold">Age<select value={guest.age} onChange={(event) => updateGuest(guest.id, { age: event.target.value })} className="mt-1 h-11 w-full rounded-lg border border-[#dce4ed] bg-white px-3 text-[14px] font-normal">{AGE_OPTIONS.map(([age, label]) => <option key={age} value={age}>{label}</option>)}</select></label>
-        <div className="mt-3 text-[12px] font-semibold">Pass days{dayOptions(guest.days, (days) => updateGuest(guest.id, { days }))}</div>
-        <p className="mt-3 text-right font-semibold text-[#486577]">{money(PRICES[guest.age][guest.days])}</p>
-      </article>)}
-      <button type="button" onClick={() => addGuest()} className="w-full rounded-xl border border-[#5b8199] px-4 py-3 text-[14px] font-semibold text-[#5b8199]">+ Add another guest</button>
-    </section>}
-
-    {layout === 'grouped' && <section className="space-y-4">
-      <div><h2 className="text-[17px] font-bold">Group matching passes</h2><p className="mt-1 text-[13px] text-[#777]">Set age and days once, then adjust how many passes you need.</p></div>
-      {groups.map((group) => <article key={`${group.age}-${group.days}`} className="rounded-xl border border-[#dce4ed] bg-white p-4">
-        <div className="flex items-center justify-between gap-2"><label className="min-w-0 flex-1 text-[12px] font-semibold">Age<select value={group.age} onChange={(event) => group.guests.forEach((guest) => updateGuest(guest.id, { age: event.target.value }))} className="mt-1 h-10 w-full rounded-lg border border-[#dce4ed] bg-white px-2 text-[13px]">{AGE_OPTIONS.map(([age, label]) => <option key={age} value={age}>{label}</option>)}</select></label><div className="mt-5 flex h-10 items-center overflow-hidden rounded-lg border border-[#dce4ed]"><button type="button" onClick={() => removeGuest(group.guests[group.guests.length - 1].id)} disabled={guestCount <= 1} aria-label={`Remove one ${group.age} pass`} className="h-full px-2.5 disabled:opacity-40"><Minus className="h-4 w-4"/></button><span className="min-w-7 text-center text-[13px]">{group.guests.length}</span><button type="button" onClick={() => addGuest(group.age, group.days)} aria-label={`Add one ${group.age} pass`} className="h-full px-2.5"><Plus className="h-4 w-4"/></button></div></div>
-        <div className="mt-3 text-[12px] font-semibold">Pass days{dayOptions(group.days, (days) => group.guests.forEach((guest) => updateGuest(guest.id, { days })), true)}</div>
-        <p className="mt-3 text-right text-[13px] text-[#526982]">{group.guests.length} × {money(PRICES[group.age][group.days])} <b className="ml-2 text-[#344a64]">{money(group.guests.length * PRICES[group.age][group.days])}</b></p>
-      </article>)}
-      <button type="button" onClick={() => addGuest('Adult', 3)} className="w-full rounded-xl border border-[#5b8199] px-4 py-3 text-[14px] font-semibold text-[#5b8199]">+ Add another pass type</button>
-    </section>}
-
-    {layout === 'age-first' && <section className="space-y-4">
+    <section className="space-y-4">
       {ageStage === 'counts' ? <>
         <div><h2 className="text-[17px] font-bold">Who are you buying for?</h2><p className="mt-1 text-[13px] text-[#777]">Choose a quantity for each age group. You can set pass days next.</p></div>
         {AGE_OPTIONS.map(([age, label]) => <div key={age} className="flex items-center justify-between gap-3 rounded-xl border border-[#dce4ed] bg-white p-3"><span className="min-w-0"><b className="block text-[14px]">{age}</b><small className="text-[11px] text-[#777]">{label.replace(`${age}: `, '')}</small></span><div className="flex h-10 items-center overflow-hidden rounded-lg border border-[#dce4ed]"><button type="button" aria-label={`Remove ${age}`} disabled={!guestsForAge(age).length} onClick={() => setAgeCount(age, guestsForAge(age).length - 1)} className="h-full px-3 disabled:opacity-40"><Minus className="h-4 w-4"/></button><span className="min-w-8 text-center text-[14px]">{guestsForAge(age).length}</span><button type="button" aria-label={`Add ${age}`} onClick={() => setAgeCount(age, guestsForAge(age).length + 1)} className="h-full px-3"><Plus className="h-4 w-4"/></button></div></div>)}
@@ -145,21 +109,7 @@ export default function EarlybirdMultiDayPassConfigurator({ image, onAdd }) {
         <button type="button" aria-pressed={individualEditing} onClick={() => setIndividualEditing((value) => !value)} className="w-full rounded-xl border border-[#5b8199] px-4 py-3 text-[13px] font-semibold text-[#5b8199]">{individualEditing ? 'Use days by age group' : 'Edit pass days per person'}</button>
         <button type="button" onClick={() => setAgeStage('counts')} className="text-[13px] text-[#5b8199] underline">Back to age counts</button>
       </>}
-    </section>}
-
-    {layout === 'quantity-copy' && <section className="space-y-4">
-      <div><h2 className="text-[17px] font-bold">Set ticket quantities</h2><p className="mt-1 text-[13px] text-[#777]">Choose how many passes for each age, then set the days once.</p></div>
-      <div className="rounded-xl border border-[#dce4ed] bg-white p-4"><b className="text-[13px]">Earlybird Multi-Day Pass</b><span className="mt-1 block text-[12px] text-[#777]">Choose quantities by age group</span></div>
-      {AGE_OPTIONS.map(([age, label]) => <div key={age} className="flex items-center justify-between gap-3 rounded-xl border border-[#dce4ed] bg-white p-3"><span className="min-w-0"><b className="block text-[14px]">{age}</b><small className="text-[11px] text-[#777]">{label.replace(`${age}: `, '')}</small></span><div className="flex h-10 items-center overflow-hidden rounded-lg border border-[#dce4ed]"><button type="button" aria-label={`Remove ${age}`} disabled={!guestsForAge(age).length || guestCount <= 1} onClick={() => setAgeCount(age, guestsForAge(age).length - 1)} className="h-full px-3 disabled:opacity-40"><Minus className="h-4 w-4"/></button><span className="min-w-8 text-center text-[14px]">{guestsForAge(age).length}</span><button type="button" aria-label={`Add ${age}`} onClick={() => setAgeCount(age, guestsForAge(age).length + 1)} className="h-full px-3"><Plus className="h-4 w-4"/></button></div></div>)}
-      <section className="rounded-xl border border-[#dce4ed] bg-white p-4"><h3 className="text-[14px] font-bold">Pass days</h3><button type="button" aria-pressed={copyDaysToAll} onClick={() => { const next = !copyDaysToAll; setCopyDaysToAll(next); if (next && guests[0]) chooseSharedDays(guests[0].days); }} className="mt-2 flex w-full items-center gap-2 rounded-lg bg-[#eef6f1] px-3 py-3 text-left text-[12px] font-semibold text-[#34765a]"><span className="flex h-5 w-5 items-center justify-center rounded bg-[#379b72] text-white">{copyDaysToAll && <Check className="h-4 w-4"/>}</span>Use the same pass days for every ticket</button>{copyDaysToAll ? dayOptions(guests[0]?.days ?? 3, chooseSharedDays) : groupedByAge.map((group) => <div key={group.age} className="mt-3 text-[12px] font-semibold">{group.age} · {group.guests.length}{dayOptions(group.guests[0].days, (days) => setGroupDays(group.age, days), true)}</div>)}<p className="mt-2 text-[11px] text-[#8a969f]">{copyDaysToAll ? 'Changing the day count updates all guests together.' : 'Set a different day count for each age group.'}</p></section>
-    </section>}
-
-    {layout === 'one-tap' && <section className="space-y-4">
-      <div><h2 className="text-[17px] font-bold">Edit guest quantities</h2><p className="mt-1 text-[13px] text-[#777]">Use the plus and minus controls to change pass counts by age group.</p></div>
-      <div className="rounded-xl border border-[#dce4ed] bg-white p-4"><span className="text-[11px] text-[#8a969f]">Selected pass</span><b className="mt-1 block text-[13px]">Earlybird Multi-Day Pass · {guests[0]?.days ?? 3} Days</b></div>
-      <div className="rounded-xl border border-[#dce4ed] bg-white p-4"><h3 className="text-[14px] font-bold">Number of days</h3>{dayOptions(guests[0]?.days ?? 3, chooseSharedDays)}<p className="mt-2 text-[11px] text-[#8a969f]">This day count applies to everyone in the order.</p></div>
-      <div className="rounded-xl border border-[#dce4ed] bg-white p-4"><h3 className="text-[12px] font-bold text-[#526982]">Guests</h3>{AGE_OPTIONS.map(([age]) => <div key={age} className="flex items-center justify-between py-1.5 text-[13px]"><span className={guestsForAge(age).length ? 'text-[#20242b]' : 'text-[#9aa4af]'}>{age}</span><div className="flex h-8 items-center overflow-hidden rounded-lg border border-[#dce4ed]"><button type="button" aria-label={`Remove one ${age}`} disabled={!guestsForAge(age).length} onClick={() => setAgeCount(age, guestsForAge(age).length - 1)} className="h-full px-2.5 text-[#526982] disabled:opacity-35"><Minus className="h-3.5 w-3.5"/></button><b className="min-w-7 text-center">{guestsForAge(age).length}</b><button type="button" aria-label={`Add one ${age}`} onClick={() => setAgeCount(age, guestsForAge(age).length + 1)} className="h-full px-2.5 text-[#526982]"><Plus className="h-3.5 w-3.5"/></button></div></div>)}</div>
-    </section>}
+    </section>
 
     <section>
       <h2 className="text-[16px] font-bold">Would you like to support the Cardrona Foundation?</h2>
