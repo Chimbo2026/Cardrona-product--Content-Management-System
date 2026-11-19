@@ -241,24 +241,22 @@ function AccommodationBookingDialog({ booking, onChange, onUnitTypeChange, night
 
 function WinterSeasonPassBooking({ onAdd }) {
   const { lang } = useLang();
-  const [paymentPlan, setPaymentPlan] = useState('Pay Now');
   const [passType, setPassType] = useState('Winter Saver Season Pass');
   const [age, setAge] = useState('Adult: 18 - 64 yrs');
   const [rulesAccepted, setRulesAccepted] = useState(false);
   const [foundation, setFoundation] = useState(false);
   const [donations, setDonations] = useState([]);
-  const [scheduleOpen, setScheduleOpen] = useState(false);
   const isSaver = passType === 'Winter Saver Season Pass';
   const agePrices = isSaver
     ? { 'Adult: 18 - 64 yrs': 1029, 'Child: 6 - 17 yrs': 319, 'Senior: 65 - 74 yrs': 689 }
     : { 'Adult: 18 - 64 yrs': 1429, 'Child: 6 - 17 yrs': 399, 'Senior: 65 - 74 yrs': 850, 'Under 6 yrs: Free of Charge': 0, 'Over 75 yrs: Free of Charge': 0 };
   const basePrice = agePrices[age] ?? agePrices['Adult: 18 - 64 yrs'];
   const fullTotal = basePrice + donations.length * 20;
-  const dueToday = (paymentPlan === 'Buy Now, Pay Later' ? Math.min(100, basePrice) : basePrice) + donations.length * 20;
+  const dueToday = basePrice + donations.length * 20;
   const canAdd = !isSaver || rulesAccepted;
   const shortPassName = isSaver ? 'Winter Saver Pass' : 'Winter Unlimited Pass';
   const ageLabel = age.split(':')[0];
-  const summaryName = `${shortPassName} - ${ageLabel} ${paymentPlan === 'Pay Now' ? 'Pay Now' : 'Pay $100 Now & The Rest In 4 Instalments'}`;
+  const summaryName = `${shortPassName} - ${ageLabel} Pay Now`;
   const toggleDonation = (id) => setDonations((current) => current.includes(id) ? current.filter((item) => item !== id) : [...current, id]);
   const addPass = () => onAdd({
     id: 'winter-season-pass',
@@ -266,8 +264,8 @@ function WinterSeasonPassBooking({ onAdd }) {
     price: dueToday,
     image: pass.image,
     ageBand: age,
-    detail: [paymentPlan, `Full pass total ${money(fullTotal)}`, paymentPlan === 'Buy Now, Pay Later' ? 'Four remaining instalments' : '', foundation ? 'Cardrona Foundation donation' : '', ...donations.map((id) => `${CHARITY_LABELS[id]} +$20`)].filter(Boolean).join(' · '),
-    variant: `${passType}-${age}-${paymentPlan}-${foundation}-${donations.join(',')}`,
+    detail: [`Full pass total ${money(fullTotal)}`, foundation ? 'Cardrona Foundation donation' : '', ...donations.map((id) => `${CHARITY_LABELS[id]} +$20`)].filter(Boolean).join(' · '),
+    variant: `${passType}-${age}-${foundation}-${donations.join(',')}`,
   });
 
   return <LocalizeCustomerTree lang={lang}><main className="grid grid-cols-1 items-start gap-6 px-4 pb-8 pt-5 sm:px-8">
@@ -275,7 +273,7 @@ function WinterSeasonPassBooking({ onAdd }) {
       <section>
         <h3 className="text-[16px] font-bold">Payment Plan</h3>
         <p className="mt-1 text-[15px] text-[#777]">Choose your Payment Option</p>
-        <div className="mt-2 space-y-3">{['Pay Now', 'Buy Now, Pay Later'].map((planOption) => <button key={planOption} type="button" aria-pressed={paymentPlan === planOption} onClick={() => setPaymentPlan(planOption)} className={`min-h-[62px] w-full rounded-xl border px-4 py-3 text-left ${paymentPlan === planOption ? 'border-2 border-[#5b8199]' : 'border-[#a0a0a0]'}`}><b className="block text-[15px]">{planOption}</b>{planOption === 'Buy Now, Pay Later' && <span className="mt-1 block text-[12px] text-[#777]">$100 deposit owed now and the rest paid in four instalments</span>}</button>)}</div>
+        <div className="mt-2 rounded-xl border-2 border-[#5b8199] px-4 py-3"><b className="block text-[15px]">Pay Now</b></div>
       </section>
 
       <section>
@@ -303,15 +301,10 @@ function WinterSeasonPassBooking({ onAdd }) {
       <h2 className="font-serif text-[23px] font-bold">Item Summary</h2>
       {canAdd && <div className="mt-4 border-b border-[#cbd7e4] pb-4 text-[15px]">
         <b className="block">(1) {summaryName}</b>
-        <span className="mt-2 block">${paymentPlan === 'Buy Now, Pay Later' ? 100 : basePrice}</span>
+        <span className="mt-2 block">${basePrice}</span>
         {donations.map((id) => <div key={id} className="mt-4"><b className="block">(1) {CHARITY_LABELS[id]}</b><span className="mt-2 block">$20</span></div>)}
       </div>}
-      {canAdd && paymentPlan === 'Buy Now, Pay Later' ? <div className="mt-4">
-        <div className="flex justify-between text-[14px] text-[#777]"><span>Total</span><span>${fullTotal.toLocaleString('en-NZ')}</span></div>
-        <div className="mt-1 flex justify-between text-[23px]"><span>Due Today</span><b>${dueToday.toLocaleString('en-NZ')}</b></div>
-        <button type="button" onClick={() => setScheduleOpen((open) => !open)} className="mt-4 flex w-full items-center justify-between text-[15px]"><span>View Payment Schedule ›</span><span>4 remaining</span></button>
-        {scheduleOpen && <div className="mt-3 space-y-2 rounded-lg bg-[#f5f6f7] p-3 text-[13px]"><div className="flex justify-between"><span>Due today</span><span>${dueToday.toLocaleString('en-NZ')}</span></div>{Array.from({ length: 4 }, (_, index) => <div key={index} className="flex justify-between"><span>Instalment {index + 1}</span><span>${Math.round((basePrice - 100) / 4).toLocaleString('en-NZ')}</span></div>)}</div>}
-      </div> : canAdd && <div className="mt-4 flex justify-between text-[23px]"><span>Total</span><b>${fullTotal.toLocaleString('en-NZ')}</b></div>}
+      {canAdd && <div className="mt-4 flex justify-between text-[23px]"><span>Total</span><b>${fullTotal.toLocaleString('en-NZ')}</b></div>}
       <button type="button" disabled={!canAdd} onClick={addPass} className="mt-4 h-11 w-full rounded-lg bg-[#5b8199] text-[15px] tracking-[0.08em] text-white disabled:bg-[#ccc]">Add To Cart</button>
     </aside>
   </main></LocalizeCustomerTree>;
