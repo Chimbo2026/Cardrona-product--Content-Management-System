@@ -195,7 +195,7 @@ export default function EarlybirdGuestAssignments({ items, hidden = false }) {
   const [groupVisible, setGroupVisible] = useState(true);
 
   return <section hidden={hidden || !passes.length} className="space-y-4" aria-label="Product assignments and group details">
-    <section className="overflow-hidden rounded-[20px] border border-[#dce4ed] bg-white">
+    <section className="@container overflow-hidden rounded-[20px] border border-[#dce4ed] bg-white">
       <div className="border-b border-[#dce4ed] px-4 py-4 sm:px-6">
         <h3 className="font-serif text-[21px] font-bold text-[#20242b] sm:text-[26px]">Assign Products</h3>
         <p className="mt-2 text-[12px] leading-5 text-[#60738d] sm:text-[14px]">Choose a group member for each item. Age bands are shown for information; any group member can be selected.</p>
@@ -203,7 +203,7 @@ export default function EarlybirdGuestAssignments({ items, hidden = false }) {
       <div className="divide-y divide-[#d2d2d2]">
         {passes.map((pass, index) => {
           const selected = group.members.find((member) => member.id === group.assignments[pass.id]);
-          return <article key={pass.id} className="grid grid-cols-[42px_minmax(0,1fr)] items-center gap-3 bg-[#f7f7f7] px-3.5 py-4 sm:grid-cols-[54px_minmax(0,1fr)_minmax(220px,34%)] sm:gap-4 sm:px-4">
+          return <article key={pass.id} className="grid grid-cols-[42px_minmax(0,1fr)] items-center gap-3 bg-[#f7f7f7] px-3.5 py-4 @lg:grid-cols-[54px_minmax(0,1fr)_minmax(220px,34%)] @lg:gap-4 @lg:px-4">
             <span aria-hidden="true" className={`grid h-10 w-10 place-items-center rounded-full text-[18px] text-white sm:h-[48px] sm:w-[48px] ${selected ? 'bg-[#5b8199]' : 'bg-[#d1d1d1]'}`}>{selected ? <Check className="h-5 w-5"/> : <Check className="h-5 w-5 text-white/60"/>}</span>
             <div className="min-w-0">
               <div className="text-[14px] font-medium leading-5 sm:text-[17px]">{pass.name.replace(/\s+-\s+Pay Now$/, '')}</div>
@@ -215,7 +215,7 @@ export default function EarlybirdGuestAssignments({ items, hidden = false }) {
                 {pass.detail.split(' · ').filter(Boolean).map((detail) => <div key={detail}>{detail}</div>)}
               </div>}
             </div>
-            <label className="col-start-2 block sm:col-start-auto">
+            <label className="col-start-2 block @lg:col-start-auto">
               <span className="sr-only">Select group member for item {index + 1}</span>
               <span className="relative block"><select aria-label={`Select group member for item ${index + 1}`} value={group.assignments[pass.id] || ''} onChange={(event) => { if (event.target.value === '__add_member__') { setAssignment(pass.id, ''); openAdd(); } else setAssignment(pass.id, event.target.value); }} className="h-11 w-full appearance-none rounded-lg border border-[#bfc3c6] bg-white px-3 pr-9 text-[13px] text-[#344a64] focus:border-[#5b8199] focus:outline-none"><option value="">Select Group Member</option>{group.members.map((member) => <option key={member.id} value={member.id}>{member.name}</option>)}<option value="__add_member__">Add Group Member</option></select><ChevronDown className="pointer-events-none absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-[#344a64]"/></span>
             </label>
