@@ -21,6 +21,14 @@ const LAYOUTS = [
   ['individual', 'Guest cards'],
   ['grouped', 'Grouped tickets'],
   ['age-first', 'Age first'],
+  ['quantity-copy', 'Quantity + copy'],
+  ['contacts', 'Contacts'],
+];
+
+const DEMO_RIDERS = [
+  { id: 'chen', name: 'Chen', avatar: '陳', age: 'Adult', days: 3 },
+  { id: 'li', name: 'Li', avatar: '李', age: 'Child', days: 4 },
+  { id: 'wang', name: 'Wang', avatar: '王', age: 'Senior', days: 3 },
 ];
 
 const DONATIONS = [
@@ -31,18 +39,19 @@ const DONATIONS = [
 ];
 
 const money = (amount) => `$${amount.toLocaleString('en-NZ')}`;
-const newGuest = (id, age = 'Adult', days = 3) => ({ id, age, days });
+const newGuest = (id, age = 'Adult', days = 3, profile = {}) => ({ id, age, days, ...profile });
 
 export default function EarlybirdMultiDayPassConfigurator({ image, onAdd }) {
   const { lang } = useLang();
   const [layout, setLayout] = useState('individual');
   const [ageStage, setAgeStage] = useState('counts');
-  const [guests, setGuests] = useState([newGuest(1, 'Adult', 3), newGuest(2, 'Child', 4)]);
+  const [guests, setGuests] = useState([newGuest(1, 'Adult', 3, { contactId: 'chen', name: 'Chen' }), newGuest(2, 'Child', 4, { contactId: 'li', name: 'Li' })]);
   const [nextGuestId, setNextGuestId] = useState(3);
   const [foundation, setFoundation] = useState(false);
   const [donations, setDonations] = useState([]);
   const [showMore, setShowMore] = useState(false);
   const [individualEditing, setIndividualEditing] = useState(false);
+  const [copyDaysToAll, setCopyDaysToAll] = useState(true);
 
   const groups = useMemo(() => {
     const grouped = new Map();
@@ -58,8 +67,8 @@ export default function EarlybirdMultiDayPassConfigurator({ image, onAdd }) {
   const donationPerGuest = foundation ? donations.length * 20 : 0;
   const total = guests.reduce((sum, guest) => sum + PRICES[guest.age][guest.days] + donationPerGuest, 0);
   const toggleDonation = (id) => setDonations((current) => current.includes(id) ? current.filter((item) => item !== id) : [...current, id]);
-  const addGuest = (age = 'Adult', days = 3) => {
-    setGuests((current) => [...current, newGuest(nextGuestId, age, days)]);
+  const addGuest = (age = 'Adult', days = 3, profile = {}) => {
+    setGuests((current) => [...current, newGuest(nextGuestId, age, days, profile)]);
     setNextGuestId((current) => current + 1);
   };
   const removeGuest = (id) => setGuests((current) => current.filter((guest) => guest.id !== id));
@@ -71,6 +80,15 @@ export default function EarlybirdMultiDayPassConfigurator({ image, onAdd }) {
     else if (count < currentCount) removeGuest(guestsForAge(age).at(-1)?.id);
   };
   const setGroupDays = (age, days) => setGuests((current) => current.map((guest) => guest.age === age ? { ...guest, days } : guest));
+  const toggleRider = (rider) => {
+    const selected = guests.find((guest) => guest.contactId === rider.id);
+    if (selected) {
+      removeGuest(selected.id);
+      return;
+    }
+    addGuest(rider.age, rider.days, { contactId: rider.id, name: rider.name });
+  };
+  const chooseSharedDays = (days) => setGuests((current) => current.map((guest) => ({ ...guest, days })));
   const groupedByAge = AGE_OPTIONS.map(([age]) => ({ age, guests: guestsForAge(age) })).filter((group) => group.guests.length);
 
   const addToCart = () => groups.forEach((group) => {
@@ -105,8 +123,8 @@ export default function EarlybirdMultiDayPassConfigurator({ image, onAdd }) {
       <button type="button" onClick={() => setShowMore((value) => !value)} className="mt-2 text-[14px] underline">{showMore ? 'See less' : 'See more'}</button>
     </section>
 
-    <nav aria-label="Choose a pass entry layout" className="rounded-xl bg-[#e8edf3] p-1">
-      <div className="grid grid-cols-3 gap-1">{LAYOUTS.map(([id, label]) => <button key={id} type="button" aria-pressed={layout === id} onClick={() => { setLayout(id); setAgeStage('counts'); }} className={`rounded-lg px-2 py-2 text-[11px] font-semibold ${layout === id ? 'bg-white text-[#344a64] shadow-sm' : 'text-[#68717f]'}`}>{label}</button>)}</div>
+    <nav aria-label="Compare pass entry layouts" className="rounded-xl bg-[#e8edf3] p-1">
+      <div className="grid grid-cols-2 gap-1 sm:grid-cols-3">{LAYOUTS.map(([id, label]) => <button key={id} type="button" aria-pressed={layout === id} onClick={() => { setLayout(id); setAgeStage('counts'); }} className={`min-h-10 rounded-lg px-2 py-2 text-[11px] font-semibold ${layout === id ? 'bg-white text-[#344a64] shadow-sm' : 'text-[#68717f]'}`}>{label}</button>)}</div>
     </nav>
 
     {layout === 'individual' && <section className="space-y-4">
@@ -141,6 +159,20 @@ export default function EarlybirdMultiDayPassConfigurator({ image, onAdd }) {
         <button type="button" aria-pressed={individualEditing} onClick={() => setIndividualEditing((value) => !value)} className="w-full rounded-xl border border-[#5b8199] px-4 py-3 text-[13px] font-semibold text-[#5b8199]">{individualEditing ? 'Use days by age group' : 'Edit pass days per person'}</button>
         <button type="button" onClick={() => setAgeStage('counts')} className="text-[13px] text-[#5b8199] underline">Back to age counts</button>
       </>}
+    </section>}
+
+    {layout === 'quantity-copy' && <section className="space-y-4">
+      <div><h2 className="text-[17px] font-bold">Set ticket quantities</h2><p className="mt-1 text-[13px] text-[#777]">Choose how many passes for each age, then set the days once.</p></div>
+      <div className="rounded-xl border border-[#dce4ed] bg-white p-4"><b className="text-[13px]">Earlybird Multi-Day Pass</b><span className="mt-1 block text-[12px] text-[#777]">Choose quantities by age group</span></div>
+      {AGE_OPTIONS.map(([age, label]) => <div key={age} className="flex items-center justify-between gap-3 rounded-xl border border-[#dce4ed] bg-white p-3"><span className="min-w-0"><b className="block text-[14px]">{age}</b><small className="text-[11px] text-[#777]">{label.replace(`${age}: `, '')}</small></span><div className="flex h-10 items-center overflow-hidden rounded-lg border border-[#dce4ed]"><button type="button" aria-label={`Remove ${age}`} disabled={!guestsForAge(age).length || guestCount <= 1} onClick={() => setAgeCount(age, guestsForAge(age).length - 1)} className="h-full px-3 disabled:opacity-40"><Minus className="h-4 w-4"/></button><span className="min-w-8 text-center text-[14px]">{guestsForAge(age).length}</span><button type="button" aria-label={`Add ${age}`} onClick={() => setAgeCount(age, guestsForAge(age).length + 1)} className="h-full px-3"><Plus className="h-4 w-4"/></button></div></div>)}
+      <section className="rounded-xl border border-[#dce4ed] bg-white p-4"><h3 className="text-[14px] font-bold">Pass days</h3><button type="button" aria-pressed={copyDaysToAll} onClick={() => { const next = !copyDaysToAll; setCopyDaysToAll(next); if (next && guests[0]) chooseSharedDays(guests[0].days); }} className="mt-2 flex w-full items-center gap-2 rounded-lg bg-[#eef6f1] px-3 py-3 text-left text-[12px] font-semibold text-[#34765a]"><span className="flex h-5 w-5 items-center justify-center rounded bg-[#379b72] text-white">{copyDaysToAll && <Check className="h-4 w-4"/>}</span>Use the same pass days for every ticket</button>{copyDaysToAll ? dayOptions(guests[0]?.days ?? 3, chooseSharedDays) : groupedByAge.map((group) => <div key={group.age} className="mt-3 text-[12px] font-semibold">{group.age} · {group.guests.length}{dayOptions(group.guests[0].days, (days) => setGroupDays(group.age, days), true)}</div>)}<p className="mt-2 text-[11px] text-[#8a969f]">{copyDaysToAll ? 'Changing the day count updates all guests together.' : 'Set a different day count for each age group.'}</p></section>
+    </section>}
+
+    {layout === 'contacts' && <section className="space-y-4">
+      <div><h2 className="text-[17px] font-bold">Add guests from contacts</h2><p className="mt-1 text-[13px] text-[#777]">Tap a recent rider to add or remove them. Demo profiles fill the age group for you.</p></div>
+      <div className="rounded-xl border border-[#dce4ed] bg-white p-4"><b className="text-[12px] text-[#526982]">Recent riders · Demo profiles</b><div className="mt-3 grid grid-cols-4 gap-2">{DEMO_RIDERS.map((rider) => { const selected = guests.some((guest) => guest.contactId === rider.id); return <button key={rider.id} type="button" aria-pressed={selected} onClick={() => toggleRider(rider)} className={`flex min-w-0 flex-col items-center rounded-xl border px-1 py-2 ${selected ? 'border-[#d44235] bg-[#fff8f6]' : 'border-dashed border-[#cbd7e4] bg-white'}`}><span className={`flex h-11 w-11 items-center justify-center rounded-full text-[16px] font-bold ${selected ? 'bg-[#d44235] text-white' : 'bg-[#edf1f5] text-[#6f7b89]'}`}>{rider.avatar}</span><span className="mt-1 text-[11px] font-semibold">{rider.name}</span><span className="text-[9px] text-[#8a969f]">{selected ? 'Selected' : rider.age}</span></button>; })}<button type="button" onClick={() => addGuest()} className="flex min-w-0 flex-col items-center rounded-xl border border-dashed border-[#cbd7e4] px-1 py-2"><span className="flex h-11 w-11 items-center justify-center rounded-full bg-[#edf1f5] text-[20px] text-[#718096]">+</span><span className="mt-1 text-[11px] font-semibold">New</span><span className="text-[9px] text-[#8a969f]">Guest</span></button></div></div>
+      <div className="rounded-xl bg-[#eef6f1] px-3 py-3 text-[12px] font-semibold text-[#34765a]"><Check className="mr-1 inline h-4 w-4"/>{guests.filter((guest) => guest.contactId).length} selected · age details filled from demo profile</div>
+      <p className="text-[11px] leading-4 text-[#8a969f]">Tap a rider to include them. New guests can be assigned an age in Guest cards or Age first.</p>
     </section>}
 
     <section>
