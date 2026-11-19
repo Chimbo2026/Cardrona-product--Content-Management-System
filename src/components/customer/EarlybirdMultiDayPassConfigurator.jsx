@@ -22,7 +22,7 @@ const LAYOUTS = [
   ['grouped', 'Grouped tickets'],
   ['age-first', 'Age first'],
   ['quantity-copy', 'Quantity + copy'],
-  ['one-tap', 'One-tap pair'],
+  ['one-tap', 'Quick quantities'],
 ];
 
 const DONATIONS = [
@@ -39,7 +39,6 @@ export default function EarlybirdMultiDayPassConfigurator({ image, onAdd }) {
   const { lang } = useLang();
   const [layout, setLayout] = useState('individual');
   const [ageStage, setAgeStage] = useState('counts');
-  const [oneTapAge, setOneTapAge] = useState('Adult');
   const [guests, setGuests] = useState([newGuest(1, 'Adult', 3), newGuest(2, 'Child', 4)]);
   const [foundation, setFoundation] = useState(false);
   const [donations, setDonations] = useState([]);
@@ -156,12 +155,9 @@ export default function EarlybirdMultiDayPassConfigurator({ image, onAdd }) {
     </section>}
 
     {layout === 'one-tap' && <section className="space-y-4">
-      <div><h2 className="text-[17px] font-bold">Add passes in one tap</h2><p className="mt-1 text-[13px] text-[#777]">Most guests book in pairs. Add two together or add one pass.</p></div>
+      <div><h2 className="text-[17px] font-bold">Edit guest quantities</h2><p className="mt-1 text-[13px] text-[#777]">Use the plus and minus controls to change pass counts by age group.</p></div>
       <div className="rounded-xl border border-[#dce4ed] bg-white p-4"><span className="text-[11px] text-[#8a969f]">Selected pass</span><b className="mt-1 block text-[13px]">Earlybird Multi-Day Pass · {guests[0]?.days ?? 3} Days</b></div>
       <div className="rounded-xl border border-[#dce4ed] bg-white p-4"><h3 className="text-[12px] font-bold text-[#526982]">Guests</h3>{AGE_OPTIONS.map(([age]) => <div key={age} className="flex items-center justify-between py-1.5 text-[13px]"><span className={guestsForAge(age).length ? 'text-[#20242b]' : 'text-[#9aa4af]'}>{age}</span><div className="flex h-8 items-center overflow-hidden rounded-lg border border-[#dce4ed]"><button type="button" aria-label={`Remove one ${age}`} disabled={!guestsForAge(age).length} onClick={() => setAgeCount(age, guestsForAge(age).length - 1)} className="h-full px-2.5 text-[#526982] disabled:opacity-35"><Minus className="h-3.5 w-3.5"/></button><b className="min-w-7 text-center">{guestsForAge(age).length}</b><button type="button" aria-label={`Add one ${age}`} onClick={() => setAgeCount(age, guestsForAge(age).length + 1)} className="h-full px-2.5 text-[#526982]"><Plus className="h-3.5 w-3.5"/></button></div></div>)}</div>
-      <label className="block text-[12px] font-semibold">Add passes for<select value={oneTapAge} onChange={(event) => setOneTapAge(event.target.value)} className="mt-1 h-11 w-full rounded-lg border border-[#dce4ed] bg-white px-3 text-[14px]">{AGE_OPTIONS.map(([age, label]) => <option key={age} value={age}>{label}</option>)}</select></label>
-      <button type="button" onClick={() => addGuests(2, oneTapAge, guestsForAge(oneTapAge)[0]?.days ?? 3)} className="w-full rounded-xl border border-[#d44235] bg-[#fff8f6] px-4 py-3 text-center text-[14px] font-bold text-[#c4362a]">+ Add 2 {oneTapAge === 'Child' ? 'children' : `${oneTapAge.toLowerCase()}s`}<small className="mt-0.5 block text-[10px] font-normal">Most book in pairs</small></button>
-      <button type="button" onClick={() => addGuest(oneTapAge, guestsForAge(oneTapAge)[0]?.days ?? 3)} className="w-full rounded-xl border border-[#dce4ed] px-4 py-2 text-center text-[13px] text-[#526982]">+ Add 1 {oneTapAge.toLowerCase()}</button>
     </section>}
 
     <section>
