@@ -242,7 +242,8 @@ function AccommodationBookingDialog({ booking, onChange, onUnitTypeChange, night
 function WinterSeasonPassBooking({ onAdd }) {
   const { lang } = useLang();
   const [passType, setPassType] = useState('Winter Saver Season Pass');
-  const [age, setAge] = useState('Adult: 18 - 64 yrs');
+  const [ageStage, setAgeStage] = useState('counts');
+  const [guestCounts, setGuestCounts] = useState({ 'Adult: 18 - 64 yrs': 1, 'Child: 6 - 17 yrs': 1, 'Senior: 65 - 74 yrs': 0, 'Under 6 yrs: Free of Charge': 0, 'Over 75 yrs: Free of Charge': 0 });
   const [rulesAccepted, setRulesAccepted] = useState(false);
   const [foundation, setFoundation] = useState(false);
   const [donations, setDonations] = useState([]);
@@ -250,26 +251,44 @@ function WinterSeasonPassBooking({ onAdd }) {
   const agePrices = isSaver
     ? { 'Adult: 18 - 64 yrs': 1029, 'Child: 6 - 17 yrs': 319, 'Senior: 65 - 74 yrs': 689 }
     : { 'Adult: 18 - 64 yrs': 1429, 'Child: 6 - 17 yrs': 399, 'Senior: 65 - 74 yrs': 850, 'Under 6 yrs: Free of Charge': 0, 'Over 75 yrs: Free of Charge': 0 };
-  const basePrice = agePrices[age] ?? agePrices['Adult: 18 - 64 yrs'];
-  const fullTotal = basePrice + donations.length * 20;
-  const dueToday = basePrice + donations.length * 20;
+  const ageEntries = Object.entries(agePrices).map(([label, price]) => ({ label, price, quantity: guestCounts[label] || 0 })).filter((item) => item.quantity > 0);
+  const guestCount = ageEntries.reduce((sum, item) => sum + item.quantity, 0);
+  const passTotal = ageEntries.reduce((sum, item) => sum + item.price * item.quantity, 0);
+  const donationTotal = donations.length * 20 * guestCount;
+  const fullTotal = passTotal + donationTotal;
   const canAdd = !isSaver || rulesAccepted;
   const shortPassName = isSaver ? 'Winter Saver Pass' : 'Winter Unlimited Pass';
-  const ageLabel = age.split(':')[0];
-  const summaryName = `${shortPassName} - ${ageLabel} Pay Now`;
   const toggleDonation = (id) => setDonations((current) => current.includes(id) ? current.filter((item) => item !== id) : [...current, id]);
-  const addPass = () => onAdd({
+  const setAgeCount = (label, quantity) => setGuestCounts((current) => ({ ...current, [label]: Math.max(0, quantity) }));
+  const choosePassType = (type) => {
+    setPassType(type);
+    setRulesAccepted(false);
+    if (type === 'Winter Saver Season Pass') setGuestCounts((current) => ({ ...current, 'Under 6 yrs: Free of Charge': 0, 'Over 75 yrs: Free of Charge': 0 }));
+  };
+  const addPass = () => ageEntries.forEach(({ label, price, quantity }) => onAdd({
     id: 'winter-season-pass',
-    name: summaryName,
-    price: dueToday,
+    name: `${shortPassName} - ${label.split(':')[0]} Pay Now`,
+    price: price + donations.length * 20,
+    quantity,
     image: pass.image,
-    ageBand: age,
-    detail: [`Full pass total ${money(fullTotal)}`, foundation ? 'Cardrona Foundation donation' : '', ...donations.map((id) => `${CHARITY_LABELS[id]} +$20`)].filter(Boolean).join(' · '),
-    variant: `${passType}-${age}-${foundation}-${donations.join(',')}`,
-  });
+    ageBand: label,
+    detail: [`Full pass total ${money(price)}`, foundation ? 'Cardrona Foundation donation' : '', ...donations.map((id) => `${CHARITY_LABELS[id]} +$20`)].filter(Boolean).join(' · '),
+    variant: `${passType}-${label}-${foundation}-${donations.join(',')}`,
+  }));
 
   return <LocalizeCustomerTree lang={lang}><main className="grid grid-cols-1 items-start gap-6 px-4 pb-8 pt-5 sm:px-8">
     <div className="space-y-6">
+      {ageStage === 'counts' && <section className="space-y-3">
+        <div><h3 className="text-[16px] font-bold">Guests</h3><p className="mt-1 text-[13px] text-[#777]">Choose the number of passes for each age group.</p></div>
+        {Object.keys(agePrices).map((label) => <div key={label} className="flex items-center justify-between gap-3 rounded-xl border border-[#dce4ed] bg-white p-3"><span className="min-w-0 text-[14px]">{label}</span><div className="flex h-10 items-center overflow-hidden rounded-lg border border-[#dce4ed]"><button type="button" aria-label={`Remove one ${label}`} disabled={!guestCounts[label]} onClick={() => setAgeCount(label, guestCounts[label] - 1)} className="h-full px-3 text-[#526982] disabled:opacity-35"><Minus className="h-4 w-4"/></button><b className="min-w-8 text-center text-[14px]">{guestCounts[label] || 0}</b><button type="button" aria-label={`Add one ${label}`} onClick={() => setAgeCount(label, (guestCounts[label] || 0) + 1)} className="h-full px-3 text-[#526982]"><Plus className="h-4 w-4"/></button></div></div>)}
+        <button type="button" disabled={!guestCount} onClick={() => setAgeStage('options')} className="w-full rounded-xl bg-[#5b8199] px-4 py-3 text-[14px] font-semibold text-white disabled:opacity-40">Continue to pass options</button>
+      </section>}
+
+      {ageStage === 'options' && <>
+      <section>
+        <h3 className="text-[16px] font-bold">Pass Type</h3>
+        <div className="mt-2 flex flex-wrap gap-2">{['Winter Saver Season Pass', 'Winter Unlimited Season Pass'].map((type) => <button key={type} type="button" aria-pressed={passType === type} onClick={() => choosePassType(type)} className={`min-h-[62px] max-w-[210px] rounded-xl border px-3 py-3 text-left text-[15px] ${passType === type ? 'border-2 border-[#5b8199] font-bold' : 'border-[#a0a0a0]'}`}>{type}</button>)}</div>
+      </section>
       <section>
         <h3 className="text-[16px] font-bold">Payment Plan</h3>
         <p className="mt-1 text-[15px] text-[#777]">Choose your Payment Option</p>
@@ -277,8 +296,6 @@ function WinterSeasonPassBooking({ onAdd }) {
       </section>
 
       <section>
-        <h3 className="text-[16px] font-bold">Pass Type</h3>
-        <div className="mt-2 flex flex-wrap gap-2">{['Winter Saver Season Pass', 'Winter Unlimited Season Pass'].map((type) => <button key={type} type="button" aria-pressed={passType === type} onClick={() => { setPassType(type); setRulesAccepted(false); if (type === 'Winter Saver Season Pass' && age.includes('Free')) setAge('Adult: 18 - 64 yrs'); }} className={`min-h-[62px] max-w-[210px] rounded-xl border px-3 py-3 text-left text-[15px] ${passType === type ? 'border-2 border-[#5b8199] font-bold' : 'border-[#a0a0a0]'}`}>{type}</button>)}</div>
         <div className="mt-5">
           <b className="block text-[16px]">{isSaver ? 'Winter Saver Season Pass' : 'Unlimited Season Pass'}</b>
           <p className="mt-1 text-[15px] leading-6 text-[#777]">{isSaver ? 'Ski or ride at Cardrona only in Winter 27. Blackout dates apply 5-16 July, 2027' : 'Ski or ride at both Cardrona and Treble Cone in Winter 27 with no blackout dates'}</p>
@@ -289,23 +306,19 @@ function WinterSeasonPassBooking({ onAdd }) {
         </div>
       </section>
 
-      <section>
-        <h3 className="text-[16px] font-bold">Age</h3>
-        <div className="mt-2 flex flex-wrap gap-2">{Object.keys(agePrices).map((label) => <button key={label} type="button" aria-pressed={age === label} onClick={() => setAge(label)} className={`min-h-[54px] rounded-xl border px-3 py-3 text-left text-[15px] ${age === label ? 'border-2 border-[#5b8199] font-bold' : 'border-[#a0a0a0]'}`}>{label}</button>)}</div>
-      </section>
-
       <WinterDonationOptions foundation={foundation} onFoundationChange={setFoundation} selected={donations} onToggle={toggleDonation}/>
+      <button type="button" onClick={() => setAgeStage('counts')} className="text-[13px] text-[#5b8199] underline">Back to guest counts</button>
+      </>}
     </div>
 
     <aside className="w-full min-w-0 rounded-[20px] border border-[#ddd] bg-white p-5 shadow-[0_8px_18px_rgba(0,0,0,0.10)]">
       <h2 className="font-serif text-[23px] font-bold">Item Summary</h2>
       {canAdd && <div className="mt-4 border-b border-[#cbd7e4] pb-4 text-[15px]">
-        <b className="block">(1) {summaryName}</b>
-        <span className="mt-2 block">${basePrice}</span>
-        {donations.map((id) => <div key={id} className="mt-4"><b className="block">(1) {CHARITY_LABELS[id]}</b><span className="mt-2 block">$20</span></div>)}
+        {ageEntries.map(({ label, price, quantity }) => <div key={label} className="mb-3"><b className="block">({quantity}) {shortPassName} - {label.split(':')[0]} Pay Now</b><span className="mt-2 block">${(price * quantity).toLocaleString('en-NZ')}</span></div>)}
+        {donations.map((id) => <div key={id} className="mt-4"><b className="block">({guestCount}) {CHARITY_LABELS[id]}</b><span className="mt-2 block">${20 * guestCount}</span></div>)}
       </div>}
       {canAdd && <div className="mt-4 flex justify-between text-[23px]"><span>Total</span><b>${fullTotal.toLocaleString('en-NZ')}</b></div>}
-      <button type="button" disabled={!canAdd} onClick={addPass} className="mt-4 h-11 w-full rounded-lg bg-[#5b8199] text-[15px] tracking-[0.08em] text-white disabled:bg-[#ccc]">Add To Cart</button>
+      <button type="button" disabled={!canAdd || !guestCount} onClick={addPass} className="mt-4 h-11 w-full rounded-lg bg-[#5b8199] text-[15px] tracking-[0.08em] text-white disabled:bg-[#ccc]">Add {guestCount} {guestCount === 1 ? 'Pass' : 'Passes'} To Cart</button>
     </aside>
   </main></LocalizeCustomerTree>;
 }
@@ -500,13 +513,13 @@ export default function CustomerExperience() {
 
     if (path === '/passes') return <main className="space-y-4 px-4 pb-6 pt-5 sm:px-8"><div className="flex gap-2 overflow-x-auto pb-1">{['All', 'Lift pass', 'Packages', 'Summer', 'Winter'].map((f) => <button onClick={() => setFilter(f)} key={f} className={`shrink-0 rounded-full px-4 py-2.5 text-[14px] ${filter === f ? 'bg-[#5b8199] text-white' : 'bg-[#f0f1f3] text-[#68717f]'}`}>{f}</button>)}<button className="ml-auto flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[#f0f1f3]" aria-label="Cart" onClick={() => navigate('/cart')}><ShoppingBag className="h-5 w-5" /><span className="sr-only">{cartCount}</span></button><button className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[#f0f1f3]" aria-label="Favorites" onClick={() => setFilter('Favorites')}><Heart className="h-5 w-5" /></button></div>{filter === 'All' || filter === 'Winter' || filter === 'Packages' || (filter === 'Favorites' && state.favorites.includes(pass.id)) ? <article className="overflow-hidden rounded-[18px] border border-[#e0e3e7] bg-white shadow-sm"><div className="relative"><img src={pass.image} alt="Family skiing at Cardrona" className="h-[150px] w-full object-cover"/><span className="absolute left-4 top-4 rounded-full bg-black/60 px-3 py-1.5 text-[10px] text-white">Packages</span><button onClick={() => toggleFavorite(pass.id)} className="absolute right-4 top-4 flex h-11 w-11 items-center justify-center rounded-full bg-black/40 text-white" aria-label="Save pass"><Heart className={`h-5 w-5 ${state.favorites.includes(pass.id) ? 'fill-[#5b8199] text-[#5b8199]' : ''}`} /></button></div><div className="p-3"><h2 className="font-serif text-[16px] font-bold">{pass.name}</h2><p className="mt-1 text-[10px] leading-5 text-[#68717f]">{pass.description} Prices starting from $1,029.</p><p className="mt-2 flex items-center gap-2 text-[10px] text-[#68717f]"><Clock3 className="h-4 w-4" />Winter 27 season</p></div><div className="flex items-center justify-between gap-3 p-3"><span><strong className="font-serif text-[16px] font-normal text-[#5b8199]">{money(1029)}</strong><small className="block text-[10px] text-[#718096]">from / season pass</small></span><button onClick={() => navigate('/configure-pass')} className="flex h-10 items-center gap-2 rounded-full bg-[#5b8199] px-4 text-[12px] font-semibold text-white">Buy Now <ArrowRight className="h-4 w-4" /></button></div></article> : null}{(filter === 'All' || filter === 'Winter' || filter === 'Packages') && <article className="overflow-hidden rounded-[18px] border border-[#dce4ed] bg-white shadow-sm"><img src={WINTER_EARLYBIRD_MULTI_DAY.image} alt="Snowboarder riding Cardrona terrain park" className="h-[170px] w-full object-cover object-[center_25%]"/><div className="p-4"><span className="rounded-full bg-[#e3ebf4] px-2.5 py-1 text-[10px] text-[#526d8b]">Winter · Earlybird</span><h2 className="mt-3 font-serif text-[17px] font-bold text-[#344a64]">{WINTER_EARLYBIRD_MULTI_DAY.name}</h2><p className="mt-1 text-[11px] leading-5 text-[#718096]">{WINTER_EARLYBIRD_MULTI_DAY.description}</p><div className="mt-3 flex items-center justify-between"><b className="font-serif text-[17px] font-normal text-[#5b8199]">From NZ$250</b><button onClick={() => navigate(WINTER_EARLYBIRD_MULTI_DAY.to)} className="rounded-full bg-[#5b8199] px-3 py-2 text-[10px] font-semibold text-white">Buy Now <ArrowRight className="ml-1 inline h-3 w-3"/></button></div></div></article>}{(filter === 'All' || filter === 'Lift pass' || filter === 'Winter') && <section className="space-y-3"><div><h2 className="font-serif text-[22px] font-bold text-[#24344b]">Lift passes</h2><p className="mt-1 text-[11px] text-[#718096]">Choose the pass that suits your day · 2026 pricing</p></div><div className="space-y-3">{WINTER_DAY_PASSES.map((option) => { const expanded = expandedLiftPass !== option.id; return <article key={option.id} className="rounded-[17px] border border-[#dce4ed] bg-gradient-to-b from-white to-[#e8eff8] p-4 shadow-sm"><span className="text-[9px] font-bold tracking-[0.12em] text-[#5a6c84]">LIFT PASS</span><div className="mt-1 flex items-start justify-between gap-2"><h3 className="font-serif text-[16px] font-bold text-[#33445e]">{option.name}</h3><strong className="shrink-0 font-serif text-[19px] font-semibold text-[#486577]">{option.priceLabel || money(option.price)}</strong></div><p className="mt-1 text-[9px] text-[#8794a5]">2026 pricing</p><ul className="mt-3 space-y-1.5">{(expanded ? option.details : option.details.slice(0, 1)).map((detail) => <li key={detail} className="flex gap-2 text-[10px] leading-4 text-[#344a64]"><span className="text-[#5b8199]">✓</span><span>{detail}</span></li>)}</ul><div className="mt-3"><button onClick={() => setExpandedLiftPass(expanded ? '' : option.id)} className="text-[10px] font-medium text-[#5b8199]">{expanded ? 'Show less' : 'Learn more'} ↗</button></div></article>; })}</div></section>}{(filter === 'All' || filter === 'Summer') && <article className="overflow-hidden rounded-[22px] border border-[#dce4ed] bg-white shadow-sm"><div className="relative"><img src={resortPhotos.hiking} alt="Summer sightseeing at Cardrona" className="h-[180px] w-full object-cover"/><span className="absolute left-3 top-3 rounded-full bg-black/55 px-3 py-1 text-[11px] text-white">Sightseeing</span></div><div className="p-4"><h2 className="font-serif text-[20px] font-bold">Summer Sightseeing Pass</h2><p className="mt-1 text-[12px] leading-5 text-[#718096]">Enjoy alpine views and choose a scenic gondola uplift at McDougall’s Chondola.</p><div className="mt-3 flex items-center justify-between"><span><b className="font-serif text-[22px] font-normal text-[#5b8199]">NZ$35.00</b><small className="block text-[10px] text-[#718096]">Adult · includes 1 uplift</small></span><button onClick={() => navigate('/configure-pass?product=sightseeing')} className="flex h-10 items-center gap-2 rounded-full bg-[#5b8199] px-4 text-[12px] font-semibold text-white">Buy Now <ArrowRight className="h-4 w-4" /></button></div></div></article>}{(filter === 'All' || filter === 'Summer') && SUMMER_PRODUCTS.map((item) => <article key={item.id} className="overflow-hidden rounded-[18px] border border-[#dce4ed] bg-white shadow-sm"><img src={item.image} alt={`${item.name} at Cardrona`} className="h-[170px] w-full object-cover"/><div className="p-4"><span className="rounded-full bg-[#e3ebf4] px-2.5 py-1 text-[10px] text-[#526d8b]">Summer</span><h2 className="mt-3 font-serif text-[17px] font-bold text-[#344a64]">{item.name}</h2><p className="mt-1 text-[11px] leading-5 text-[#718096]">{item.description}</p><div className="mt-3 flex items-center justify-between"><b className="font-serif text-[17px] font-normal text-[#5b8199]">{item.price}</b><button onClick={() => navigate(item.to)} className="rounded-full bg-[#5b8199] px-3 py-2 text-[10px] font-semibold text-white">Buy Now <ArrowRight className="ml-1 inline h-3 w-3"/></button></div></div></article>)}{filter === 'Favorites' && !state.favorites.includes(pass.id) && <p className="py-12 text-center text-[#68717f]">No saved passes yet.</p>}</main>;
 
-    if (path === '/bike-configure') return <BikePackageConfigurator cartTotal={cartTotal} onAdd={(item) => addToCart(item, 1, { detail: item.detail, variant: item.variant, visitDate: item.visitDate, ageBand: item.ageBand })} onCheckout={() => { setBookingStep(0); navigate('/checkout'); }} />;
+    if (path === '/bike-configure') return <BikePackageConfigurator cartTotal={cartTotal} onAdd={(item) => addToCart(item, item.quantity || 1, { detail: item.detail, variant: item.variant, visitDate: item.visitDate, ageBand: item.ageBand })} onCheckout={() => { setBookingStep(0); navigate('/checkout'); }} />;
 
     if (path === '/configure-pass') {
       if (productId === 'earlybird-multi-day') return <><Stepper current={0} lang={lang}/><EarlybirdMultiDayPassConfigurator image={WINTER_EARLYBIRD_MULTI_DAY.image} onAdd={(item) => { addToCart(item, item.quantity, { detail: item.detail, variant: item.variant, ageBand: item.ageBand }); navigate('/cart'); }} /></>;
-      if (isSightseeing) return <><Stepper current={0} lang={lang}/><SightseeingConfigurator cartTotal={cartTotal} onAdd={(item) => addToCart(item, 1, { detail: item.detail, variant: item.variant, visitDate: item.visitDate, ageBand: item.ageBand })} onCheckout={() => { setBookingStep(0); navigate('/checkout'); }} /></>;
+      if (isSightseeing) return <><Stepper current={0} lang={lang}/><SightseeingConfigurator cartTotal={cartTotal} onAdd={(item) => addToCart(item, item.quantity || 1, { detail: item.detail, variant: item.variant, visitDate: item.visitDate, ageBand: item.ageBand })} onCheckout={() => { setBookingStep(0); navigate('/checkout'); }} /></>;
       if (productId) return <><Stepper current={0} lang={lang}/><SummerProductConfigurator productId={productId} cartTotal={cartTotal} onAdd={(item) => addToCart(item, item.quantity || 1, { detail: item.detail, variant: item.variant, visitDate: item.visitDate, ageBand: item.ageBand, replaceKey: item.replaceKey })} onCheckout={() => { setBookingStep(0); navigate('/checkout'); }} /></>;
-      return <><Stepper current={0} lang={lang}/><WinterSeasonPassBooking onAdd={(item) => { addToCart(item, 1, { detail: item.detail, variant: item.variant, ageBand: item.ageBand }); navigate('/cart'); }} /></>;
+      return <><Stepper current={0} lang={lang}/><WinterSeasonPassBooking onAdd={(item) => { addToCart(item, item.quantity || 1, { detail: item.detail, variant: item.variant, ageBand: item.ageBand }); navigate('/cart'); }} /></>;
     }
 
     if (path === '/checkout') return <><Stepper current={bookingStep + 2} lang={lang}/><main className="space-y-6 overflow-x-hidden px-4 pb-[160px] sm:px-8 sm:pb-[260px]"><section className="rounded-[22px] border border-[#e0e3e7] bg-white p-4 sm:p-7"><h2 className="font-serif text-[23px] font-bold sm:text-[32px]">Order summary</h2>{state.cart.length > 0 ? <div className="mt-4 space-y-3">{state.cart.map((item) => <div key={item.key} className="flex items-start justify-between gap-3 border-b border-[#e6edf4] pb-3 text-[13px]"><span className="min-w-0"><b className="block">{item.quantity} × {item.name}</b>{item.detail && <small className="mt-1 block text-[#718096]">{item.detail}</small>}</span><b className="shrink-0">{money(item.price * item.quantity)}</b></div>)}<p className="flex justify-between gap-3 pt-1 text-[14px] font-semibold"><span>Total due</span><span>{money(bookingTotal)}</span></p></div> : <p className="mt-3 text-[14px] text-[#68717f]">{passType} · {age} · {money(configuredPassTotal)} · {paymentPlan}</p>}</section>{bookingStep === 0 ? <><section><h3 className="flex items-center gap-2 text-[18px] font-semibold sm:text-[24px]"><CalendarDays className="h-5 w-5 text-[#5b8199] sm:h-7 sm:w-7"/>Visit details</h3>{state.cart.length > 0 ? <p className="mt-4 text-[13px] text-[#68717f]">{bookingDates.length ? (bookingDates.length === 1 ? 'Selected visit date: ' : 'Selected visit dates: ') : ''}{bookingDates.length ? bookingDates.join(', ') : 'No visit date is required for these items.'}</p> : <><div className="mt-4 grid grid-cols-2 gap-3 sm:mt-5 sm:gap-4">{[['From', dateFrom, setDateFrom], ['To', dateTo, setDateTo]].map(([label, value, setValue]) => <label key={label} className="min-w-0 text-[13px] text-[#68717f] sm:text-[19px]">{label}<input type="date" value={value} min={dateFrom} onChange={(e) => setValue(e.target.value)} className="mt-2 h-14 min-w-0 w-full rounded-[17px] border border-[#dfe2e6] bg-white px-3 text-[14px] text-[#20242b] shadow-sm sm:mt-3 sm:h-[86px] sm:px-5 sm:text-[20px]" /></label>)}</div><p className="mt-2 text-[13px] text-[#68717f] sm:mt-3 sm:text-[18px]">{dateFrom} – {dateTo}</p></>}</section>{state.cart.length > 0 ? <section><h3 className="text-[18px] font-semibold sm:text-[24px]">Items in this order</h3><p className="mt-3 text-[13px] text-[#68717f]">{bookingQuantity} {bookingQuantity === 1 ? 'item' : 'items'} are included in the order.</p></section> : <section><h3 className="text-[18px] font-semibold sm:text-[24px]">Guests</h3><div className="mt-3 flex items-center gap-4 sm:mt-4 sm:gap-6"><button aria-label="Remove guest" onClick={() => changeBookingGuests(-1)} className="flex h-14 w-14 items-center justify-center rounded-[18px] border border-[#dfe2e6] text-[#68717f] sm:h-20 sm:w-20"><Minus className="sm:h-7 sm:w-7"/></button><b className="min-w-8 text-center text-[20px] sm:min-w-10 sm:text-[27px]">{guests}</b><button aria-label="Add guest" onClick={() => changeBookingGuests(1)} className="flex h-14 w-14 items-center justify-center rounded-[18px] border border-[#dfe2e6] text-[#68717f] sm:h-20 sm:w-20"><Plus className="sm:h-7 sm:w-7"/></button><span className="ml-auto text-right text-[13px] text-[#68717f] sm:text-[18px]">Order subtotal<br/>{money(bookingTotal)}</span></div></section>}<section className="rounded-[20px] border border-[#e0e3e7] bg-white p-4"><h3 className="font-serif text-[19px] font-bold sm:text-[23px]">Order details</h3><p className="mt-2 text-[14px] leading-6 text-[#68717f] sm:text-[17px]">Your selected products and options will be confirmed in the demo checkout.</p></section></> : bookingStep === 1 ? <section className="space-y-4 rounded-[22px] border border-[#dce4ed] bg-white p-4">

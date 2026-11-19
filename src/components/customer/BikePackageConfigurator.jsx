@@ -4,6 +4,7 @@ import { Bike, CalendarDays, Check, ShieldCheck } from 'lucide-react';
 import DateAvailabilityCalendar from './DateAvailabilityCalendar';
 import { useLang } from '@/lib/i18n';
 import { LocalizeCustomerTree } from '@/lib/customerLocale';
+import AgeFirstGuestCounts from './AgeFirstGuestCounts';
 
 const BIKE_TYPES = ['Enduro', 'Downhill', 'Full Suspension'];
 const SIZES = {
@@ -40,7 +41,12 @@ export default function BikePackageConfigurator({ onAdd, onCheckout, cartTotal =
   const location = useLocation();
   const rentalOnly = new URLSearchParams(location.search).get('product') === 'bike-rental';
   const [date, setDate] = useState('');
-  const [age, setAge] = useState('Adult');
+  const ageOptions = [{ value: 'Adult', label: 'Adult: 18+' }, { value: 'Child', label: 'Child: 6 - 17 yrs' }];
+  const [ageStage, setAgeStage] = useState('counts');
+  const [guestCounts, setGuestCounts] = useState({ Adult: 1, Child: 0 });
+  const ageEntries = ageOptions.map((option) => ({ ...option, quantity: guestCounts[option.value] || 0 })).filter((option) => option.quantity > 0);
+  const guestCount = ageEntries.reduce((sum, option) => sum + option.quantity, 0);
+  const age = ageEntries[0]?.value || 'Adult';
   const [bike, setBike] = useState('Enduro');
   const [size, setSize] = useState(defaultSize('Enduro', 'Adult'));
   const [halfDay, setHalfDay] = useState(false);
@@ -54,8 +60,8 @@ export default function BikePackageConfigurator({ onAdd, onCheckout, cartTotal =
     : defaultSize(type, riderAge);
 
   const basePrice = rentalOnly ? RENTAL_PRICES[bike] : PRICES[halfDay ? 'halfDay' : 'fullDay'][bike][age];
-  const packagePrice = basePrice;
-  const insurancePrice = insuranceSelected ? 25 : 0;
+  const packagePrice = rentalOnly ? basePrice : ageEntries.reduce((sum, entry) => sum + PRICES[halfDay ? 'halfDay' : 'fullDay'][bike][entry.value] * entry.quantity, 0);
+  const insurancePrice = insuranceSelected ? 25 * (rentalOnly ? 1 : guestCount) : 0;
   const price = packagePrice + insurancePrice;
   const sizeName = size.split(' · ')[0];
   const productName = rentalOnly
@@ -94,17 +100,18 @@ export default function BikePackageConfigurator({ onAdd, onCheckout, cartTotal =
   };
 
   const addPackage = () => {
-    onAdd({
-      id: rentalOnly ? 'bike-rental' : 'lift-bike-package',
-      name: productName,
-      price,
+    if (rentalOnly) {
+      onAdd({ id: 'bike-rental', name: productName, price, visitDate: date, detail: `${date} · Bike Rental · ${bike}${size ? ` · ${size}` : ''}${insuranceSelected ? ' · Bike Insurance · $25/day' : ''}`, variant: `${date}-${bike}-${size}-${insuranceSelected}` });
+    } else ageEntries.forEach((entry) => onAdd({
+      id: 'lift-bike-package',
+      name: `${halfDay ? halfDayType === 'friday' ? 'TGIF' : 'Afternoon' : '1 Day'} Lift + ${bike === 'Full Suspension' ? 'Full Suspension - 24"' : `${bike} Bike - ${sizeName}`} - ${entry.value}`,
+      price: PRICES[halfDay ? 'halfDay' : 'fullDay'][bike][entry.value] + (insuranceSelected ? 25 : 0),
+      quantity: entry.quantity,
       visitDate: date,
-      ...(!rentalOnly ? { ageBand: age } : {}),
-      detail: rentalOnly
-        ? `${date} · Bike Rental · ${bike}${size ? ` · ${size}` : ''}${insuranceSelected ? ' · Bike Insurance · $25/day' : ''}`
-        : `${date} · ${halfDay ? 'Half Day Package' : 'Full Day Package'} · ${bike} · ${size} · Lift included${insuranceSelected ? ' · Bike Insurance · NZ$25/day' : ''}`,
-      variant: `${date}-${rentalOnly ? '' : age}-${bike}-${size}-${halfDay}-${rentalOnly}-${insuranceSelected}`,
-    });
+      ageBand: entry.value,
+      detail: `${date} · ${halfDay ? 'Half Day Package' : 'Full Day Package'} · ${bike} · ${size} · Lift included${insuranceSelected ? ' · Bike Insurance · NZ$25/day' : ''}`,
+      variant: `${date}-${entry.value}-${bike}-${size}-${halfDay}-${insuranceSelected}`,
+    }));
     setItemAdded(true);
   };
 
@@ -119,6 +126,8 @@ export default function BikePackageConfigurator({ onAdd, onCheckout, cartTotal =
     </section>
 
     <section className="space-y-4">
+      {!rentalOnly && ageStage === 'counts' ? <AgeFirstGuestCounts options={ageOptions} counts={guestCounts} onChange={(value, count) => setGuestCounts((current) => ({ ...current, [value]: count }))} onContinue={() => setAgeStage('options')} continueLabel={`Continue with ${guestCount} ${guestCount === 1 ? 'guest' : 'guests'}`} /> : <>
+      {!rentalOnly && <button type="button" onClick={() => setAgeStage('counts')} className="text-[13px] text-[#5b8199] underline">Edit guest counts</button>}
       {rentalOnly && <DateAvailabilityCalendar value={date} onChange={selectDate} min={SUMMER_START} max={SUMMER_END} isUnavailable={(value) => {
         const weekday = new Date(`${value}T00:00:00Z`).getUTCDay();
         const peakSeason = value >= '2026-12-28' && value <= '2027-01-17';
@@ -152,10 +161,6 @@ export default function BikePackageConfigurator({ onAdd, onCheckout, cartTotal =
         return dayDoesNotMatch || value === '2026-12-25' || (!peakSeason && (weekday === 2 || weekday === 3));
       }} required />}
 
-      {!rentalOnly && <label className="block text-[13px] font-semibold text-[#344a64]">Adult or Child
-        <select value={age} onChange={(event) => { setAge(event.target.value); setSize(selectedDefaultSize(bike, event.target.value)); }} className="mt-2 h-12 w-full rounded-xl border border-[#cbd7e4] bg-white px-3 text-[13px] font-normal text-[#344a64]"><option>Adult</option><option>Child</option></select>
-      </label>}
-
       <fieldset className="space-y-2">
         <legend className="mb-1 text-[13px] font-semibold text-[#344a64]">{rentalOnly ? 'Type of Bike' : 'Choose type of bike'}</legend>
         {rentalOnly && <p className="mb-2 text-[12px] font-normal text-[#777]">Choose either Enduro or Downhill bike</p>}
@@ -180,23 +185,24 @@ export default function BikePackageConfigurator({ onAdd, onCheckout, cartTotal =
           <input type="checkbox" checked={insuranceSelected} onChange={(event) => setInsuranceSelected(event.target.checked)} className="mt-1 h-4 w-4 accent-[#5b8199]"/>
         </label>
       </section>
+      </>}
     </section>
 
     <section className="rounded-[18px] border border-[#dce4ed] bg-white p-4 shadow-sm">
       <h3 className="font-serif text-[17px] font-bold text-[#202b3a]">Item Summary</h3>
-      <div className="mt-3 border-b border-[#cbd7e4] pb-3 text-[12px]"><b className="block">Start Date</b><span className="mt-1 block text-[#718096]">{formatDate(date)}</span>{showLineItems && <><b className="mt-3 block">(1) {productName}</b><span className="mt-1 block">{displayMoney(packagePrice)}</span>{insuranceSelected && <div className="mt-3"><b className="block">{rentalOnly ? '(1) Add On - Bike Insurance' : '(1) Bike Insurance'}</b><span className="mt-1 block">{displayMoney(insurancePrice)}{rentalOnly ? '' : ' · per day'}</span></div>}</>}</div>
+      <div className="mt-3 border-b border-[#cbd7e4] pb-3 text-[12px]"><b className="block">Start Date</b><span className="mt-1 block text-[#718096]">{formatDate(date)}</span>{showLineItems && <>{rentalOnly ? <><b className="mt-3 block">(1) {productName}</b><span className="mt-1 block">{displayMoney(packagePrice)}</span></> : ageEntries.map((entry) => <div key={entry.value} className="mt-3"><b className="block">({entry.quantity}) {halfDay ? halfDayType === 'friday' ? 'TGIF' : 'Afternoon' : '1 Day'} Lift + {bike} Bike - {entry.value}</b><span className="mt-1 block">{displayMoney((PRICES[halfDay ? 'halfDay' : 'fullDay'][bike][entry.value] + (insuranceSelected ? 25 : 0)) * entry.quantity)}</span></div>)}{insuranceSelected && <div className="mt-3"><b className="block">{rentalOnly ? '(1) Add On - Bike Insurance' : 'Bike insurance per guest'}</b><span className="mt-1 block">{displayMoney(insurancePrice)}{rentalOnly ? '' : ' · per day'}</span></div>}</>}</div>
       {showLineItems && <div className="mt-3 flex items-center justify-between text-[16px] font-semibold"><span>Total</span><span>{displayMoney(price)}</span></div>}
     </section>
 
     <div className="fixed inset-x-0 bottom-[64px] z-20 mx-auto flex w-full max-w-[430px] items-center gap-3 border-t border-[#dce4ed] bg-white/95 px-4 py-3 backdrop-blur sm:bottom-[120px]">
       <span className="mr-auto"><small className="block text-[10px] text-[#718096]">Total</small><b className="font-serif text-[20px] text-[#5b8199]">{displayMoney(price)}</b></span>
-      <button type="button" disabled={!date || !hasRentalSelection} onClick={addPackage} className="h-11 flex-1 rounded-xl bg-[#5b8199] text-[13px] font-semibold tracking-wide text-white transition-colors enabled:hover:bg-black focus-visible:bg-black disabled:cursor-not-allowed disabled:bg-[#c9c9c9]">Add to cart</button>
+      <button type="button" disabled={!date || !hasRentalSelection || (!rentalOnly && !guestCount)} onClick={addPackage} className="h-11 flex-1 rounded-xl bg-[#5b8199] text-[13px] font-semibold tracking-wide text-white transition-colors enabled:hover:bg-black focus-visible:bg-black disabled:cursor-not-allowed disabled:bg-[#c9c9c9]">{rentalOnly ? 'Add to cart' : `Add ${guestCount} to cart`}</button>
     </div>
 
     {itemAdded && <div className="fixed inset-0 z-40 flex items-end justify-center bg-black/25 p-2 sm:items-center"><section role="dialog" aria-modal="true" aria-labelledby="bike-item-added-title" className="w-full max-w-[430px] rounded-t-2xl border border-[#dce4ed] bg-white p-4 shadow-xl sm:rounded-2xl">
       <div className="flex items-center gap-2"><Check className="h-5 w-5 text-emerald-700"/><h2 id="bike-item-added-title" className="text-[17px] font-bold">Item Added</h2><button type="button" onClick={() => setItemAdded(false)} aria-label="Close" className="ml-auto px-2 text-xl">×</button></div>
-      <p className="mt-3 text-[13px] font-semibold">{formatDate(date)}</p><div className="mt-3 flex justify-between gap-3 border-b border-[#dce4ed] pb-3 text-[12px]"><span>1 {productName}</span><b className="shrink-0">{displayMoney(packagePrice)}</b></div>{insuranceSelected && <div className="flex justify-between gap-3 border-b border-[#dce4ed] py-2 text-[12px]"><span>{rentalOnly ? '1 Add On - Bike Insurance' : '1 Bike Insurance · per day'}</span><b className="shrink-0">{displayMoney(insurancePrice)}</b></div>}
-      <div className="space-y-1 py-3 text-[12px]"><p className="flex justify-between"><span>Per item total</span><span>{displayMoney(price)}</span></p><p className="flex justify-between font-semibold"><span>Cart total</span><span>{displayMoney(cartTotal + price)}</span></p></div>
+      <p className="mt-3 text-[13px] font-semibold">{formatDate(date)}</p>{rentalOnly ? <div className="mt-3 flex justify-between gap-3 border-b border-[#dce4ed] pb-3 text-[12px]"><span>1 {productName}</span><b className="shrink-0">{displayMoney(packagePrice)}</b></div> : ageEntries.map((entry) => <div key={entry.value} className="mt-3 flex justify-between gap-3 border-b border-[#dce4ed] pb-3 text-[12px]"><span>{entry.quantity} {halfDay ? halfDayType === 'friday' ? 'TGIF' : 'Afternoon' : '1 Day'} Lift + {bike} Bike - {entry.value}</span><b className="shrink-0">{displayMoney((PRICES[halfDay ? 'halfDay' : 'fullDay'][bike][entry.value] + (insuranceSelected ? 25 : 0)) * entry.quantity)}</b></div>)}{insuranceSelected && rentalOnly && <div className="flex justify-between gap-3 border-b border-[#dce4ed] py-2 text-[12px]"><span>1 Add On - Bike Insurance</span><b className="shrink-0">{displayMoney(insurancePrice)}</b></div>}
+      <div className="space-y-1 py-3 text-[12px]"><p className="flex justify-between font-semibold"><span>Cart total</span><span>{displayMoney(cartTotal + price)}</span></p></div>
       <p className="bg-[#f7f8f9] px-2 py-3 text-center text-[11px]">Payment is available at checkout. No real charge is made.</p>
       <div className="mt-3 grid grid-cols-2 gap-3"><button type="button" onClick={() => navigate('/cart')} className="h-11 rounded-xl border border-[#344a64] text-[12px]">View Cart</button><button type="button" onClick={onCheckout} className="h-11 rounded-xl bg-[#5b8199] text-[12px] font-semibold text-white">Checkout</button></div>
     </section></div>}
