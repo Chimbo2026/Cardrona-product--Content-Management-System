@@ -117,7 +117,7 @@ export default function BikePackageConfigurator({ onAdd, onCheckout, cartTotal =
 
   return <LocalizeCustomerTree lang={lang}><main className="space-y-5 px-4 pb-[150px] pt-5 sm:px-8 sm:pb-[220px]">
     <section>
-      <h2 className="font-serif text-[25px] font-bold text-[#202b3a]">{rentalOnly ? 'Bike Rental' : 'Lift Pass + Bike Rental'}</h2>
+      <h2 className="font-serif text-[25px] font-bold text-[#20242b]">{rentalOnly ? 'Bike Rental' : 'Lift Pass + Bike Rental'}</h2>
       {rentalOnly ? <>
         <p className="mt-2 text-[12px] leading-5 text-[#718096]">No bike? No problem. Rent an enduro or downhill bike and hit the trails, whatever your age or ability. Summer rentals include a helmet and safety pads.{descriptionExpanded && ' Choose the bike style and size that best suits your day on the mountain.'}</p>
         <button type="button" onClick={() => setDescriptionExpanded((expanded) => !expanded)} className="mt-2 text-[12px] text-[#202b3a] underline">{descriptionExpanded ? 'See less' : 'See more'}</button>

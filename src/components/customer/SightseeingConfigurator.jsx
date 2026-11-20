@@ -48,7 +48,7 @@ export default function SightseeingConfigurator({ onAdd, onCheckout, cartTotal =
 
   return <LocalizeCustomerTree lang={lang}><main className="space-y-5 px-4 pb-[150px] pt-5 sm:px-8 sm:pb-[220px]">
     <section>
-      <h2 className="font-serif text-[26px] font-bold text-[#202b3a]">Summer Sightseeing Pass</h2>
+      <h2 className="font-serif text-[26px] font-bold text-[#20242b]">Summer Sightseeing Pass</h2>
       <div className="mt-3 border-y border-[#cbd7e4] py-4 text-[13px] leading-6 text-[#718096]">
         Enjoy the mountain views, explore alpine trails, or take a scenic gondola ride.
         {showMore && <span> This pass is valid on your selected summer date at Cardrona.</span>}

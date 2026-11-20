@@ -59,7 +59,7 @@ export default function ChildcareConfigurator({ onAdd }) {
 
   return <main className="space-y-4 px-4 pb-36 pt-4">
     <header className="rounded-[17px] border border-[#dce4ed] bg-white p-4">
-      <h1 className="font-serif text-[22px] font-bold text-[#263345]">Childcare</h1>
+      <h1 className="font-serif text-[22px] font-bold text-[#20242b]">Childcare</h1>
       <p className="mt-1 text-[12px] leading-5 text-[#718096]">To book a full day of childcare please select your child&apos;s age.</p>
       <label className="mt-3 block text-[11px] font-medium text-[#718096]">Childcare - Age
         <select value={age} onChange={(event) => { setAge(event.target.value); setLesson(''); setLessonTime(''); }} className="mt-1 h-12 w-full rounded-xl border border-[#cbd7e4] bg-white px-3 text-[14px] text-[#344a64] focus:border-[#5b8199]">

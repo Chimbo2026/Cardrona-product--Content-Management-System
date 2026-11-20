@@ -30,7 +30,7 @@ export default function RetailProductCard({ product }) {
 
       <div className="flex flex-1 flex-col p-3.5">
         <p className="text-[10px] font-semibold uppercase tracking-[0.11em] text-muted-foreground">{product.vendor}</p>
-        <h3 className="mt-1 line-clamp-2 text-[13px] font-semibold leading-snug text-forest-950">{product.name}</h3>
+        <h3 className="mt-1 line-clamp-2 font-serif text-[13px] font-bold leading-snug text-[#20242b]">{product.name}</h3>
         <p className="mt-1 text-[11px] text-muted-foreground">{product.category}</p>
 
         <div className="mt-auto flex items-end justify-between gap-2 pt-3">

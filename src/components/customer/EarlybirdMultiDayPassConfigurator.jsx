@@ -92,7 +92,7 @@ export default function EarlybirdMultiDayPassConfigurator({ image, onAdd }) {
 
   return <LocalizeCustomerTree lang={lang}><main className="grid grid-cols-1 items-start gap-6 px-4 pb-8 pt-5 sm:px-8">
     <section className="border-b border-[#cbd7e4] pb-5">
-      <h1 className="font-serif text-[24px] font-bold text-[#344a64]">Earlybird Multi-Day Passes</h1>
+      <h1 className="font-serif text-[24px] font-bold text-[#20242b]">Earlybird Multi-Day Passes</h1>
       <p className="mt-4 text-[15px] leading-6 text-[#777]">Ski or ride at both mountains outside of our blackout period (5 - 16 July, 2027) and lock in a sweet deal. No need to book your days in advance, turn up when you want!</p>
       {showMore && <p className="mt-2 text-[14px] leading-6 text-[#777]">Valid at Cardrona and Treble Cone during Winter 2027, excluding the blackout period. Choose 3 to 6 days and use them whenever you like.</p>}
       <button type="button" onClick={() => setShowMore((value) => !value)} className="mt-2 text-[14px] underline">{showMore ? 'See less' : 'See more'}</button>

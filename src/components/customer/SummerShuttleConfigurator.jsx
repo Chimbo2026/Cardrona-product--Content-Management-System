@@ -44,7 +44,7 @@ export default function SummerShuttleConfigurator({ onAdd }) {
 
   return <main className="space-y-4 px-4 pb-36 pt-4">
     <section className="rounded-[17px] border border-[#dce4ed] bg-white p-4">
-      <h1 className="font-serif text-[22px] font-bold text-[#263345]">Cardrona Valley Shuttle</h1>
+      <h1 className="font-serif text-[22px] font-bold text-[#20242b]">Cardrona Valley Shuttle</h1>
       <div className="mt-3 border-y border-[#cbd7e4] py-3 text-[12px] leading-5 text-[#718096]">
         <p>Let us do the driving from Cardrona Valley to the top of the mountain. Then either ride back down via the Peak to Pub trail, or we can drive you back to your car!</p>
         {showMore && <p className="mt-2">Choose a shuttle departure, select your travel date, and optionally book a return shuttle from the mountain. Demo bookings do not reserve real seats.</p>}

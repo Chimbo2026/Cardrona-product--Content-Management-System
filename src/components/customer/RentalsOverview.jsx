@@ -79,7 +79,7 @@ export default function RentalsOverview() {
         <article key={option.name} className="rounded-[18px] border border-[#dce4ed] bg-white p-4 shadow-[0_3px_10px_rgba(35,52,75,0.06)]">
           {option.badge && <span className="mb-2 inline-flex rounded-full bg-[#eaf0f6] px-2.5 py-1 text-[8px] font-bold uppercase tracking-[0.05em] text-[#536f89]">{option.badge}</span>}
           <div className="flex items-start justify-between gap-2">
-            <h3 className="font-serif text-[16px] font-bold leading-5 text-[#334a64]">{option.name}</h3>
+            <h3 className="font-serif text-[16px] font-bold leading-5 text-[#20242b]">{option.name}</h3>
             <div className="shrink-0 text-right">
               <strong className="font-serif text-[21px] font-normal text-[#5b8199]">{option.price}</strong>
               <small className="mt-0.5 block text-[8px] text-[#8492a4]">{option.label}</small>
