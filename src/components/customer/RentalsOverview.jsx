@@ -94,9 +94,6 @@ export default function RentalsOverview() {
             ))}
           </ul>
           {option.note && <p className="mt-2 text-[9px] text-[#718096]">{option.note}</p>}
-          <a href={RENTALS_URL} target="_blank" rel="noreferrer" className="mt-3 inline-flex min-h-9 items-center gap-1 rounded-full bg-[#eaf0f6] px-3 text-[10px] font-semibold text-[#4f6e87]">
-            Learn more <ArrowUpRight className="h-3 w-3" />
-          </a>
         </article>
       ))}
 

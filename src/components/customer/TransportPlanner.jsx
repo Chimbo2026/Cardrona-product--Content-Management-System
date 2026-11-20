@@ -1,10 +1,10 @@
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { ArrowUpRight, Bus, CarFront, Check, ChevronDown, MapPin, Mountain, Sun } from 'lucide-react';
 import { useLang } from '@/lib/i18n';
 import { LocalizeCustomerTree } from '@/lib/customerLocale';
 
 const TRANSPORT_URL = 'https://cardrona-treblecone.com/mountains/transport';
-const SUMMER_BOOKING_URL = 'https://secure.cardrona-treblecone.com/s/summer';
 
 const driveDetails = {
   Cardrona: {
@@ -47,7 +47,7 @@ function PlannerSelect({ label, value, onChange, children }) {
   );
 }
 
-function OptionCard({ icon: Icon, title, subtitle, price, priceNote, details, action, href, featured = false }) {
+function OptionCard({ icon: Icon, title, subtitle, price, priceNote, details, action, href, to, featured = false }) {
   return (
     <article className="rounded-[17px] border border-[#dce4ed] bg-white p-3.5 shadow-[0_3px_10px_rgba(35,52,75,0.06)]">
       <div className="flex items-start gap-2.5">
@@ -64,9 +64,7 @@ function OptionCard({ icon: Icon, title, subtitle, price, priceNote, details, ac
       <ul className="mt-3 space-y-1.5 border-t border-[#e8edf2] pt-2.5">
         {details.map((detail) => <li key={detail} className="flex items-start gap-1.5 text-[10px] leading-4 text-[#526981]"><Check className="mt-0.5 h-3 w-3 shrink-0 text-[#5e839b]" />{detail}</li>)}
       </ul>
-      <a href={href} target="_blank" rel="noreferrer" className={`mt-3 inline-flex min-h-8 items-center gap-1 rounded-full px-3 text-[10px] font-semibold ${featured ? 'bg-[#5e839b] text-white' : 'bg-[#eaf0f6] text-[#4f6e87]'}`}>
-        {action}<ArrowUpRight className="h-3 w-3" />
-      </a>
+      {action && (to ? <Link to={to} className={`mt-3 inline-flex min-h-8 items-center gap-1 rounded-full px-3 text-[10px] font-semibold ${featured ? 'bg-[#5e839b] text-white' : 'bg-[#eaf0f6] text-[#4f6e87]'}`}>{action}<ArrowUpRight className="h-3 w-3" /></Link> : <a href={href} target="_blank" rel="noreferrer" className={`mt-3 inline-flex min-h-8 items-center gap-1 rounded-full px-3 text-[10px] font-semibold ${featured ? 'bg-[#5e839b] text-white' : 'bg-[#eaf0f6] text-[#4f6e87]'}`}>{action}<ArrowUpRight className="h-3 w-3" /></a>)}
     </article>
   );
 }
@@ -113,13 +111,14 @@ export default function TransportPlanner() {
         </div>
         <div className="space-y-2.5">
           {isSummer ? <>
-            <OptionCard icon={Bus} title="Cardrona Summer Shuttle" subtitle="Cardrona Valley Road to the top of the mountain" price="NZ$20" priceNote="adult · one way" details={['Add a return shuttle for NZ$5', 'Mountain bike trailer included', 'Advance booking required; set shuttle times']} action="View summer options" href={SUMMER_BOOKING_URL} featured />
-            <OptionCard icon={CarFront} title="Drive to Cardrona" subtitle={`${drive.distance} from ${origin} · ${drive.time}`} price="—" priceNote="drive time varies" details={[drive.road, 'Carry snow chains and check current road conditions before travelling.']} action="Driving details" href={TRANSPORT_URL} />
+            <OptionCard icon={Bus} title="Peak to Pub · Lift Pass and Shuttle" subtitle="Cardrona Chondola uplift, downhill ride and return shuttle" price="NZ$49" priceNote="adult · summer package" details={['Ride the Chondola to the mountain', 'Downhill bike ride back toward Cardrona Valley Road', 'Return shuttle and bike trailer included']} action="Book Peak to Pub" to="/configure-pass?product=peak-to-pub" featured />
+            <OptionCard icon={Bus} title="Cardrona Valley Shuttle" subtitle="Cardrona Valley Road to the top of the mountain" price="NZ$20" priceNote="adult · one way" details={['Add a return shuttle for NZ$5', 'Choose a shuttle departure and travel date', 'TGIF Friday shuttle also available']} action="Book shuttle" to="/summer-shuttle" featured />
+            <OptionCard icon={CarFront} title="Drive to Cardrona" subtitle={`${drive.distance} from ${origin} · ${drive.time}`} price="—" priceNote="drive time varies" details={[drive.road, 'Carry snow chains and check current road conditions before travelling.']} />
           </> : <>
-            <OptionCard icon={Bus} title={`${origin} Ski Bus`} subtitle={`Return bus to ${destination} · multiple pickup points`} price="NZ$45" priceNote="per person · 2026 pricing" details={[skiBusDetails[destination][origin], 'Return travel included; all-season service', 'Pickup points and timetable on the official site']} action="View bus times & booking" href={TRANSPORT_URL} featured />
+            <OptionCard icon={Bus} title={`${origin} Ski Bus`} subtitle={`Return bus to ${destination} · multiple pickup points`} price="NZ$45" priceNote="per person · 2026 pricing" details={[skiBusDetails[destination][origin], 'Return travel included; all-season service', 'Pickup points and timetable on the official site']} featured />
             {origin === 'Queenstown' && destination === 'Cardrona' && <OptionCard icon={Bus} title="Après later-departure bus" subtitle="Queenstown to Cardrona · seasonal service" price="NZ$45" priceNote="return · 2026 listed fare" details={['Later morning departure; selected Queenstown pickup points', 'Published 2026 dates have passed; check the official site for the next season’s dates and availability']} action="Check seasonal dates" href={TRANSPORT_URL} />}
-            <OptionCard icon={MapPin} title="Free mountain road shuttle" subtitle={destination === 'Cardrona' ? 'From The Pines car park' : 'From the car park at the bottom of the access road'} price="FREE" details={[mountainShuttleTimes[destination], 'First come, first served; no booking required', 'Times can change with weather, road conditions or capacity']} action="Shuttle details" href={TRANSPORT_URL} />
-            <OptionCard icon={CarFront} title={`Drive to ${destination}`} subtitle={`${drive.distance} from ${origin} · ${drive.time}`} price="—" priceNote="drive time varies" details={[drive.road, 'Snow chains are required in your vehicle; check road conditions before travelling.']} action="Driving details" href={TRANSPORT_URL} />
+            <OptionCard icon={MapPin} title="Free mountain road shuttle" subtitle={destination === 'Cardrona' ? 'From The Pines car park' : 'From the car park at the bottom of the access road'} price="FREE" details={[mountainShuttleTimes[destination], 'First come, first served; no booking required', 'Times can change with weather, road conditions or capacity']} />
+            <OptionCard icon={CarFront} title={`Drive to ${destination}`} subtitle={`${drive.distance} from ${origin} · ${drive.time}`} price="—" priceNote="drive time varies" details={[drive.road, 'Snow chains are required in your vehicle; check road conditions before travelling.']} />
           </>}
         </div>
       </section>

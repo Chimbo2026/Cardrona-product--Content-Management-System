@@ -142,7 +142,7 @@ function AppRouteGate() {
   const customerPaths = new Set([
     '/', '/passes', '/configure-pass', '/configure-event', '/bike-configure', '/book', '/checkout', '/cart', '/shop', '/retail', '/rentals',
     '/orders', '/account', '/group', '/login', '/register', '/lessons', '/transport', '/resort',
-    '/ski', '/support', '/snow-report',
+    '/ski', '/support', '/snow-report', '/childcare', '/summer-shuttle',
   ]);
 
   return (
