@@ -139,7 +139,6 @@ const WINTER_DAY_PASSES = [
   { id: 'learners-pass', name: 'Learners Pass', price: 99, details: ['Access to the beginners’ area with conveyors', 'Gentle learner runs', 'A dedicated kids’ conveyor', 'One ride on McDougall’s Chondola (Cardrona only)'] },
   { id: 'half-day-pass', name: 'Half Day Pass', price: 145, details: ['Half a day of skiing or riding from 12:30pm', 'Choose Cardrona or Treble Cone', 'Available on the day of travel only', 'Purchase at ticket offices or the call centre'] },
   { id: 'single-day-pass', name: 'Single Day Pass', price: 184, details: ['One full day skiing or riding', 'Choose Cardrona or Treble Cone', 'Ski or ride on your selected day', 'Buy online and save up to NZ$15'] },
-  { id: 'multi-day-pass', name: 'Multi-Day Pass', price: 120, priceLabel: 'From NZ$120', details: ['Access both Cardrona and Treble Cone', 'Ski or ride at both mountains', 'Use anytime during the season', 'The more days you buy, the less you pay'] },
   { id: 'lift-rental-combo', name: 'Lift Pass & Rental Combo', price: 247, details: ['Single or multi-day lift pass', 'Rental skis and boots or snowboard and boots', 'Upgrade to the complete bundle for clothing and accessories', 'The more days you buy, the less you pay'] },
 ];
 const pass = { id: 'winter-season-pass', name: 'Winter Season Pass', price: 1429, description: 'Ski or ride at both Cardrona and Treble Cone in Winter 27 with no blackout dates.', image: heroPhoto };
