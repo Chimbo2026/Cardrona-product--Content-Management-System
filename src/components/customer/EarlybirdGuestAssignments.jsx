@@ -224,13 +224,13 @@ export default function EarlybirdGuestAssignments({ items, hidden = false }) {
       </div>
     </section>
 
-    <section className="overflow-hidden rounded-[20px] border border-[#d1d8e0] bg-[#edf2f7] shadow-sm" aria-label="Manage group members">
+    <section className="@container overflow-hidden rounded-[20px] border border-[#d1d8e0] bg-[#edf2f7] shadow-sm" aria-label="Manage group members">
       <header className="flex flex-wrap items-center gap-3 border-b border-[#d1d8e0] bg-[#f4f5f8] px-4 py-3 sm:gap-5 sm:px-5">
         <h3 className="text-[17px] font-medium text-[#5b8199] sm:text-[21px]">Manage Your Group ({group.members.length} {group.members.length === 1 ? 'Member' : 'Members'})</h3>
         <div className="flex items-center pl-1" aria-label={`${group.members.length} group members`}>{group.members.slice(0, 4).map((member, index) => <span key={member.id} className={`-ml-1 grid h-9 w-9 place-items-center rounded-full border-2 border-[#f4f5f8] text-[11px] text-white ${['bg-[#4e6790]','bg-[#4e9ec2]','bg-[#f3bd61]','bg-[#b59b73]'][index % 4]}`}>{member.name.split(/\s+/).map((part) => part[0]).slice(0, 2).join('').toUpperCase()}</span>)}{group.members.length > 4 && <span className="-ml-1 grid h-9 w-9 place-items-center rounded-full border-2 border-[#f4f5f8] bg-[#052f52] text-[11px] text-white">+{group.members.length - 4}</span>}</div>
         <button type="button" aria-expanded={groupVisible} onClick={() => setGroupVisible((visible) => !visible)} className="ml-auto border border-[#5b8199] px-3 py-2 text-[12px] font-semibold text-[#5b8199]">{groupVisible ? 'Hide Group' : 'Show Group'}</button>
       </header>
-      {groupVisible && <div className="grid grid-cols-1 gap-3 p-3 sm:grid-cols-2 sm:gap-4 sm:p-5 lg:grid-cols-3">
+      {groupVisible && <div className="grid grid-cols-1 gap-3 p-3 @md:grid-cols-2 @md:gap-4 @md:p-5 @lg:grid-cols-3">
         {group.members.map((member) => <article key={member.id} className="relative flex min-h-[145px] flex-col border border-[#c8c8c8] bg-white">
           {!member.hasCard && <span className="absolute right-0 top-0 rounded-bl-md bg-[#5b8199] px-2 py-1 text-[10px] font-bold text-white">NO CARD</span>}
           <div className="flex flex-1 items-start gap-2.5 p-3">
@@ -240,7 +240,7 @@ export default function EarlybirdGuestAssignments({ items, hidden = false }) {
           <div className="flex items-center bg-[#5b8199] text-white"><label className="flex min-h-9 flex-1 cursor-pointer items-center justify-center gap-2 text-[11px] font-bold"><Camera className="h-3.5 w-3.5"/>NEW PHOTO<input type="file" accept="image/*" data-member-id={member.id} onChange={handlePhoto} className="sr-only"/></label></div>
           <div className="flex justify-end gap-3 px-3 py-1.5"><button type="button" onClick={() => openEdit(member)} className="inline-flex items-center gap-1 text-[10px] text-[#5b8199] underline"><Pencil className="h-3 w-3"/>Edit</button><button type="button" onClick={() => removeMember(member.id)} className="inline-flex items-center gap-1 text-[10px] text-[#5b8199] underline"><Trash2 className="h-3 w-3"/>Remove</button></div>
         </article>)}
-        <button type="button" onClick={openAdd} className="grid min-h-[145px] place-items-center border border-[#c8c8c8] bg-white text-[14px] text-[#252b33] hover:bg-[#f9fbfd]"><span className="inline-flex items-center gap-2"><Plus className="h-4 w-4"/>Add Member</span></button>
+        <button type="button" onClick={openAdd} className="grid min-h-[145px] w-full min-w-0 place-items-center border border-[#c8c8c8] bg-white text-[14px] text-[#252b33] hover:bg-[#f9fbfd]"><span className="inline-flex items-center gap-2 whitespace-nowrap"><Plus className="h-4 w-4 shrink-0"/>Add Member</span></button>
       </div>}
       {groupVisible && formOpen && <form ref={formRef} onSubmit={saveMember} className="space-y-3 border-t border-[#d1d8e0] bg-[#edf2f7] p-4 sm:p-5">
         <div className="flex items-center justify-between"><h4 className="text-[15px] font-semibold text-[#5b8199]">{editingId ? 'Edit Group Member' : 'Add Group Member'}</h4><button type="button" onClick={() => { setFormOpen(false); setSignatureStarted(false); setTermsAccepted(false); }} aria-label="Close member form" className="rounded p-1 text-[#60738d]"><X className="h-4 w-4"/></button></div>
