@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { ArrowUpRight, Bus, CarFront, Check, ChevronDown, MapPin, Mountain, Sun } from 'lucide-react';
 import { useLang } from '@/lib/i18n';
 import { LocalizeCustomerTree } from '@/lib/customerLocale';
+import { cardronaImage } from '@/lib/cardronaImages';
 
 const TRANSPORT_URL = 'https://cardrona-treblecone.com/mountains/transport';
 
@@ -112,21 +113,27 @@ export default function TransportPlanner() {
         <div className="space-y-2.5">
           {isSummer ? <>
             <article className="overflow-hidden rounded-[20px] border border-[#dce4ed] bg-white shadow-sm">
-              <div className="bg-[#203447] p-4 text-white">
-                <span className="text-[11px] font-bold uppercase tracking-[0.12em] text-white/75">Summer package</span>
-                <h3 className="mt-1 font-serif text-[21px] font-bold">Peak to Pub</h3>
-                <p className="mt-1 text-[13px] leading-5 text-white/80">Chondola uplift, downhill ride and return shuttle.</p>
+              <div className="relative h-36 sm:h-44">
+                <img src={cardronaImage('summer-peak-to-pub.webp')} alt="Summer mountain biking at Cardrona" className="h-full w-full object-cover" />
+                <span className="absolute left-3 top-3 rounded-full bg-white/95 px-3 py-1 text-[11px] font-semibold text-[#526d8b]">Summer package</span>
               </div>
               <div className="p-4">
+                <h3 className="font-serif text-[21px] font-bold text-[#20242b]">Peak to Pub</h3>
+                <p className="mt-1 text-[13px] leading-5 text-[#60738d]">Chondola uplift, downhill ride and return shuttle.</p>
+              </div>
+              <div className="px-4 pb-4">
                 <div className="flex items-center justify-between gap-3"><span><b className="font-serif text-[22px] font-bold text-[#5b8199]">NZ$49</b><small className="mt-1 block text-[12px] text-[#687b92]">per adult · package</small></span><Link to="/configure-pass?product=peak-to-pub" className="inline-flex min-h-11 items-center justify-center gap-2 rounded-full bg-[#5b8199] px-4 text-[13px] font-semibold text-white">Book package <ArrowUpRight className="h-4 w-4"/></Link></div>
               </div>
             </article>
-            <article className="rounded-[20px] border border-[#dce4ed] bg-white p-4 shadow-sm">
-              <div className="flex items-start justify-between gap-3"><div><span className="text-[11px] font-bold uppercase tracking-[0.12em] text-[#5b8199]">Bus times &amp; booking</span><h3 className="mt-1 font-serif text-[20px] font-bold text-[#202b3a]">Cardrona Valley Shuttle</h3><p className="mt-1 text-[13px] leading-5 text-[#60738d]">From Cardrona Valley Road to the mountain.</p></div><Bus className="mt-1 h-6 w-6 shrink-0 text-[#5b8199]"/></div>
+            <article className="overflow-hidden rounded-[20px] border border-[#dce4ed] bg-white shadow-sm">
+              <img src={cardronaImage('mountain-biking.webp')} alt="Mountain biking on Cardrona's alpine trails" className="h-36 w-full object-cover sm:h-44" />
+              <div className="p-4">
+              <div className="flex items-start justify-between gap-3"><div><span className="inline-flex rounded-full bg-[#e3ebf4] px-3 py-1 text-[11px] font-semibold text-[#526d8b]">Summer transport</span><h3 className="mt-2 font-serif text-[20px] font-bold text-[#202b3a]">Cardrona Valley Shuttle</h3><p className="mt-1 text-[13px] leading-5 text-[#60738d]">From Cardrona Valley Road to the mountain.</p></div><Bus className="mt-1 h-6 w-6 shrink-0 text-[#5b8199]"/></div>
               <p className="mt-4 text-[13px] font-semibold text-[#263345]">Departures up</p>
               <div className="mt-2 grid grid-cols-2 gap-2">{[['9:00 am', 'Daily'], ['11:00 am', 'Daily'], ['1:00 pm', 'Daily'], ['5:00 pm', 'Fridays only']].map(([time, note]) => <div key={time} className="rounded-xl bg-[#f1f5f8] px-3 py-2.5"><b className="block text-[15px] text-[#263345]">{time}</b><span className="text-[11px] text-[#60738d]">{note}</span></div>)}</div>
               <div className="mt-3 rounded-xl border border-[#dce4ed] px-3 py-2.5"><p className="text-[12px] font-semibold text-[#263345]">Return shuttles down</p><p className="mt-1 text-[13px] text-[#60738d]">12:30 pm · 4:15 pm · 8:15 pm Fridays</p></div>
               <div className="mt-4 flex items-center justify-between gap-3"><span><b className="font-serif text-[21px] font-bold text-[#5b8199]">NZ$20</b><small className="mt-1 block text-[11px] text-[#687b92]">one way · return +NZ$5</small></span><Link to="/summer-shuttle" className="inline-flex min-h-11 items-center justify-center gap-2 rounded-full bg-[#5b8199] px-4 text-[13px] font-semibold text-white">Choose a bus <ArrowUpRight className="h-4 w-4"/></Link></div>
+              </div>
             </article>
           </> : <>
             <OptionCard icon={Bus} title={`${origin} Ski Bus`} subtitle={`Return bus to ${destination} · multiple pickup points`} price="NZ$45" priceNote="per person · 2026 pricing" details={[skiBusDetails[destination][origin], 'Return travel included; all-season service', 'Pickup points and timetable on the official site']} featured />

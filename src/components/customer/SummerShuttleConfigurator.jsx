@@ -1,6 +1,8 @@
 import { useState } from 'react';
 import { CalendarDays, Minus, Plus } from 'lucide-react';
 import ProductSummaryCard from './ProductSummaryCard';
+import ProductIntro from './ProductIntro';
+import { cardronaImage } from '@/lib/cardronaImages';
 
 const START_DATE = '2026-12-12';
 const END_DATE = '2027-02-28';
@@ -44,8 +46,14 @@ export default function SummerShuttleConfigurator({ onAdd }) {
 
   return <main className="space-y-5 px-4 pb-10 pt-4">
     <section className="space-y-4">
-      <h1 className="font-serif text-[22px] font-bold text-[#20242b]">Cardrona Valley Shuttle</h1>
-      <p className="text-[14px] leading-6 text-[#60738d]">Choose your ride up the mountain. Add a return trip if you need one.</p>
+      <ProductIntro
+        title="Cardrona Valley Shuttle"
+        season="Summer"
+        image={cardronaImage('summer-peak-to-pub.webp')}
+        imageAlt="Summer mountain biking at Cardrona"
+        description="Ride from Cardrona Valley Road to the mountain, then choose an optional shuttle back down."
+        details="Choose an available travel date and an uphill departure. Return seats are optional and cost NZ$5 per passenger. Online bookings close the day before travel; call 0800 440 800 for availability."
+      />
 
       <fieldset className="mt-4 grid grid-cols-2 gap-2">
         <legend className="col-span-2 text-[17px] font-bold text-[#202b3a]">Departure from Cardrona Valley</legend>

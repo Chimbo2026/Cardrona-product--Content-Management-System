@@ -6,6 +6,8 @@ import { CableCar, Check } from 'lucide-react';
 import DateAvailabilityCalendar from './DateAvailabilityCalendar';
 import AgeFirstGuestCounts from './AgeFirstGuestCounts';
 import ProductSummaryCard from './ProductSummaryCard';
+import ProductIntro from './ProductIntro';
+import { cardronaImage } from '@/lib/cardronaImages';
 
 const AGE_OPTIONS = [
   { label: 'Adult: 18 - 74', price: 35 },
@@ -26,7 +28,6 @@ export default function SightseeingConfigurator({ onAdd, onCheckout, cartTotal =
   const [ageStage, setAgeStage] = useState('counts');
   const [guestCounts, setGuestCounts] = useState({ [AGE_OPTIONS[0].label]: 1, [AGE_OPTIONS[1].label]: 1, [AGE_OPTIONS[2].label]: 0, [AGE_OPTIONS[3].label]: 0 });
   const [uplift, setUplift] = useState(true);
-  const [showMore, setShowMore] = useState(false);
   const [itemAdded, setItemAdded] = useState(false);
 
   const ageEntries = AGE_OPTIONS.map((option) => ({ ...option, quantity: guestCounts[option.label] || 0 })).filter((option) => option.quantity > 0);
@@ -47,15 +48,15 @@ export default function SightseeingConfigurator({ onAdd, onCheckout, cartTotal =
     });
   });
 
-  return <LocalizeCustomerTree lang={lang}><main className="space-y-5 px-4 pb-[100px] pt-5 sm:px-8 sm:pb-[140px]">
-    <section>
-      <h2 className="font-serif text-[26px] font-bold text-[#20242b]">Summer Sightseeing Pass</h2>
-      <div className="mt-3 border-y border-[#cbd7e4] py-4 text-[13px] leading-6 text-[#718096]">
-        Enjoy the mountain views, explore alpine trails, or take a scenic gondola ride.
-        {showMore && <span> This pass is valid on your selected summer date at Cardrona.</span>}
-        <button type="button" className="ml-1 text-[#344a64] underline" onClick={() => setShowMore((value) => !value)}>{showMore ? 'See less' : 'See more'}</button>
-      </div>
-    </section>
+  return <LocalizeCustomerTree lang={lang}><main className="space-y-5 px-4 pb-8 pt-5 sm:px-8">
+    <ProductIntro
+      title="Summer Sightseeing Pass"
+      season="Summer"
+      image={cardronaImage('sightseeing.webp')}
+      imageAlt="Summer sightseeing at Cardrona"
+      description="Enjoy the mountain views, explore alpine trails, or take a scenic gondola ride."
+      details="Choose a visit date and decide whether to include one uplift on McDougall’s Chondola."
+    />
 
     {ageStage === 'counts' ? <AgeFirstGuestCounts options={AGE_OPTIONS.map((option) => ({ value: option.label, label: option.label }))} counts={guestCounts} onChange={(label, count) => setGuestCounts((current) => ({ ...current, [label]: count }))} onContinue={() => setAgeStage('options')} continueLabel={`Continue with ${guestCount} ${guestCount === 1 ? 'guest' : 'guests'}`} /> : <section className="space-y-4">
       <button type="button" onClick={() => setAgeStage('counts')} className="text-[13px] text-[#5b8199] underline">Edit guest counts</button>

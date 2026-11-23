@@ -4,7 +4,7 @@ export default function AgeFirstGuestCounts({ options, counts, onChange, onConti
   const total = options.reduce((sum, option) => sum + (counts[option.value] || 0), 0);
 
   return <section className="space-y-3">
-    <div><h2 className="text-[17px] font-bold">Guests</h2><p className="mt-1 text-[13px] text-[#777]">Choose the number of passes for each age group.</p></div>
+    <div><h2 className="text-[17px] font-bold">Who are you buying for?</h2><p className="mt-1 text-[13px] text-[#777]">Choose a quantity for each age group.</p></div>
     {options.map((option) => {
       const count = counts[option.value] || 0;
       return <div key={option.value} className="flex items-center justify-between gap-3 rounded-xl border border-[#dce4ed] bg-white p-3">

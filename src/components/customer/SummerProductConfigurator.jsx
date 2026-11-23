@@ -2,15 +2,19 @@ import { useState } from 'react';
 import { useLang } from '@/lib/i18n';
 import { LocalizeCustomerTree } from '@/lib/customerLocale';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { Bike, Check } from 'lucide-react';
+import { Check } from 'lucide-react';
 import DateAvailabilityCalendar from './DateAvailabilityCalendar';
 import AgeFirstGuestCounts from './AgeFirstGuestCounts';
 import ProductSummaryCard from './ProductSummaryCard';
+import ProductIntro from './ProductIntro';
+import { cardronaImage } from '@/lib/cardronaImages';
 
 const PRODUCTS = {
   'earlybird-summer': {
     name: 'Earlybird Summer Season pass',
     description: "Lock in your Summer Season Pass for the best price. Ride your bike all summer long at Cardrona, home to NZ's highest bike park.",
+    details: 'Enjoy unlimited summer mountain visits throughout the 2026/27 season with one pass.',
+    image: cardronaImage('summer-earlybird.webp'),
     adult: 359,
     child: 219,
     under6: 0,
@@ -21,6 +25,8 @@ const PRODUCTS = {
   'summer-day-passes': {
     name: 'Summer Day Passes',
     description: 'Choose a full-day, afternoon, or Friday evening Cardrona bike park pass.',
+    details: 'Select your visit date and pass type. Friday evening access is available on Fridays only.',
+    image: cardronaImage('summer-day-passes.webp'),
     adult: 99,
     child: 79,
     needsDate: true,
@@ -36,6 +42,8 @@ const PRODUCTS = {
   'peak-to-pub': {
     name: 'Peak to Pub · Lift Pass and Shuttle',
     description: 'Pair mountain time with a return shuttle after your day out.',
+    details: 'Choose your lift departure and shuttle time, then add a return shuttle if you need one.',
+    image: cardronaImage('summer-peak-to-pub.webp'),
     adult: 49,
     child: 35,
     needsDate: true,
@@ -44,6 +52,8 @@ const PRODUCTS = {
   'summer-carting': {
     name: 'Summer Mountain Carting',
     description: 'Three wheels, three times the fun, and one summer activity for your bucket list. Cardrona is the only place in New Zealand where you can go mountain carting.',
+    details: 'Choose a visit date, start time, cart size, and the age group for each rider.',
+    image: cardronaImage('summer-carting.webp'),
     adult: 175,
     child: 95,
     needsDate: true,
@@ -109,7 +119,6 @@ export default function SummerProductConfigurator({ productId, onAdd, onCheckout
   const [cartingBuddy, setCartingBuddy] = useState(false);
   const [plan, setPlan] = useState('Pay Now');
   const [itemAdded, setItemAdded] = useState(false);
-  const [expandedDescription, setExpandedDescription] = useState(false);
   const [selectedDonations, setSelectedDonations] = useState([]);
 
   const ageEntries = ageOptions.map((item) => ({ ...item, quantity: guestCounts[item.value] || 0 })).filter((item) => item.quantity > 0);
@@ -191,8 +200,15 @@ export default function SummerProductConfigurator({ productId, onAdd, onCheckout
     : isPeakToPub ? `${age} · ${shuttleTime} shuttle${shuttleDeparture.includes('11.00am') ? ' · 4:15 pm return' : ''}`
       : isCarting ? `${age} · ${cartSize}${cartingTime ? ` · ${cartingTime}` : ''}`
         : `${guestCount} ${guestCount === 1 ? 'guest' : 'guests'} · Season pass`;
-  return <LocalizeCustomerTree lang={lang}><main className="space-y-5 px-4 pb-[100px] pt-5 sm:px-8 sm:pb-[140px]">
-    {!isSummerDayPass && <section><h2 className="font-serif text-[25px] font-bold text-[#20242b]">{product.name}</h2><div className="mt-2 border-y border-[#cbd7e4] py-4 text-[12px] leading-5 text-[#718096]"><p>{product.description}</p>{(isEarlybird || isCarting) && <><button type="button" onClick={() => setExpandedDescription((expanded) => !expanded)} className="mt-2 text-[#202020] underline">{expandedDescription ? 'See less' : 'See more'}</button>{expandedDescription && <p className="mt-2">Enjoy a two-hour mountain carting experience with unlimited uplifts. Choose your age band, a cart size, and an available start time.</p>}</>}</div></section>}
+  return <LocalizeCustomerTree lang={lang}><main className="space-y-5 px-4 pb-8 pt-5 sm:px-8">
+    <ProductIntro
+      title={product.name}
+      season={isEarlybird ? 'Summer · Earlybird' : 'Summer'}
+      image={product.image}
+      imageAlt={`${product.name} at Cardrona`}
+      description={product.description}
+      details={product.details}
+    />
     {ageStage === 'counts' ? <AgeFirstGuestCounts options={ageOptions} counts={guestCounts} onChange={(value, count) => setGuestCounts((current) => ({ ...current, [value]: count }))} onContinue={() => { if (isSummerDayPass && age.includes('Under 6')) setOption('Child Under 6'); else if (isSummerDayPass && age.includes('Over 75')) setOption('Senior'); else if (isSummerDayPass && (option === 'Child Under 6' || option === 'Senior')) setOption('1 Day Pass'); setAgeStage('options'); }} continueLabel={`Continue with ${guestCount} ${guestCount === 1 ? 'guest' : 'guests'}`} /> : <section className="space-y-4">
     <button type="button" onClick={() => setAgeStage('counts')} className="text-[13px] text-[#5b8199] underline">Edit guest counts</button>
     {product.hasPlan && <fieldset className="space-y-2"><legend className="mb-2 text-[13px] font-semibold text-[#344a64]">Payment plan</legend>{['Pay Now', 'Buy Now, Pay Later'].map((item) => <button key={item} type="button" onClick={() => setPlan(item)} className={`flex min-h-12 w-full items-center justify-between rounded-xl border p-3 text-left text-[12px] ${plan === item ? 'border-[#5b8199] bg-white' : 'border-[#dce4ed] bg-white'}`}><span><b>{item}</b>{item === 'Buy Now, Pay Later' && <small className="mt-1 block text-[10px] text-[#718096]">$100 deposit now, balance in four instalments</small>}</span><span className={`h-4 w-4 rounded-full border ${plan === item ? 'border-[5px] border-[#5b8199]' : 'border-[#a0a7b0]'}`} /></button>)}</fieldset>}

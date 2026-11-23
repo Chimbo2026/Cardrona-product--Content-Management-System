@@ -6,6 +6,8 @@ import { useLang } from '@/lib/i18n';
 import { LocalizeCustomerTree } from '@/lib/customerLocale';
 import AgeFirstGuestCounts from './AgeFirstGuestCounts';
 import ProductSummaryCard from './ProductSummaryCard';
+import ProductIntro from './ProductIntro';
+import { cardronaImage } from '@/lib/cardronaImages';
 
 const BIKE_TYPES = ['Enduro', 'Downhill', 'Full Suspension'];
 const SIZES = {
@@ -54,7 +56,6 @@ export default function BikePackageConfigurator({ onAdd, onCheckout, cartTotal =
   const [halfDayType, setHalfDayType] = useState('weekday');
   const [insuranceSelected, setInsuranceSelected] = useState(false);
   const [itemAdded, setItemAdded] = useState(false);
-  const [descriptionExpanded, setDescriptionExpanded] = useState(false);
 
   const selectedDefaultSize = (type, riderAge) => !rentalOnly && type === 'Full Suspension'
     ? SIZES[type][0]
@@ -115,15 +116,15 @@ export default function BikePackageConfigurator({ onAdd, onCheckout, cartTotal =
     setItemAdded(true);
   };
 
-  return <LocalizeCustomerTree lang={lang}><main className="space-y-5 px-4 pb-[100px] pt-5 sm:px-8 sm:pb-[140px]">
-    <section>
-      <h2 className="font-serif text-[25px] font-bold text-[#20242b]">{rentalOnly ? 'Bike Rental' : 'Lift Pass + Bike Rental'}</h2>
-      {rentalOnly ? <>
-        <p className="mt-2 text-[12px] leading-5 text-[#718096]">No bike? No problem. Rent an enduro or downhill bike and hit the trails, whatever your age or ability. Summer rentals include a helmet and safety pads.{descriptionExpanded && ' Choose the bike style and size that best suits your day on the mountain.'}</p>
-        <button type="button" onClick={() => setDescriptionExpanded((expanded) => !expanded)} className="mt-2 text-[12px] text-[#202b3a] underline">{descriptionExpanded ? 'See less' : 'See more'}</button>
-        <div className="mt-4 border-t border-[#cbd7e4]" />
-      </> : <p className="mt-2 text-[12px] leading-5 text-[#718096]">Grab a day pass and a bike rental at Cardrona Bike Park in one easy booking.</p>}
-    </section>
+  return <LocalizeCustomerTree lang={lang}><main className="space-y-5 px-4 pb-8 pt-5 sm:px-8">
+    <ProductIntro
+      title={rentalOnly ? 'Bike Rental' : 'Lift Pass + Bike Rental'}
+      season="Summer"
+      image={cardronaImage(rentalOnly ? 'summer-bike-rental.webp' : 'summer-lift-bike-combo.webp')}
+      imageAlt={rentalOnly ? 'Mountain bike rental at Cardrona' : 'Mountain biking at Cardrona'}
+      description={rentalOnly ? 'Rent an enduro or downhill bike and hit the trails. Summer rentals include a helmet and safety pads.' : 'Get your lift pass and bike rental together in one easy booking at Cardrona Bike Park.'}
+      details={rentalOnly ? 'Choose the bike style and size that best suits your day on the mountain.' : 'Choose each rider’s age group, visit date, bike style, and size. Full-day and half-day options are available.'}
+    />
 
     <section className="space-y-4">
       {!rentalOnly && ageStage === 'counts' ? <AgeFirstGuestCounts options={ageOptions} counts={guestCounts} onChange={(value, count) => setGuestCounts((current) => ({ ...current, [value]: count }))} onContinue={() => setAgeStage('options')} continueLabel={`Continue with ${guestCount} ${guestCount === 1 ? 'guest' : 'guests'}`} /> : <>
