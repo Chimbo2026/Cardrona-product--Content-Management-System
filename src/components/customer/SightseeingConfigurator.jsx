@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import { CableCar, Check } from 'lucide-react';
 import DateAvailabilityCalendar from './DateAvailabilityCalendar';
 import AgeFirstGuestCounts from './AgeFirstGuestCounts';
+import ProductSummaryCard from './ProductSummaryCard';
 
 const AGE_OPTIONS = [
   { label: 'Adult: 18 - 74', price: 35 },
@@ -46,7 +47,7 @@ export default function SightseeingConfigurator({ onAdd, onCheckout, cartTotal =
     });
   });
 
-  return <LocalizeCustomerTree lang={lang}><main className="space-y-5 px-4 pb-[150px] pt-5 sm:px-8 sm:pb-[220px]">
+  return <LocalizeCustomerTree lang={lang}><main className="space-y-5 px-4 pb-[100px] pt-5 sm:px-8 sm:pb-[140px]">
     <section>
       <h2 className="font-serif text-[26px] font-bold text-[#20242b]">Summer Sightseeing Pass</h2>
       <div className="mt-3 border-y border-[#cbd7e4] py-4 text-[13px] leading-6 text-[#718096]">
@@ -73,20 +74,7 @@ export default function SightseeingConfigurator({ onAdd, onCheckout, cartTotal =
       </fieldset>
     </section>}
 
-    <section className="rounded-[18px] border border-[#dce4ed] bg-white p-4 shadow-sm">
-      <h3 className="font-serif text-[17px] font-bold text-[#202b3a]">Item Summary</h3>
-      <div className="mt-3 border-b border-[#cbd7e4] pb-3 text-[12px]">
-        <b className="block">Start Date</b><span className="mt-1 block text-[#718096]">{formatDate(startDate)}</span>
-        {ageEntries.map((entry) => <div key={entry.label} className="mt-3"><b className="block">({entry.quantity}) Summer Sightseeing Pass - {entry.label.replace(': ', ' ')}{uplift ? " - 1 Uplift To McDougall's Chondola" : ''}</b><span className="mt-1 block">{money(entry.quantity * Math.max(0, entry.price + (uplift ? 0 : -20)))}</span></div>)}
-      </div>
-      <div className="mt-3 flex items-center justify-between text-[16px] font-semibold"><span>Total</span><span>{money(total)}</span></div>
-      <p className="mt-2 text-center text-[10px] text-[#718096]">Demo checkout · no real charge is made.</p>
-    </section>
-
-    <div className="fixed inset-x-0 bottom-[64px] z-20 mx-auto flex w-full max-w-[430px] items-center gap-3 border-t border-[#dce4ed] bg-white/95 px-4 py-3 backdrop-blur sm:bottom-[120px]">
-      <span className="mr-auto"><small className="block text-[10px] text-[#718096]">Total</small><b className="font-serif text-[20px] text-[#5b8199]">{money(total)}</b></span>
-      <button type="button" disabled={!startDate || !guestCount} onClick={() => { addPass(); setItemAdded(true); }} className="h-11 flex-1 rounded-xl bg-[#5b8199] text-[13px] font-semibold tracking-wide text-white disabled:cursor-not-allowed disabled:bg-[#c9c9c9]">Add {guestCount} To Cart</button>
-    </div>
+    <ProductSummaryCard title="Your pass" dateLabel={formatDate(startDate)} selection={`${ageEntries.map((entry) => `${entry.quantity > 1 ? `${entry.quantity} ` : ''}${entry.label.split(':')[0]}`).join(', ')} · Sightseeing${uplift ? ' · 1 uplift' : ''}`} total={money(total).replace('.00', '')} actionLabel="Add pass to cart" disabled={!startDate || !guestCount} onAdd={() => { addPass(); setItemAdded(true); }} />
     {itemAdded && <div className="fixed inset-0 z-40 flex items-end justify-center bg-black/25 p-2 sm:items-center">
       <section role="dialog" aria-modal="true" aria-labelledby="item-added-title" className="w-full max-w-[430px] rounded-t-2xl border border-[#dce4ed] bg-white p-4 shadow-xl sm:rounded-2xl">
         <div className="flex items-center gap-2"><Check className="h-5 w-5 text-emerald-700"/><h2 id="item-added-title" className="text-[17px] font-bold">Item Added</h2><button type="button" onClick={() => setItemAdded(false)} aria-label="Close" className="ml-auto px-2 text-xl">×</button></div>

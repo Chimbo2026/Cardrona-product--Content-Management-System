@@ -44,6 +44,7 @@ import SiteShell from '@/components/site/SiteShell';
 import SiteHome from '@/pages/SiteHome';
 import SitePageDetail from '@/pages/SitePageDetail';
 import CustomerExperience from '@/pages/CustomerExperience';
+import AdmissionsHome from '@/pages/AdmissionsHome';
 
 // GitHub Pages cannot serve application routes directly; keep them in the hash.
 const Router = import.meta.env.BASE_URL === '/Cardrona-project/' ? HashRouter : BrowserRouter;
@@ -144,6 +145,8 @@ function AppRouteGate() {
     '/orders', '/account', '/group', '/login', '/register', '/lessons', '/transport', '/resort',
     '/ski', '/support', '/snow-report', '/childcare', '/summer-shuttle',
   ]);
+
+  if (pathname === '/admissions') return <AdmissionsHome />;
 
   return (
     customerPaths.has(pathname) ? <CustomerExperience /> : (

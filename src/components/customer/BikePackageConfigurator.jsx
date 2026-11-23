@@ -5,6 +5,7 @@ import DateAvailabilityCalendar from './DateAvailabilityCalendar';
 import { useLang } from '@/lib/i18n';
 import { LocalizeCustomerTree } from '@/lib/customerLocale';
 import AgeFirstGuestCounts from './AgeFirstGuestCounts';
+import ProductSummaryCard from './ProductSummaryCard';
 
 const BIKE_TYPES = ['Enduro', 'Downhill', 'Full Suspension'];
 const SIZES = {
@@ -71,7 +72,6 @@ export default function BikePackageConfigurator({ onAdd, onCheckout, cartTotal =
   const bikeSizes = rentalOnly ? RENTAL_SIZES[bike] : bike === 'Full Suspension' ? [SIZES[bike][0]] : SIZES[bike];
   const needsRentalSize = rentalOnly && bike === 'Full Suspension';
   const hasRentalSelection = !needsRentalSize || Boolean(size);
-  const showLineItems = Boolean(date) && hasRentalSelection;
 
   const selectDate = (value) => {
     setDate(value);
@@ -115,7 +115,7 @@ export default function BikePackageConfigurator({ onAdd, onCheckout, cartTotal =
     setItemAdded(true);
   };
 
-  return <LocalizeCustomerTree lang={lang}><main className="space-y-5 px-4 pb-[150px] pt-5 sm:px-8 sm:pb-[220px]">
+  return <LocalizeCustomerTree lang={lang}><main className="space-y-5 px-4 pb-[100px] pt-5 sm:px-8 sm:pb-[140px]">
     <section>
       <h2 className="font-serif text-[25px] font-bold text-[#20242b]">{rentalOnly ? 'Bike Rental' : 'Lift Pass + Bike Rental'}</h2>
       {rentalOnly ? <>
@@ -188,16 +188,7 @@ export default function BikePackageConfigurator({ onAdd, onCheckout, cartTotal =
       </>}
     </section>
 
-    <section className="rounded-[18px] border border-[#dce4ed] bg-white p-4 shadow-sm">
-      <h3 className="font-serif text-[17px] font-bold text-[#202b3a]">Item Summary</h3>
-      <div className="mt-3 border-b border-[#cbd7e4] pb-3 text-[12px]"><b className="block">Start Date</b><span className="mt-1 block text-[#718096]">{formatDate(date)}</span>{showLineItems && <>{rentalOnly ? <><b className="mt-3 block">(1) {productName}</b><span className="mt-1 block">{displayMoney(packagePrice)}</span></> : ageEntries.map((entry) => <div key={entry.value} className="mt-3"><b className="block">({entry.quantity}) {halfDay ? halfDayType === 'friday' ? 'TGIF' : 'Afternoon' : '1 Day'} Lift + {bike} Bike - {entry.value}</b><span className="mt-1 block">{displayMoney((PRICES[halfDay ? 'halfDay' : 'fullDay'][bike][entry.value] + (insuranceSelected ? 25 : 0)) * entry.quantity)}</span></div>)}{insuranceSelected && <div className="mt-3"><b className="block">{rentalOnly ? '(1) Add On - Bike Insurance' : 'Bike insurance per guest'}</b><span className="mt-1 block">{displayMoney(insurancePrice)}{rentalOnly ? '' : ' · per day'}</span></div>}</>}</div>
-      {showLineItems && <div className="mt-3 flex items-center justify-between text-[16px] font-semibold"><span>Total</span><span>{displayMoney(price)}</span></div>}
-    </section>
-
-    <div className="fixed inset-x-0 bottom-[64px] z-20 mx-auto flex w-full max-w-[430px] items-center gap-3 border-t border-[#dce4ed] bg-white/95 px-4 py-3 backdrop-blur sm:bottom-[120px]">
-      <span className="mr-auto"><small className="block text-[10px] text-[#718096]">Total</small><b className="font-serif text-[20px] text-[#5b8199]">{displayMoney(price)}</b></span>
-      <button type="button" disabled={!date || !hasRentalSelection || (!rentalOnly && !guestCount)} onClick={addPackage} className="h-11 flex-1 rounded-xl bg-[#5b8199] text-[13px] font-semibold tracking-wide text-white transition-colors enabled:hover:bg-black focus-visible:bg-black disabled:cursor-not-allowed disabled:bg-[#c9c9c9]">{rentalOnly ? 'Add to cart' : `Add ${guestCount} to cart`}</button>
-    </div>
+    <ProductSummaryCard title="Your pass" dateLabel={formatDate(date)} selection={rentalOnly ? `${bike} bike · ${size || 'Choose size'}` : `${guestCount} ${guestCount === 1 ? 'guest' : 'guests'} · ${halfDay ? halfDayType === 'friday' ? 'Friday evening' : 'Afternoon' : 'Full day'} · ${bike} bike`} total={displayMoney(price)} actionLabel={rentalOnly ? 'Add to cart' : `Add ${guestCount} to cart`} disabled={!date || !hasRentalSelection || (!rentalOnly && !guestCount)} onAdd={addPackage} />
 
     {itemAdded && <div className="fixed inset-0 z-40 flex items-end justify-center bg-black/25 p-2 sm:items-center"><section role="dialog" aria-modal="true" aria-labelledby="bike-item-added-title" className="w-full max-w-[430px] rounded-t-2xl border border-[#dce4ed] bg-white p-4 shadow-xl sm:rounded-2xl">
       <div className="flex items-center gap-2"><Check className="h-5 w-5 text-emerald-700"/><h2 id="bike-item-added-title" className="text-[17px] font-bold">Item Added</h2><button type="button" onClick={() => setItemAdded(false)} aria-label="Close" className="ml-auto px-2 text-xl">×</button></div>

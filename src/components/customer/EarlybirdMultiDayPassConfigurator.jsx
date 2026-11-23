@@ -2,6 +2,7 @@ import { useMemo, useState } from 'react';
 import { useLang } from '@/lib/i18n';
 import { LocalizeCustomerTree } from '@/lib/customerLocale';
 import { Check, Minus, Plus } from 'lucide-react';
+import ProductSummaryCard from './ProductSummaryCard';
 
 const PRICES = {
   Adult: { 3: 449, 4: 499, 5: 580, 6: 630 },
@@ -118,12 +119,6 @@ export default function EarlybirdMultiDayPassConfigurator({ image, onAdd }) {
     </section>
     {foundation && DONATIONS.map((option) => <section key={option.id}><h2 className="mb-2 text-[16px] font-bold">{option.name}</h2>{donationCard(option)}</section>)}
 
-    <aside className="rounded-[20px] border border-[#ddd] bg-white p-5 shadow-[0_8px_18px_rgba(0,0,0,0.10)]">
-      <h2 className="font-serif text-[23px] font-bold">Item Summary</h2>
-      <div className="mt-4 space-y-3 border-b border-[#cbd7e4] pb-4 text-[14px]">{groups.map((group) => <div key={`${group.age}-${group.days}`}><b className="block">({group.guests.length}) Earlybird Multi-Day Pass - {group.age} - {group.days} Days - Pay Now</b><span className="mt-1 block">{money(group.guests.length * PRICES[group.age][group.days])}</span></div>)}{donations.map((id) => <div key={id}><b className="block">({guestCount}) {DONATIONS.find((item) => item.id === id)?.name}</b><span className="mt-1 block">{money(20 * guestCount)}</span></div>)}</div>
-      <div className="mt-4 flex justify-between text-[21px]"><span>Total</span><b>{money(total)}</b></div>
-      <div className="mt-2 text-[12px] text-[#526982]">{guestCount} {guestCount === 1 ? 'guest' : 'guests'} · {guests.reduce((sum, guest) => sum + guest.days, 0)} pass days</div>
-      <button type="button" disabled={!guestCount} onClick={addToCart} className="mt-4 h-11 w-full rounded-lg bg-[#5b8199] text-[15px] tracking-[0.08em] text-white disabled:opacity-40">Add {guestCount} {guestCount === 1 ? 'Pass' : 'Passes'} To Cart</button>
-    </aside>
+    <ProductSummaryCard title="Your pass" dateLabel="Winter 2027 season" selection={`${guestCount} ${guestCount === 1 ? 'guest' : 'guests'} · ${guests.reduce((sum, guest) => sum + guest.days, 0)} pass days`} total={`NZ$${total.toLocaleString('en-NZ')}`} actionLabel={`Add ${guestCount} ${guestCount === 1 ? 'pass' : 'passes'} to cart`} disabled={!guestCount} onAdd={addToCart} />
   </main></LocalizeCustomerTree>;
 }

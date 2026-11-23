@@ -81,7 +81,7 @@ export default function TransportPlanner() {
     <LocalizeCustomerTree lang={lang}><main className="space-y-4 px-4 pb-8 pt-5 sm:px-8">
       <section>
         <h2 className="font-serif text-[25px] font-bold text-[#2e435d]">Plan your trip</h2>
-        <p className="mt-1 text-[11px] leading-5 text-[#687b92]">Choose where you’re starting and which mountain you’re visiting to compare travel options.</p>
+        <p className="mt-1 text-[14px] leading-6 text-[#687b92]">Choose a mountain and see shuttle times and booking options.</p>
       </section>
 
       <section className="rounded-[18px] border border-[#dce4ed] bg-white p-3.5">
@@ -111,9 +111,23 @@ export default function TransportPlanner() {
         </div>
         <div className="space-y-2.5">
           {isSummer ? <>
-            <OptionCard icon={Bus} title="Peak to Pub · Lift Pass and Shuttle" subtitle="Cardrona Chondola uplift, downhill ride and return shuttle" price="NZ$49" priceNote="adult · summer package" details={['Ride the Chondola to the mountain', 'Downhill bike ride back toward Cardrona Valley Road', 'Return shuttle and bike trailer included']} action="Book Peak to Pub" to="/configure-pass?product=peak-to-pub" featured />
-            <OptionCard icon={Bus} title="Cardrona Valley Shuttle" subtitle="Cardrona Valley Road to the top of the mountain" price="NZ$20" priceNote="adult · one way" details={['Add a return shuttle for NZ$5', 'Choose a shuttle departure and travel date', 'TGIF Friday shuttle also available']} action="Book shuttle" to="/summer-shuttle" featured />
-            <OptionCard icon={CarFront} title="Drive to Cardrona" subtitle={`${drive.distance} from ${origin} · ${drive.time}`} price="—" priceNote="drive time varies" details={[drive.road, 'Carry snow chains and check current road conditions before travelling.']} />
+            <article className="overflow-hidden rounded-[20px] border border-[#dce4ed] bg-white shadow-sm">
+              <div className="bg-[#203447] p-4 text-white">
+                <span className="text-[11px] font-bold uppercase tracking-[0.12em] text-white/75">Summer package</span>
+                <h3 className="mt-1 font-serif text-[21px] font-bold">Peak to Pub</h3>
+                <p className="mt-1 text-[13px] leading-5 text-white/80">Chondola uplift, downhill ride and return shuttle.</p>
+              </div>
+              <div className="p-4">
+                <div className="flex items-center justify-between gap-3"><span><b className="font-serif text-[22px] font-bold text-[#5b8199]">NZ$49</b><small className="mt-1 block text-[12px] text-[#687b92]">per adult · package</small></span><Link to="/configure-pass?product=peak-to-pub" className="inline-flex min-h-11 items-center justify-center gap-2 rounded-full bg-[#5b8199] px-4 text-[13px] font-semibold text-white">Book package <ArrowUpRight className="h-4 w-4"/></Link></div>
+              </div>
+            </article>
+            <article className="rounded-[20px] border border-[#dce4ed] bg-white p-4 shadow-sm">
+              <div className="flex items-start justify-between gap-3"><div><span className="text-[11px] font-bold uppercase tracking-[0.12em] text-[#5b8199]">Bus times &amp; booking</span><h3 className="mt-1 font-serif text-[20px] font-bold text-[#202b3a]">Cardrona Valley Shuttle</h3><p className="mt-1 text-[13px] leading-5 text-[#60738d]">From Cardrona Valley Road to the mountain.</p></div><Bus className="mt-1 h-6 w-6 shrink-0 text-[#5b8199]"/></div>
+              <p className="mt-4 text-[13px] font-semibold text-[#263345]">Departures up</p>
+              <div className="mt-2 grid grid-cols-2 gap-2">{[['9:00 am', 'Daily'], ['11:00 am', 'Daily'], ['1:00 pm', 'Daily'], ['5:00 pm', 'Fridays only']].map(([time, note]) => <div key={time} className="rounded-xl bg-[#f1f5f8] px-3 py-2.5"><b className="block text-[15px] text-[#263345]">{time}</b><span className="text-[11px] text-[#60738d]">{note}</span></div>)}</div>
+              <div className="mt-3 rounded-xl border border-[#dce4ed] px-3 py-2.5"><p className="text-[12px] font-semibold text-[#263345]">Return shuttles down</p><p className="mt-1 text-[13px] text-[#60738d]">12:30 pm · 4:15 pm · 8:15 pm Fridays</p></div>
+              <div className="mt-4 flex items-center justify-between gap-3"><span><b className="font-serif text-[21px] font-bold text-[#5b8199]">NZ$20</b><small className="mt-1 block text-[11px] text-[#687b92]">one way · return +NZ$5</small></span><Link to="/summer-shuttle" className="inline-flex min-h-11 items-center justify-center gap-2 rounded-full bg-[#5b8199] px-4 text-[13px] font-semibold text-white">Choose a bus <ArrowUpRight className="h-4 w-4"/></Link></div>
+            </article>
           </> : <>
             <OptionCard icon={Bus} title={`${origin} Ski Bus`} subtitle={`Return bus to ${destination} · multiple pickup points`} price="NZ$45" priceNote="per person · 2026 pricing" details={[skiBusDetails[destination][origin], 'Return travel included; all-season service', 'Pickup points and timetable on the official site']} featured />
             {origin === 'Queenstown' && destination === 'Cardrona' && <OptionCard icon={Bus} title="Après later-departure bus" subtitle="Queenstown to Cardrona · seasonal service" price="NZ$45" priceNote="return · 2026 listed fare" details={['Later morning departure; selected Queenstown pickup points', 'Published 2026 dates have passed; check the official site for the next season’s dates and availability']} action="Check seasonal dates" href={TRANSPORT_URL} />}

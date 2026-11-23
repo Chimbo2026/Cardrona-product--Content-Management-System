@@ -1,5 +1,6 @@
 import { useState } from 'react';
-import { ArrowRight, CalendarDays, Check, Ticket } from 'lucide-react';
+import { Check, Ticket } from 'lucide-react';
+import ProductSummaryCard from './ProductSummaryCard';
 
 export const RISE_SHINE_IMAGE = 'https://cardrona-treblecone.com/_next/image?q=75&url=https%3A%2F%2Fimages.ctfassets.net%2F2atbvuhykqrn%2F1E5Z9ayVth7RtH4djslw5N%2F367808bb89f90e243a4c6dc6cd68faa0%2Fimage.png&w=3840';
 
@@ -52,12 +53,6 @@ export default function RiseShineSummerSeriesConfigurator({ onAdd }) {
       <button type="button" aria-pressed={entryIncluded} onClick={() => setEntryIncluded((checked) => !checked)} className={`flex min-h-[68px] w-full items-center gap-3 rounded-[14px] border bg-white px-4 text-left ${entryIncluded ? 'border-[#5b8199]' : 'border-[#c9ccd1]'}`}><Ticket className="h-7 w-7 shrink-0 text-[#20242b]" strokeWidth={1.6}/><span className="flex-1 text-[14px] font-semibold">Entry</span><span className={`flex h-6 w-6 items-center justify-center rounded border ${entryIncluded ? 'border-[#5b8199] bg-[#5b8199] text-white' : 'border-[#9ca0a5] bg-white'}`}>{entryIncluded && <Check className="h-4 w-4"/>}</span></button>
     </section>
 
-    <aside className="rounded-[20px] border border-[#e0e3e7] bg-white p-4 shadow-sm" aria-label="Item summary">
-      <h2 className="font-serif text-[20px] font-bold text-[#20242b]">Item Summary</h2>
-      <div className="mt-4 border-b border-[#dce4ed] pb-4"><h3 className="flex items-center gap-2 text-[13px] font-semibold"><CalendarDays className="h-4 w-4 text-[#5b8199]"/>Start Date</h3><p className="mt-2 text-[12px] text-[#68717f]">{selectedEntry?.dateLabel || 'No date selected'}</p>{selectedEntry && gender && entryIncluded && <><p className="mt-4 text-[13px] font-semibold">(1) {selectedEntry.summary} - {gender === 'male' ? 'Male' : 'Female'}</p><p className="mt-2 text-[12px]">{money(selectedEntry.price)}</p></>}</div>
-      {selectedEntry && <p className="flex justify-between py-3 text-[17px]"><span>Total</span><b>{money(selectedEntry.price)}</b></p>}
-      <button type="button" disabled={!ready} onClick={addEntry} className="mt-4 flex h-12 w-full items-center justify-center gap-2 rounded-[12px] bg-[#5b8199] text-[13px] font-semibold tracking-[0.08em] text-white disabled:cursor-not-allowed disabled:bg-[#c7c7c7]">Add To Cart <ArrowRight className="h-4 w-4"/></button>
-      {!ready && <p className="mt-2 text-center text-[10px] text-[#718096]">Choose an entry, category and Event Entry to continue.</p>}
-    </aside>
+    <ProductSummaryCard title="Your pass" dateLabel={selectedEntry?.dateLabel || 'Choose an event'} selection={selectedEntry ? `${selectedEntry.summary} · ${gender ? gender === 'male' ? 'Male' : 'Female' : 'Choose category'}` : 'Choose an event entry'} total={selectedEntry ? money(selectedEntry.price).replace('.00', '') : '—'} actionLabel="Add to cart" disabled={!ready} onAdd={addEntry} />
   </main>;
 }
