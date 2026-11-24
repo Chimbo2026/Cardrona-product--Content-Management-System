@@ -1,0 +1,47 @@
+{
+  "name": "LiftPassProduct",
+  "description": "Sellable lift pass product for reporting",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string"
+    },
+    "pass_type": {
+      "type": "string",
+      "enum": [
+        "Single Day",
+        "Multi-Day",
+        "Season Pass",
+        "Learner Pass",
+        "Sightseeing Pass"
+      ]
+    },
+    "season": {
+      "type": "string",
+      "enum": [
+        "Winter",
+        "Summer"
+      ]
+    },
+    "days_valid": {
+      "type": "number",
+      "default": 1
+    },
+    "price": {
+      "type": "number"
+    },
+    "description": {
+      "type": "string"
+    },
+    "active": {
+      "type": "boolean",
+      "default": true
+    }
+  },
+  "required": [
+    "name",
+    "pass_type",
+    "season",
+    "price"
+  ]
+}

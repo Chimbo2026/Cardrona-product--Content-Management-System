@@ -6,10 +6,9 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Lock, Loader2, AlertTriangle } from "lucide-react";
 import AuthLayout from "@/components/AuthLayout";
-import { useLanguage } from "@/lib/i18n/LanguageContext";
+import { useLang } from "@/lib/i18n";
 
 export default function ResetPassword() {
-  const { bi } = useLanguage();
   const [searchParams] = useSearchParams();
   const resetToken = searchParams.get("token");
 
@@ -17,12 +16,13 @@ export default function ResetPassword() {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const { t } = useLang();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
     if (newPassword !== confirmPassword) {
-      setError(bi("两次输入的密码不一致", "Those passwords do not match"));
+      setError(t("两次输入的密码不一致", "Passwords do not match"));
       return;
     }
     setLoading(true);
@@ -30,7 +30,7 @@ export default function ResetPassword() {
       await base44.auth.resetPassword({ resetToken, newPassword });
       window.location.href = "/login";
     } catch (err) {
-      setError(err.message || bi("重置失败，请重新申请重置链接", "Reset failed, please request a new link"));
+      setError(err.message || t("密码重置失败", "Failed to reset password"));
     } finally {
       setLoading(false);
     }
@@ -40,19 +40,16 @@ export default function ResetPassword() {
     return (
       <AuthLayout
         icon={AlertTriangle}
-        title={bi("链接无效", "Invalid link")}
-        subtitle={bi("该重置链接缺失或已失效", "This reset link is missing or has expired")}
+        title={t("重置链接无效", "Invalid reset link")}
+        subtitle={t("该密码重置链接缺失或无效", "This password reset link is missing or invalid")}
         footer={
           <Link to="/forgot-password" className="text-primary font-medium hover:underline">
-            {bi("重新申请链接", "Request a new link")}
+            {t("重新申请链接", "Request a new link")}
           </Link>
         }
       >
         <p className="text-sm text-foreground text-center">
-          {bi(
-            "你使用的链接不完整，请重新申请一封重置密码邮件。",
-            "The link you used is incomplete. Please request a new reset email."
-          )}
+          {t("您使用的链接似乎不完整，请重新申请密码重置邮件。", "The link you used appears to be incomplete. Please request a new password reset email.")}
         </p>
       </AuthLayout>
     );
@@ -61,8 +58,8 @@ export default function ResetPassword() {
   return (
     <AuthLayout
       icon={Lock}
-      title={bi("设置新密码", "Set a new password")}
-      subtitle={bi("请在下方输入新密码", "Enter your new password below")}
+      title={t("设置新密码", "New password")}
+      subtitle={t("在下方输入您的新密码", "Enter your new password below")}
     >
       {error && (
         <div className="mb-4 p-3 rounded-lg bg-destructive/10 text-destructive text-sm">
@@ -71,14 +68,13 @@ export default function ResetPassword() {
       )}
       <form onSubmit={handleSubmit} className="space-y-4">
         <div className="space-y-2">
-          <Label htmlFor="password">{bi("新密码", "New password")}</Label>
+          <Label htmlFor="password">{t("新密码", "New Password")}</Label>
           <div className="relative">
             <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" aria-hidden="true" />
             <Input
               id="password"
               type="password"
               autoComplete="new-password"
-              autoFocus
               placeholder="••••••••"
               value={newPassword}
               onChange={(e) => setNewPassword(e.target.value)}
@@ -88,7 +84,7 @@ export default function ResetPassword() {
           </div>
         </div>
         <div className="space-y-2">
-          <Label htmlFor="confirm">{bi("确认新密码", "Confirm new password")}</Label>
+          <Label htmlFor="confirm">{t("确认新密码", "Confirm Password")}</Label>
           <div className="relative">
             <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" aria-hidden="true" />
             <Input
@@ -107,10 +103,10 @@ export default function ResetPassword() {
           {loading ? (
             <>
               <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-              {bi("重置中…", "Resetting…")}
+              {t("重置中…", "Resetting...")}
             </>
           ) : (
-            bi("重置密码", "Reset password")
+            t("重置密码", "Reset password")
           )}
         </Button>
       </form>

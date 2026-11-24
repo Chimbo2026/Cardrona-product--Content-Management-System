@@ -1,210 +1,194 @@
 {
   "name": "Booking",
+  "description": "Resort booking linking a guest to a resort product",
   "type": "object",
   "properties": {
-    "order_no": {
+    "booking_ref": {
+      "type": "string",
+      "description": "Unique reference such as CRD-2418"
+    },
+    "guest_id": {
       "type": "string"
     },
-    "product_id": {
+    "guest_name": {
       "type": "string"
     },
-    "product_name": {
+    "email": {
       "type": "string"
     },
-    "product_category": {
+    "phone": {
       "type": "string"
     },
     "visit_date": {
-      "type": "string"
-    },
-    "visit_end_date": {
       "type": "string",
-      "description": "\u884c\u7a0b\u7ed3\u675f\u65e5\u671f\uff0c\u5355\u65e5\u9884\u8ba2\u4e0e visit_date \u76f8\u540c"
+      "format": "date"
     },
-    "quantity": {
-      "type": "number"
+    "guests_count": {
+      "type": "number",
+      "default": 1
     },
-    "unit_price": {
-      "type": "number"
+    "activity": {
+      "type": "string",
+      "enum": [
+        "Lift Pass",
+        "Lesson",
+        "Rental",
+        "Accommodation",
+        "Event",
+        "Transport",
+        "Food & Beverage",
+        "Gift Voucher"
+      ]
     },
-    "subtotal": {
-      "type": "number"
-    },
-    "discount_code": {
+    "lesson_id": {
       "type": "string"
     },
-    "discount_amount": {
-      "type": "number"
+    "lesson_title": {
+      "type": "string"
     },
-    "total_amount": {
+    "instructor_id": {
+      "type": "string"
+    },
+    "instructor_name": {
+      "type": "string"
+    },
+    "pass_type": {
+      "type": "string"
+    },
+    "lesson_type": {
+      "type": "string"
+    },
+    "rental_notes": {
+      "type": "string"
+    },
+    "amount": {
       "type": "number"
     },
     "currency": {
       "type": "string",
-      "default": "NZD"
-    },
-    "status": {
-      "type": "string",
       "enum": [
-        "pending_payment",
-        "confirmed",
-        "used",
-        "reschedule_requested",
-        "refund_requested",
-        "refunded",
-        "cancelled"
+        "NZD",
+        "AUD",
+        "TWD",
+        "HKD",
+        "CNY"
       ],
-      "default": "pending_payment"
-    },
-    "payment_method": {
-      "type": "string",
-      "enum": [
-        "wechat_pay",
-        "card",
-        "agent_transfer"
-      ]
+      "default": "NZD",
+      "description": "Currency the guest is charged in, based on their region"
     },
     "payment_status": {
       "type": "string",
       "enum": [
-        "unpaid",
-        "paid",
-        "refund_pending",
-        "refunded"
-      ],
-      "default": "unpaid"
-    },
-    "payment_ref": {
-      "type": "string"
-    },
-    "payment_plan": {
-      "type": "string",
-      "enum": [
-        "now",
-        "later"
-      ],
-      "default": "now",
-      "description": "\u5b63\u7968\u4ed8\u6b3e\u65b9\u6848\uff1a\u7acb\u5373\u652f\u4ed8 / \u5148\u4eab\u540e\u4ed8"
-    },
-    "deposit_amount": {
-      "type": "number",
-      "description": "\u5148\u4eab\u540e\u4ed8\u65f6\u4eca\u65e5\u53ea\u6536\u53d6\u7684\u5b9a\u91d1"
-    },
-    "pass_type": {
-      "type": "string",
-      "enum": [
-        "saver",
-        "unlimited",
-        "summer"
-      ],
-      "description": "\u5b63\u7968\u7c7b\u578b"
-    },
-    "pass_type_label": {
-      "type": "string"
-    },
-    "age_band": {
-      "type": "string",
-      "enum": [
-        "adult",
-        "child",
-        "senior",
-        "under6",
-        "over75"
+        "Paid",
+        "Pending",
+        "Partially Paid",
+        "Refunded"
       ]
     },
-    "age_band_label": {
-      "type": "string"
+    "payment_method": {
+      "type": "string",
+      "enum": [
+        "WeChat Pay",
+        "Visa",
+        "Mastercard",
+        "Alipay",
+        "Cash",
+        "Account",
+        "Card",
+        "Gift Voucher"
+      ]
     },
-    "agent_email": {
+    "payment_terms": {
+      "type": "string",
+      "enum": [
+        "Pay now",
+        "Pay later"
+      ],
+      "default": "Pay now",
+      "description": "Whether the guest settles at booking or is invoiced to pay later"
+    },
+    "payment_due_date": {
+      "type": "string",
+      "format": "date",
+      "description": "Date the balance must be settled when paying later"
+    },
+    "amount_paid": {
+      "type": "number",
+      "description": "Amount already settled in NZD, including card and WeChat payments"
+    },
+    "voucher_code": {
+      "type": "string",
+      "description": "Gift voucher applied to this booking"
+    },
+    "voucher_amount": {
+      "type": "number",
+      "description": "Gift voucher credit applied in NZD"
+    },
+    "booking_status": {
+      "type": "string",
+      "enum": [
+        "Confirmed",
+        "Pending",
+        "Completed",
+        "Cancelled",
+        "No-show"
+      ]
+    },
+    "season": {
+      "type": "string",
+      "enum": [
+        "Winter",
+        "Summer"
+      ]
+    },
+    "channel": {
+      "type": "string",
+      "enum": [
+        "Online",
+        "Phone",
+        "Walk-in",
+        "Agent"
+      ]
+    },
+    "agent_id": {
       "type": "string"
     },
     "agent_name": {
       "type": "string"
     },
-    "source": {
-      "type": "string",
-      "enum": [
-        "\u5fae\u4fe1\u641c\u7d22",
-        "\u670b\u53cb\u5708\u5206\u4eab",
-        "\u4ee3\u7406\u63a8\u8350",
-        "\u5c0f\u7a0b\u5e8f\u7801",
-        "\u5e7f\u544a\u6295\u653e"
-      ]
-    },
-    "guest_name_pinyin": {
-      "type": "string"
-    },
-    "guest_legal_name": {
-      "type": "string"
+    "agent_discount": {
+      "type": "number",
+      "description": "Net-rate discount percentage applied by the agent"
     },
     "guest_dob": {
+      "type": "string",
+      "format": "date"
+    },
+    "guest_country": {
       "type": "string"
     },
-    "guest_nationality": {
-      "type": "string"
-    },
-    "guest_document_no": {
-      "type": "string"
-    },
-    "guest_phone": {
-      "type": "string"
-    },
-    "guest_email": {
-      "type": "string"
-    },
-    "extra_guests": {
-      "type": "array",
-      "items": {
-        "type": "object",
-        "properties": {
-          "name_pinyin": {
-            "type": "string"
-          },
-          "legal_name": {
-            "type": "string"
-          },
-          "dob": {
-            "type": "string"
-          },
-          "nationality": {
-            "type": "string"
-          }
-        }
-      }
+    "pinyin_name": {
+      "type": "string",
+      "description": "Pinyin or romanised name matching the guest passport"
     },
     "waiver_signed": {
       "type": "boolean",
       "default": false
     },
-    "waiver_signature": {
-      "type": "string"
-    },
-    "waiver_signature_file": {
-      "type": "string"
-    },
     "waiver_signed_at": {
-      "type": "string"
-    },
-    "aspenware_sync_status": {
       "type": "string",
-      "enum": [
-        "not_connected",
-        "pending",
-        "synced",
-        "failed"
-      ],
-      "default": "not_connected"
+      "format": "date-time"
     },
-    "aspenware_order_ref": {
-      "type": "string"
-    },
-    "admin_note": {
+    "notes": {
       "type": "string"
     }
   },
   "required": [
-    "order_no",
-    "product_name",
-    "total_amount"
+    "booking_ref",
+    "guest_name",
+    "visit_date",
+    "activity",
+    "booking_status",
+    "payment_status"
   ]
 }

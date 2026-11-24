@@ -10,10 +10,9 @@ import AuthLayout from "@/components/AuthLayout";
 import GoogleIcon from "@/components/GoogleIcon";
 import { toast } from "@/components/ui/use-toast";
 import { safeReturnTo } from "@/lib/authReturnTo";
-import { useLanguage } from "@/lib/i18n/LanguageContext";
+import { useLang } from "@/lib/i18n";
 
 export default function Register() {
-  const { bi } = useLanguage();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -21,12 +20,13 @@ export default function Register() {
   const [loading, setLoading] = useState(false);
   const [showOtp, setShowOtp] = useState(false);
   const [otpCode, setOtpCode] = useState("");
+  const { t } = useLang();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
     if (password !== confirmPassword) {
-      setError(bi("两次输入的密码不一致", "Those passwords do not match"));
+      setError(t("两次输入的密码不一致", "Passwords do not match"));
       return;
     }
     setLoading(true);
@@ -34,7 +34,7 @@ export default function Register() {
       await base44.auth.register({ email, password });
       setShowOtp(true);
     } catch (err) {
-      setError(err.message || bi("注册失败，请稍后重试", "Sign-up failed, please try again"));
+      setError(err.message || t("注册失败", "Registration failed"));
     } finally {
       setLoading(false);
     }
@@ -50,7 +50,7 @@ export default function Register() {
       }
       window.location.href = safeReturnTo();
     } catch (err) {
-      setError(err.message || bi("验证码不正确", "Incorrect verification code"));
+      setError(err.message || t("验证码不正确", "Invalid verification code"));
     } finally {
       setLoading(false);
     }
@@ -61,11 +61,11 @@ export default function Register() {
     try {
       await base44.auth.resendOtp(email);
       toast({
-        title: bi("验证码已发送", "Code sent"),
-        description: bi("请查收邮件中的新验证码。", "Check your inbox for the new code."),
+        title: t("验证码已发送", "Code sent"),
+        description: t("请查收邮箱中的新验证码。", "Check your email for the new code."),
       });
     } catch (err) {
-      setError(err.message || bi("验证码发送失败，请稍后重试", "Could not send the code, please try again"));
+      setError(err.message || t("验证码发送失败", "Failed to resend code"));
     }
   };
 
@@ -77,8 +77,8 @@ export default function Register() {
     return (
       <AuthLayout
         icon={Mail}
-        title={bi("验证邮箱", "Verify your email")}
-        subtitle={bi(`验证码已发送至 ${email}`, `We sent a code to ${email}`)}
+        title={t("验证您的邮箱", "Verify your email")}
+        subtitle={t(`验证码已发送至 ${email}`, `We sent a code to ${email}`)}
       >
         {error && (
           <div className="mb-4 p-3 rounded-lg bg-destructive/10 text-destructive text-sm">
@@ -111,16 +111,16 @@ export default function Register() {
           {loading ? (
             <>
               <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-              {bi("验证中…", "Verifying…")}
+              {t("验证中…", "Verifying...")}
             </>
           ) : (
-            bi("验证", "Verify")
+            t("验证", "Verify")
           )}
         </Button>
         <p className="text-center text-sm text-muted-foreground mt-4">
-          {bi("没有收到验证码？", "No code yet?")}{" "}
+          {t("没有收到验证码？", "Didn't receive the code?")}{" "}
           <button onClick={handleResend} className="text-primary font-medium hover:underline">
-            {bi("重新发送", "Resend")}
+            {t("重新发送", "Resend")}
           </button>
         </p>
       </AuthLayout>
@@ -130,16 +130,16 @@ export default function Register() {
   return (
     <AuthLayout
       icon={UserPlus}
-      title={bi("创建账户", "Create your account")}
-      subtitle={bi("注册后即可在线预订雪票", "Sign up to book passes online")}
+      title={t("创建您的账户", "Create your account")}
+      subtitle={t("注册即可开始使用", "Sign up to get started")}
       footer={
         <>
-          {bi("已有账户？", "Already registered?")}{" "}
+          {t("已有账户？", "Already have an account?")}{" "}
           <Link
             to={"/login" + (safeReturnTo() !== "/" ? "?returnTo=" + encodeURIComponent(safeReturnTo()) : "")}
             className="text-primary font-medium hover:underline"
           >
-            {bi("登录", "Sign in")}
+            {t("登录", "Log in")}
           </Link>
         </>
       }
@@ -150,7 +150,7 @@ export default function Register() {
         onClick={handleGoogle}
       >
         <GoogleIcon className="w-5 h-5 mr-2" />
-        {bi("使用 Google 账号登录", "Continue with Google")}
+        {t("通过 Google 继续", "Continue with Google")}
       </Button>
 
       <div className="relative mb-6">
@@ -158,7 +158,7 @@ export default function Register() {
           <div className="w-full border-t border-border" />
         </div>
         <div className="relative flex justify-center text-xs uppercase">
-          <span className="bg-card px-3 text-muted-foreground">{bi("或", "or")}</span>
+          <span className="bg-card px-3 text-muted-foreground">{t("或", "or")}</span>
         </div>
       </div>
 
@@ -170,7 +170,7 @@ export default function Register() {
 
       <form onSubmit={handleSubmit} className="space-y-4">
         <div className="space-y-2">
-          <Label htmlFor="email">{bi("邮箱", "Email")}</Label>
+          <Label htmlFor="email">{t("邮箱", "Email")}</Label>
           <div className="relative">
             <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" aria-hidden="true" />
             <Input
@@ -187,7 +187,7 @@ export default function Register() {
           </div>
         </div>
         <div className="space-y-2">
-          <Label htmlFor="password">{bi("密码", "Password")}</Label>
+          <Label htmlFor="password">{t("密码", "Password")}</Label>
           <div className="relative">
             <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" aria-hidden="true" />
             <Input
@@ -203,7 +203,7 @@ export default function Register() {
           </div>
         </div>
         <div className="space-y-2">
-          <Label htmlFor="confirm">{bi("确认密码", "Confirm password")}</Label>
+          <Label htmlFor="confirm">{t("确认密码", "Confirm Password")}</Label>
           <div className="relative">
             <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" aria-hidden="true" />
             <Input
@@ -222,10 +222,10 @@ export default function Register() {
           {loading ? (
             <>
               <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-              {bi("正在创建账户…", "Creating your account…")}
+              {t("创建账户中…", "Creating account...")}
             </>
           ) : (
-            bi("创建账户", "Create account")
+            t("创建账户", "Create account")
           )}
         </Button>
       </form>

@@ -1,0 +1,74 @@
+{
+  "name": "Instructor",
+  "description": "Snow Sports instructor profile (fictional demo data)",
+  "type": "object",
+  "properties": {
+    "instructor_code": {
+      "type": "string"
+    },
+    "full_name": {
+      "type": "string"
+    },
+    "photo_url": {
+      "type": "string"
+    },
+    "discipline": {
+      "type": "string",
+      "enum": [
+        "Ski",
+        "Snowboard",
+        "Both"
+      ]
+    },
+    "certification": {
+      "type": "string"
+    },
+    "years_experience": {
+      "type": "number",
+      "default": 3
+    },
+    "levels": {
+      "type": "string"
+    },
+    "languages": {
+      "type": "string"
+    },
+    "phone": {
+      "type": "string"
+    },
+    "email": {
+      "type": "string"
+    },
+    "availability": {
+      "type": "string",
+      "enum": [
+        "Available",
+        "On Lesson",
+        "Off Duty"
+      ]
+    },
+    "rating": {
+      "type": "number",
+      "default": 4.6
+    },
+    "reviews_count": {
+      "type": "number",
+      "default": 0
+    },
+    "cert_expiry": {
+      "type": "string",
+      "format": "date"
+    },
+    "specialties": {
+      "type": "string"
+    },
+    "bio": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "full_name",
+    "discipline",
+    "availability"
+  ]
+}

@@ -1,0 +1,44 @@
+{
+  "name": "SupportRequest",
+  "description": "Training or support request submitted from the Support & Data Ownership page",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string"
+    },
+    "email": {
+      "type": "string"
+    },
+    "company": {
+      "type": "string"
+    },
+    "topic": {
+      "type": "string",
+      "enum": [
+        "Training",
+        "Support",
+        "Data ownership"
+      ],
+      "default": "Support"
+    },
+    "message": {
+      "type": "string"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "New",
+        "In progress",
+        "Closed"
+      ],
+      "default": "New"
+    }
+  },
+  "required": [
+    "name",
+    "email",
+    "topic",
+    "message",
+    "status"
+  ]
+}

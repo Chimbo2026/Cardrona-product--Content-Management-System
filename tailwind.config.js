@@ -11,6 +11,33 @@ module.exports = {
   			sm: 'calc(var(--radius) - 4px)'
   		},
   		colors: {
+			// Neutral alpine slate scale — named `forest` for backwards compatibility.
+  			forest: {
+				50: '#F5F7F9',
+				100: '#E9EEF2',
+				200: '#D4DDE5',
+				300: '#B5C1CC',
+				400: '#8999A7',
+				500: '#657582',
+				600: '#4B5965',
+				700: '#394550',
+				800: '#28333D',
+				900: '#1C252D',
+				950: '#11181E'
+  			},
+			// Cardrona red accent — named `ice` for backwards compatibility.
+  			ice: {
+				50: '#FFF2F2',
+				100: '#FFE2E2',
+				200: '#FFC8C8',
+				300: '#F69A9C',
+				400: '#E9676B',
+				500: '#D83B42',
+				600: '#C52C35',
+				700: '#A5222C',
+				800: '#871F27',
+				900: '#711D24'
+  			},
   			background: 'hsl(var(--background))',
   			foreground: 'hsl(var(--foreground))',
   			card: {
@@ -69,6 +96,10 @@ module.exports = {
   			mono: ['var(--font-mono)']
   		},
   		keyframes: {
+  			scanline: {
+  				'0%': { top: '-15%' },
+  				'100%': { top: '100%' }
+  			},
   			'accordion-down': {
   				from: {
   					height: '0'
@@ -87,6 +118,7 @@ module.exports = {
   			}
   		},
   		animation: {
+  			scanline: 'scanline 1.4s linear infinite',
   			'accordion-down': 'accordion-down 0.2s ease-out',
   			'accordion-up': 'accordion-up 0.2s ease-out'
   		}

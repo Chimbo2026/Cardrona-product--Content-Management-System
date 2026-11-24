@@ -1,0 +1,155 @@
+{
+  "name": "RefundRequest",
+  "description": "Guest refund request with reason, approval, provider result and manual fallback trail",
+  "type": "object",
+  "properties": {
+    "request_ref": {
+      "type": "string"
+    },
+    "booking_id": {
+      "type": "string"
+    },
+    "booking_ref": {
+      "type": "string"
+    },
+    "guest_name": {
+      "type": "string"
+    },
+    "guest_email": {
+      "type": "string"
+    },
+    "booking_amount": {
+      "type": "number"
+    },
+    "refund_type": {
+      "type": "string",
+      "enum": [
+        "Full",
+        "Partial"
+      ],
+      "default": "Full"
+    },
+    "amount": {
+      "type": "number"
+    },
+    "reason": {
+      "type": "string",
+      "enum": [
+        "Weather or mountain closure",
+        "Guest illness or injury",
+        "Change of plans",
+        "Duplicate or incorrect charge",
+        "Service issue",
+        "Agent cancellation",
+        "Other"
+      ]
+    },
+    "reason_detail": {
+      "type": "string"
+    },
+    "method": {
+      "type": "string",
+      "enum": [
+        "WeChat Pay",
+        "Visa/Mastercard"
+      ],
+      "default": "Visa/Mastercard"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "Pending",
+        "Approved",
+        "Rejected",
+        "Processing",
+        "Processed",
+        "Failed",
+        "Manual required"
+      ],
+      "default": "Pending"
+    },
+    "requested_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "decided_by": {
+      "type": "string"
+    },
+    "decided_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "decision_note": {
+      "type": "string"
+    },
+    "processed_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "processed_by": {
+      "type": "string"
+    },
+    "stripe_refund_id": {
+      "type": "string"
+    },
+    "stripe_refund_status": {
+      "type": "string",
+      "description": "Latest status reported by Stripe: pending, requires_action, succeeded, failed, canceled"
+    },
+    "stripe_refund_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "failure_reason": {
+      "type": "string",
+      "enum": [
+        "Refund window expired",
+        "Transaction not settled",
+        "Issuer declined",
+        "Insufficient provider balance",
+        "Provider error",
+        "Other"
+      ],
+      "description": "Why the provider or bank declined the refund credit"
+    },
+    "failure_detail": {
+      "type": "string"
+    },
+    "failed_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "resolution": {
+      "type": "string",
+      "enum": [
+        "Store credit",
+        "Bank transfer",
+        "Guest to contact bank",
+        "No action"
+      ],
+      "description": "Manual fallback chosen when the provider refund fails"
+    },
+    "resolution_note": {
+      "type": "string"
+    },
+    "resolved_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "resolved_by": {
+      "type": "string"
+    },
+    "released": {
+      "type": "boolean",
+      "default": false
+    }
+  },
+  "required": [
+    "request_ref",
+    "booking_id",
+    "guest_name",
+    "amount",
+    "reason",
+    "status"
+  ]
+}

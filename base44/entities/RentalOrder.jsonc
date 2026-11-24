@@ -1,0 +1,68 @@
+{
+  "name": "RentalOrder",
+  "description": "Demo equipment rental order",
+  "type": "object",
+  "properties": {
+    "order_ref": {
+      "type": "string"
+    },
+    "guest_id": {
+      "type": "string"
+    },
+    "guest_name": {
+      "type": "string"
+    },
+    "date_out": {
+      "type": "string",
+      "format": "date"
+    },
+    "date_due": {
+      "type": "string",
+      "format": "date"
+    },
+    "date_returned": {
+      "type": "string",
+      "format": "date"
+    },
+    "items_summary": {
+      "type": "string"
+    },
+    "equipment_ids": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "item_count": {
+      "type": "number",
+      "default": 1
+    },
+    "total": {
+      "type": "number"
+    },
+    "deposit": {
+      "type": "number",
+      "default": 0
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "Reserved",
+        "Issued",
+        "Returned",
+        "Overdue",
+        "Cancelled"
+      ]
+    },
+    "notes": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "order_ref",
+    "guest_name",
+    "date_out",
+    "date_due",
+    "status"
+  ]
+}

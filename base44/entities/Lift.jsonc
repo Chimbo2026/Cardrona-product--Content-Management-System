@@ -1,0 +1,48 @@
+{
+  "name": "Lift",
+  "description": "Demo lift or surface conveyor",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string"
+    },
+    "lift_type": {
+      "type": "string",
+      "enum": [
+        "Chairlift",
+        "Gondola",
+        "Surface Lift",
+        "Magic Carpet"
+      ]
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "Open",
+        "Closed",
+        "Delayed",
+        "Maintenance"
+      ]
+    },
+    "capacity_per_hour": {
+      "type": "number"
+    },
+    "opened_at": {
+      "type": "string"
+    },
+    "terrain": {
+      "type": "string"
+    },
+    "note": {
+      "type": "string"
+    },
+    "updated_by": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "name",
+    "lift_type",
+    "status"
+  ]
+}

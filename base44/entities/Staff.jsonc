@@ -1,0 +1,81 @@
+{
+  "name": "Staff",
+  "description": "Resort staff member (fictional demo data)",
+  "type": "object",
+  "properties": {
+    "staff_id": {
+      "type": "string"
+    },
+    "full_name": {
+      "type": "string"
+    },
+    "department": {
+      "type": "string",
+      "enum": [
+        "Lift Operations",
+        "Snowmaking",
+        "Snow School Instructors",
+        "Retail",
+        "Food & Beverage",
+        "First Aid",
+        "Guest Services",
+        "Rentals",
+        "Maintenance",
+        "Transport",
+        "Accommodation",
+        "Administration"
+      ]
+    },
+    "role": {
+      "type": "string"
+    },
+    "email": {
+      "type": "string"
+    },
+    "phone": {
+      "type": "string"
+    },
+    "location": {
+      "type": "string"
+    },
+    "availability": {
+      "type": "string",
+      "enum": [
+        "Full time",
+        "Part time",
+        "Casual",
+        "On call"
+      ]
+    },
+    "certification": {
+      "type": "string"
+    },
+    "cert_expiry": {
+      "type": "string",
+      "format": "date"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "On Duty",
+        "Off Duty",
+        "On Leave",
+        "Sick"
+      ]
+    },
+    "hourly_rate": {
+      "type": "number"
+    },
+    "start_date": {
+      "type": "string",
+      "format": "date"
+    }
+  },
+  "required": [
+    "staff_id",
+    "full_name",
+    "department",
+    "role",
+    "status"
+  ]
+}

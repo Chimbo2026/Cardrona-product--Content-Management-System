@@ -1,48 +1,53 @@
 import { Toaster } from "@/components/ui/toaster"
 import { QueryClientProvider } from '@tanstack/react-query'
 import { queryClientInstance } from '@/lib/query-client'
-import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
+import { BrowserRouter, HashRouter, Route, Routes, Navigate, useLocation } from 'react-router-dom';
 import PageNotFound from './lib/PageNotFound';
+import { LangProvider } from '@/lib/i18n';
 import { AuthProvider, useAuth } from '@/lib/AuthContext';
-import { LanguageProvider } from '@/lib/i18n/LanguageContext';
-import { AgentProvider } from '@/lib/AgentContext';
-import { CartProvider } from '@/lib/CartContext';
-import { PassCartProvider } from '@/lib/PassCartContext';
 import UserNotRegisteredError from '@/components/UserNotRegisteredError';
 import ScrollToTop from './components/ScrollToTop';
 import ProtectedRoute from '@/components/ProtectedRoute';
-import MiniShell from '@/components/MiniShell';
-import Home from '@/pages/Home';
-import Shop from '@/pages/Shop';
-import ShopNew from '@/pages/ShopNew';
-import ShopDetail from '@/pages/ShopDetail';
-import AdEntry from '@/pages/AdEntry';
-import Tickets from '@/pages/Tickets';
-import Lessons from '@/pages/Lessons';
-import BookLesson from '@/pages/BookLesson';
-import LessonCheckout from '@/pages/LessonCheckout';
-import FirstTimerLessons from '@/pages/FirstTimerLessons';
-import Rentals from '@/pages/Rentals';
-import PassCart from '@/pages/PassCart';
-import My from '@/pages/My';
-import Favorites from '@/pages/Favorites';
-import FeatureMap from '@/pages/FeatureMap';
-import AllFeatures from '@/pages/AllFeatures';
-import Info from '@/pages/Info';
-import Resort from '@/pages/Resort';
-import ProductDetail from '@/pages/ProductDetail';
-import ConfigurePass from '@/pages/ConfigurePass';
-import BikeRental from '@/pages/BikeRental';
-import BookingFlow from '@/pages/BookingFlow';
-import Orders from '@/pages/Orders';
-import OrderDetail from '@/pages/OrderDetail';
-import AgentCenter from '@/pages/AgentCenter';
-import AgentPortal from '@/pages/AgentPortal';
-import Admin from '@/pages/Admin';
 import Login from '@/pages/Login';
 import Register from '@/pages/Register';
 import ForgotPassword from '@/pages/ForgotPassword';
 import ResetPassword from '@/pages/ResetPassword';
+import AppShell from '@/components/layout/AppShell';
+import Dashboard from '@/pages/Dashboard';
+import CustomerHome from '@/pages/CustomerHome';
+import BookingDetail from '@/pages/BookingDetail';
+import BookingManagement from '@/pages/BookingManagement';
+import Agents from '@/pages/Agents';
+import Guests from '@/pages/Guests';
+import GuestDetail from '@/pages/GuestDetail';
+import Passes from '@/pages/Passes';
+import Ski from '@/pages/Ski';
+import Lessons from '@/pages/Lessons';
+import Operations from '@/pages/Operations';
+import Dining from '@/pages/Dining';
+import StaffPage from '@/pages/Staff';
+import Transport from '@/pages/Transport';
+import Accommodation from '@/pages/Accommodation';
+import Events from '@/pages/Events';
+import Reports from '@/pages/Reports';
+import Support from '@/pages/Support';
+import Analytics from '@/pages/Analytics';
+import ContentManagement from '@/pages/ContentManagement';
+import Payments from '@/pages/Payments';
+import Refunds from '@/pages/Refunds';
+import GiftVouchers from '@/pages/GiftVouchers';
+import Retail from '@/pages/Retail';
+import RetailInventory from '@/pages/RetailInventory';
+import OwnershipSupport from '@/pages/OwnershipSupport';
+import WebsiteBuilder from '@/pages/WebsiteBuilder';
+import SiteShell from '@/components/site/SiteShell';
+import SiteHome from '@/pages/SiteHome';
+import SitePageDetail from '@/pages/SitePageDetail';
+import CustomerExperience from '@/pages/CustomerExperience';
+import AdmissionsHome from '@/pages/AdmissionsHome';
+
+// GitHub Pages cannot serve application routes directly; keep them in the hash.
+const Router = import.meta.env.BASE_URL === '/Cardrona-project/' ? HashRouter : BrowserRouter;
 
 const AuthenticatedApp = () => {
   const { isLoadingAuth, isLoadingPublicSettings, authError, navigateToLogin } = useAuth();
@@ -75,43 +80,42 @@ const AuthenticatedApp = () => {
       <Route path="/forgot-password" element={<ForgotPassword />} />
       <Route path="/reset-password" element={<ResetPassword />} />
 
-      {/* 课程预约为宽屏双栏布局，独立于手机框架 */}
-      <Route path="/lessons/book" element={<BookLesson />} />
-      <Route path="/lessons/checkout" element={<LessonCheckout />} />
-
-      {/* 游客可直接浏览与下单，无需注册账号 */}
-      <Route element={<MiniShell />}>
-        <Route path="/" element={<Home />} />
-        <Route path="/shop" element={<Shop />} />
-        <Route path="/shop/new" element={<ShopNew />} />
-        <Route path="/shop/:id" element={<ShopDetail />} />
-        <Route path="/ad" element={<AdEntry />} />
-        <Route path="/tickets" element={<Tickets />} />
-        <Route path="/lessons" element={<Lessons />} />
-        <Route path="/lessons/first-timer" element={<FirstTimerLessons />} />
-        <Route path="/rentals" element={<Rentals />} />
-        <Route path="/pass-cart" element={<PassCart />} />
-        <Route path="/favorites" element={<Favorites />} />
-        <Route path="/info" element={<Info />} />
-        <Route path="/resort" element={<Resort />} />
-        <Route path="/map" element={<FeatureMap />} />
-        <Route path="/features" element={<AllFeatures />} />
-        <Route path="/product/:id" element={<ProductDetail />} />
-        <Route path="/configure/:id" element={<ConfigurePass />} />
-        <Route path="/bike/:id" element={<BikeRental />} />
-        <Route path="/booking" element={<Tickets />} />
-        <Route path="/booking/:id" element={<BookingFlow />} />
-        <Route path="/me" element={<My />} />
-        <Route path="/order/:id" element={<OrderDetail />} />
-        <Route path="/agent-portal" element={<AgentPortal />} />
-      </Route>
-
       <Route element={<ProtectedRoute unauthenticatedElement={<Navigate to="/login" replace />} />}>
-        <Route element={<MiniShell />}>
-          <Route path="/orders" element={<Orders />} />
-          <Route path="/agent" element={<AgentCenter />} />
+        <Route path="/" element={<CustomerHome />} />
+        <Route element={<AppShell />}>
+          <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/bookings" element={<Navigate to="/booking-management" replace />} />
+          <Route path="/bookings/:id" element={<BookingDetail />} />
+          <Route path="/booking-management" element={<BookingManagement />} />
+          <Route path="/payments" element={<Payments />} />
+          <Route path="/gift-vouchers" element={<GiftVouchers />} />
+          <Route path="/management/retail" element={<Retail />} />
+          <Route path="/retail-inventory" element={<RetailInventory />} />
+          <Route path="/refunds" element={<Refunds />} />
+          <Route path="/agents" element={<Agents />} />
+          <Route path="/guests" element={<Guests />} />
+          <Route path="/guests/:id" element={<GuestDetail />} />
+          <Route path="/management/passes" element={<Passes />} />
+          <Route path="/management/ski" element={<Ski />} />
+          <Route path="/management/lessons" element={<Lessons />} />
+          <Route path="/operations" element={<Operations />} />
+          <Route path="/dining" element={<Dining />} />
+          <Route path="/staff" element={<StaffPage />} />
+          <Route path="/management/transport" element={<Transport />} />
+          <Route path="/accommodation" element={<Accommodation />} />
+          <Route path="/events" element={<Events />} />
+          <Route path="/reports" element={<Reports />} />
+          <Route path="/management/support" element={<Support />} />
+          <Route path="/analytics" element={<Analytics />} />
+          <Route path="/content" element={<ContentManagement />} />
+          <Route path="/website-builder" element={<WebsiteBuilder />} />
+          <Route path="/ownership-support" element={<OwnershipSupport />} />
         </Route>
-        <Route path="/admin" element={<Admin />} />
+
+        <Route path="/site" element={<SiteShell />}>
+          <Route index element={<SiteHome />} />
+          <Route path=":slug" element={<SitePageDetail />} />
+        </Route>
       </Route>
 
       <Route path="*" element={<PageNotFound />} />
@@ -121,26 +125,36 @@ const AuthenticatedApp = () => {
 
 
 function App() {
+  return (
+    <LangProvider>
+      <QueryClientProvider client={queryClientInstance}>
+        <Router>
+          <ScrollToTop />
+          <AppRouteGate />
+          <Toaster />
+        </Router>
+      </QueryClientProvider>
+    </LangProvider>
+  );
+}
+
+function AppRouteGate() {
+  const { pathname } = useLocation();
+  const customerPaths = new Set([
+    '/', '/passes', '/configure-pass', '/configure-event', '/bike-configure', '/book', '/checkout', '/cart', '/shop', '/retail', '/rentals',
+    '/orders', '/account', '/group', '/login', '/register', '/lessons', '/transport', '/resort',
+    '/ski', '/support', '/snow-report', '/childcare', '/summer-shuttle',
+  ]);
+
+  if (pathname === '/admissions') return <AdmissionsHome />;
 
   return (
-    <AuthProvider>
-      <QueryClientProvider client={queryClientInstance}>
-        <LanguageProvider>
-          <AgentProvider>
-            <CartProvider>
-              <PassCartProvider>
-                <Router>
-                  <ScrollToTop />
-                  <AuthenticatedApp />
-                </Router>
-              </PassCartProvider>
-            </CartProvider>
-          </AgentProvider>
-          <Toaster />
-        </LanguageProvider>
-      </QueryClientProvider>
-    </AuthProvider>
-  )
+    customerPaths.has(pathname) ? <CustomerExperience /> : (
+      <AuthProvider>
+        <AuthenticatedApp />
+      </AuthProvider>
+    )
+  );
 }
 
 export default App

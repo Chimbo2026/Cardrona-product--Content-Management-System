@@ -1,0 +1,85 @@
+{
+  "name": "StripePayment",
+  "description": "Stripe hosted Checkout attempt for a resort booking, confirmed by Stripe webhook",
+  "type": "object",
+  "properties": {
+    "booking_id": {
+      "type": "string"
+    },
+    "booking_ref": {
+      "type": "string"
+    },
+    "guest_name": {
+      "type": "string"
+    },
+    "amount": {
+      "type": "number",
+      "description": "Charge amount in the presentment currency"
+    },
+    "currency": {
+      "type": "string",
+      "enum": [
+        "NZD",
+        "AUD",
+        "TWD",
+        "HKD",
+        "CNY"
+      ],
+      "default": "NZD"
+    },
+    "amount_nzd": {
+      "type": "number",
+      "description": "Booking total in NZD before conversion"
+    },
+    "fx_rate": {
+      "type": "number",
+      "description": "NZD to presentment currency rate applied at checkout"
+    },
+    "method": {
+      "type": "string",
+      "enum": [
+        "WeChat Pay",
+        "Card"
+      ],
+      "default": "Card"
+    },
+    "session_id": {
+      "type": "string"
+    },
+    "payment_intent_id": {
+      "type": "string"
+    },
+    "checkout_url": {
+      "type": "string"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "Pending",
+        "Paid",
+        "Expired",
+        "Failed",
+        "Refunded"
+      ],
+      "default": "Pending"
+    },
+    "paid_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "refunded_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "note": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "booking_id",
+    "amount",
+    "currency",
+    "method",
+    "status"
+  ]
+}

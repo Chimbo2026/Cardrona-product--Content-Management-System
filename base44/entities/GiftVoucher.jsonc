@@ -1,0 +1,109 @@
+{
+  "name": "GiftVoucher",
+  "description": "Gift voucher sold or redeemed through the booking or online purchase flow",
+  "type": "object",
+  "properties": {
+    "code": {
+      "type": "string",
+      "description": "Voucher code given to the recipient, e.g. GV-482913"
+    },
+    "purchaser_name": {
+      "type": "string",
+      "description": "Person who bought the voucher"
+    },
+    "guest_name": {
+      "type": "string",
+      "description": "Purchaser name kept for existing voucher reports"
+    },
+    "recipient_name": {
+      "type": "string",
+      "description": "Person the voucher was gifted to"
+    },
+    "email": {
+      "type": "string",
+      "format": "email"
+    },
+    "recipient_channel": {
+      "type": "string",
+      "enum": [
+        "WeChat",
+        "Email",
+        "Print"
+      ],
+      "default": "WeChat",
+      "description": "How the voucher was delivered to the recipient"
+    },
+    "message": {
+      "type": "string",
+      "description": "Personal greeting shown on the voucher card"
+    },
+    "amount": {
+      "type": "number",
+      "description": "Face value in NZD"
+    },
+    "balance": {
+      "type": "number",
+      "description": "Remaining value in NZD"
+    },
+    "currency": {
+      "type": "string",
+      "enum": [
+        "NZD",
+        "AUD",
+        "TWD",
+        "HKD",
+        "CNY"
+      ],
+      "default": "NZD"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "Active",
+        "Partially redeemed",
+        "Redeemed",
+        "Expired"
+      ],
+      "default": "Active"
+    },
+    "expires_at": {
+      "type": "string",
+      "format": "date"
+    },
+    "sold_on_ref": {
+      "type": "string",
+      "description": "Booking reference of the voucher sale"
+    },
+    "redeemed_on_ref": {
+      "type": "string",
+      "description": "Booking reference the voucher credit was applied to"
+    },
+    "channel": {
+      "type": "string",
+      "enum": [
+        "Online",
+        "Front desk",
+        "Agent"
+      ],
+      "default": "Online",
+      "description": "Sales channel the voucher was sold through"
+    },
+    "agent_name": {
+      "type": "string",
+      "description": "Travel trade agent who sold the voucher, when applicable"
+    },
+    "sold_by": {
+      "type": "string",
+      "description": "Staff member who processed the sale"
+    },
+    "notes": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "code",
+    "amount",
+    "balance",
+    "status"
+  ]
+}

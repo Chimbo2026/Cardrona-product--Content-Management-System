@@ -1,0 +1,75 @@
+{
+  "name": "Event",
+  "description": "Demo event or seasonal activity",
+  "type": "object",
+  "properties": {
+    "title": {
+      "type": "string"
+    },
+    "category": {
+      "type": "string",
+      "enum": [
+        "Mountain Biking",
+        "Mountain Carting",
+        "Sightseeing",
+        "Conference",
+        "Special Event",
+        "Winter Sport"
+      ]
+    },
+    "season": {
+      "type": "string",
+      "enum": [
+        "Winter",
+        "Summer"
+      ]
+    },
+    "date": {
+      "type": "string",
+      "format": "date"
+    },
+    "start_time": {
+      "type": "string"
+    },
+    "end_time": {
+      "type": "string"
+    },
+    "capacity": {
+      "type": "number"
+    },
+    "booked": {
+      "type": "number",
+      "default": 0
+    },
+    "attended": {
+      "type": "number",
+      "default": 0
+    },
+    "price": {
+      "type": "number"
+    },
+    "location": {
+      "type": "string"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "Scheduled",
+        "Running",
+        "Completed",
+        "Cancelled"
+      ]
+    },
+    "description": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "title",
+    "category",
+    "season",
+    "date",
+    "capacity",
+    "status"
+  ]
+}

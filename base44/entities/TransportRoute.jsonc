@@ -1,0 +1,70 @@
+{
+  "name": "TransportRoute",
+  "description": "Demonstration shuttle service schedule",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string"
+    },
+    "origin": {
+      "type": "string"
+    },
+    "destination": {
+      "type": "string"
+    },
+    "depart_time": {
+      "type": "string"
+    },
+    "return_time": {
+      "type": "string"
+    },
+    "capacity": {
+      "type": "number"
+    },
+    "booked": {
+      "type": "number",
+      "default": 0
+    },
+    "vehicle": {
+      "type": "string"
+    },
+    "driver": {
+      "type": "string"
+    },
+    "price": {
+      "type": "number",
+      "description": "Shuttle fare in NZD, shown as the starting price on the service list"
+    },
+    "description": {
+      "type": "string",
+      "description": "Guest-facing description of the shuttle service"
+    },
+    "image_url": {
+      "type": "string",
+      "description": "Photo of the shuttle service shown on the transport board"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "On Time",
+        "Delayed",
+        "Cancelled",
+        "Completed"
+      ]
+    },
+    "operating_days": {
+      "type": "string"
+    },
+    "notes": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "name",
+    "origin",
+    "destination",
+    "depart_time",
+    "capacity",
+    "status"
+  ]
+}

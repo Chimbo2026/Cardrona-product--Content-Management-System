@@ -1,0 +1,66 @@
+{
+  "name": "Transaction",
+  "description": "Demo sales transaction used for revenue reporting",
+  "type": "object",
+  "properties": {
+    "date": {
+      "type": "string",
+      "format": "date"
+    },
+    "reference": {
+      "type": "string"
+    },
+    "category": {
+      "type": "string",
+      "enum": [
+        "Lift Passes",
+        "Lessons",
+        "Rentals",
+        "Accommodation",
+        "Food & Beverage",
+        "Events",
+        "Transport"
+      ]
+    },
+    "amount": {
+      "type": "number"
+    },
+    "payment_method": {
+      "type": "string",
+      "enum": [
+        "Card",
+        "Eftpos",
+        "Online",
+        "Account",
+        "Cash"
+      ]
+    },
+    "booking_ref": {
+      "type": "string"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "Paid",
+        "Refunded"
+      ]
+    },
+    "season": {
+      "type": "string",
+      "enum": [
+        "Winter",
+        "Summer"
+      ]
+    },
+    "notes": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "date",
+    "reference",
+    "category",
+    "amount",
+    "status"
+  ]
+}

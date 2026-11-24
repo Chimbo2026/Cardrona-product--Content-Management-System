@@ -1,0 +1,90 @@
+{
+  "name": "RetailProduct",
+  "description": "Retail product mirrored from the Cardrona online shop, with staff-managed stock and pricing",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "Product name as shown on the Cardrona shop"
+    },
+    "sku": {
+      "type": "string",
+      "description": "Internal stock code used by the retail desk"
+    },
+    "vendor": {
+      "type": "string",
+      "description": "Brand, e.g. The North Face, Burton, Leatt"
+    },
+    "category": {
+      "type": "string",
+      "description": "Product type, e.g. Jackets, Beanies, Bike Protection"
+    },
+    "price": {
+      "type": "number",
+      "description": "Retail price in NZD"
+    },
+    "compare_at_price": {
+      "type": "number",
+      "description": "Original price in NZD when the product is discounted"
+    },
+    "cost_price": {
+      "type": "number",
+      "description": "Wholesale cost in NZD used for margin reporting"
+    },
+    "currency": {
+      "type": "string",
+      "default": "NZD"
+    },
+    "stock_on_hand": {
+      "type": "number",
+      "default": 0,
+      "description": "Units currently on the shelf at the retail store"
+    },
+    "reorder_level": {
+      "type": "number",
+      "default": 5,
+      "description": "Stock level at which staff should reorder"
+    },
+    "image_url": {
+      "type": "string"
+    },
+    "product_url": {
+      "type": "string",
+      "description": "Link to the product on shop.cardrona.com"
+    },
+    "tags": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "season": {
+      "type": "string",
+      "enum": [
+        "Winter",
+        "Summer",
+        "All year"
+      ],
+      "default": "Winter"
+    },
+    "is_new": {
+      "type": "boolean",
+      "default": true
+    },
+    "active": {
+      "type": "boolean",
+      "default": true
+    },
+    "notes": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "name",
+    "vendor",
+    "category",
+    "price",
+    "image_url",
+    "product_url"
+  ]
+}
