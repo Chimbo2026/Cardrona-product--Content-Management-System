@@ -37,8 +37,8 @@ node --test tests/localClient.test.mjs
 
 ## GitHub Pages
 
-In GitHub Settings → Pages, select GitHub Actions as the source. The workflow in `.github/workflows/deploy.yml` builds and publishes `dist/` on pushes to `main`, or when run manually in Actions. It sets `GITHUB_PAGES=true` to build with the `/Cardrona-project/` asset path and hash routing so refreshing an application page works on GitHub Pages. Local development continues to use normal routes.
+In GitHub Settings → Pages, select GitHub Actions as the source. The workflow in `.github/workflows/deploy.yml` builds and publishes `dist/` on pushes to `main`, or when run manually in Actions. It sets `GITHUB_PAGES=true` to build with the `/Cardrona-product--Content-Management-System/` asset path and hash routing so refreshing an application page works on GitHub Pages. Local development continues to use normal routes.
 
-To check this build locally, run `GITHUB_PAGES=true npm run build`, then `npm run preview` and open `http://localhost:4173/Cardrona-project/`.
+To check this build locally, run `GITHUB_PAGES=true npm run build`, then `npm run preview` and open `http://localhost:4173/Cardrona-product--Content-Management-System/`.
 
 The `base44/` folder preserves the old entity definitions and function source as migration references; it is not used by the local app.

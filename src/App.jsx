@@ -47,7 +47,7 @@ import CustomerExperience from '@/pages/CustomerExperience';
 import AdmissionsHome from '@/pages/AdmissionsHome';
 
 // GitHub Pages cannot serve application routes directly; keep them in the hash.
-const Router = import.meta.env.BASE_URL === '/Cardrona-project/' ? HashRouter : BrowserRouter;
+const Router = import.meta.env.BASE_URL === '/Cardrona-product--Content-Management-System/' ? HashRouter : BrowserRouter;
 
 const AuthenticatedApp = () => {
   const { isLoadingAuth, isLoadingPublicSettings, authError, navigateToLogin } = useAuth();
