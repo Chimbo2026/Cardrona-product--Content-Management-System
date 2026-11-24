@@ -1,0 +1,66 @@
+{
+  "name": "Agent",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string"
+    },
+    "company": {
+      "type": "string"
+    },
+    "email": {
+      "type": "string"
+    },
+    "phone": {
+      "type": "string"
+    },
+    "region": {
+      "type": "string",
+      "enum": [
+        "\u65b0\u897f\u5170",
+        "\u6fb3\u5927\u5229\u4e9a",
+        "\u53f0\u6e7e",
+        "\u9999\u6e2f",
+        "\u4e2d\u56fd\u5927\u9646",
+        "\u5176\u4ed6"
+      ]
+    },
+    "agent_code": {
+      "type": "string",
+      "description": "\u4ee3\u7406\u4e13\u5c5e\u767b\u5f55\u7801\uff0c\u4f8b\u5982 AGENT-10"
+    },
+    "discount_rate": {
+      "type": "number",
+      "default": 10,
+      "description": "\u4ee3\u7406\u534f\u8bae\u6298\u6263\u767e\u5206\u6bd4\uff0c\u4f8b\u5982 10 \u8868\u793a 9 \u6298"
+    },
+    "is_active": {
+      "type": "boolean",
+      "default": true,
+      "description": "\u505c\u7528\u540e\u65e0\u6cd5\u767b\u5f55"
+    },
+    "commission_rate": {
+      "type": "number",
+      "default": 8
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "pending",
+        "active",
+        "suspended"
+      ],
+      "default": "pending"
+    },
+    "notes": {
+      "type": "string"
+    },
+    "joined_date": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "name",
+    "email"
+  ]
+}

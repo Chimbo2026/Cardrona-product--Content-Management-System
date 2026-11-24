@@ -1,0 +1,113 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;1,500;1,600&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 210 28% 97%;
+    --foreground: 218 27% 16%;
+    --card: 0 0% 100%;
+    --card-foreground: 218 27% 16%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 218 27% 16%;
+    --primary: 354 82% 48%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 211 26% 93%;
+    --secondary-foreground: 218 25% 23%;
+    --muted: 211 25% 95%;
+    --muted-foreground: 216 14% 45%;
+    --accent: 211 28% 92%;
+    --accent-foreground: 214 35% 31%;
+    --destructive: 0 72% 45%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 214 22% 87%;
+    --input: 214 22% 87%;
+    --ring: 354 78% 54%;
+    --chart-1: 354 82% 48%;
+    --chart-2: 213 32% 39%;
+    --chart-3: 198 42% 52%;
+    --chart-4: 174 34% 42%;
+    --chart-5: 225 28% 55%;
+    --radius: 0.85rem;
+    --font-heading: 'Playfair Display', 'Noto Serif SC', 'Songti SC', Georgia, serif;
+    --font-body: 'Noto Sans SC', -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif;
+    --font-display: 'Playfair Display', 'Noto Serif SC', 'Songti SC', Georgia, serif;
+    --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+    --sidebar-background: 0 0% 98%;
+    --sidebar-foreground: 240 5.3% 26.1%;
+    --sidebar-primary: 240 5.9% 10%;
+    --sidebar-primary-foreground: 0 0% 98%;
+    --sidebar-accent: 240 4.8% 95.9%;
+    --sidebar-accent-foreground: 240 5.9% 10%;
+    --sidebar-border: 220 13% 91%;
+    --sidebar-ring: 217.2 91.2% 59.8%;
+  }
+
+  .dark {
+    --background: 220 16% 8%;
+    --foreground: 24 20% 96%;
+    --card: 220 14% 11%;
+    --card-foreground: 24 20% 96%;
+    --popover: 220 14% 11%;
+    --popover-foreground: 24 20% 96%;
+    --primary: 354 78% 55%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 220 12% 17%;
+    --secondary-foreground: 24 20% 96%;
+    --muted: 220 12% 17%;
+    --muted-foreground: 220 8% 66%;
+    --accent: 212 25% 21%;
+    --accent-foreground: 210 24% 92%;
+    --destructive: 0 62% 45%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 220 12% 20%;
+    --input: 220 12% 20%;
+    --ring: 354 65% 60%;
+    --chart-1: 354 78% 55%;
+    --chart-2: 215 22% 55%;
+    --chart-3: 38 90% 58%;
+    --chart-4: 174 42% 48%;
+    --chart-5: 275 34% 62%;
+    --sidebar-background: 240 5.9% 10%;
+    --sidebar-foreground: 240 4.8% 95.9%;
+    --sidebar-primary: 224.3 76.3% 48%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 240 3.7% 15.9%;
+    --sidebar-accent-foreground: 240 4.8% 95.9%;
+    --sidebar-border: 240 3.7% 15.9%;
+    --sidebar-ring: 217.2 91.2% 59.8%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+
+  body {
+    @apply bg-background text-foreground font-body;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  h1, h2, h3, h4 {
+    @apply font-heading;
+    letter-spacing: -0.01em;
+  }
+}
+
+@layer utilities {
+  .scrollbar-none {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+  .scrollbar-none::-webkit-scrollbar {
+    display: none;
+  }
+  .snow-ridge {
+    background-image: radial-gradient(120% 90% at 20% 0%, rgba(255, 255, 255, 0.18), transparent 60%),
+      linear-gradient(145deg, #3f5872 0%, #2c4058 54%, #1e2c40 100%);
+  }
+}

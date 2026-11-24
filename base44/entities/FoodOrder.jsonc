@@ -1,0 +1,99 @@
+{
+  "name": "FoodOrder",
+  "type": "object",
+  "properties": {
+    "order_no": {
+      "type": "string"
+    },
+    "cafe_id": {
+      "type": "string"
+    },
+    "cafe_name": {
+      "type": "string"
+    },
+    "items": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "dish_id": {
+            "type": "string"
+          },
+          "name_zh": {
+            "type": "string"
+          },
+          "name_en": {
+            "type": "string"
+          },
+          "qty": {
+            "type": "number"
+          },
+          "unit_price": {
+            "type": "number"
+          },
+          "amount": {
+            "type": "number"
+          },
+          "note": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "total_amount": {
+      "type": "number"
+    },
+    "currency": {
+      "type": "string",
+      "default": "NZD"
+    },
+    "guest_name": {
+      "type": "string"
+    },
+    "guest_phone": {
+      "type": "string"
+    },
+    "pickup_time": {
+      "type": "string"
+    },
+    "note": {
+      "type": "string"
+    },
+    "payment_method": {
+      "type": "string",
+      "enum": [
+        "pay_at_counter",
+        "wechat_pay"
+      ],
+      "default": "pay_at_counter"
+    },
+    "payment_status": {
+      "type": "string",
+      "enum": [
+        "unpaid",
+        "paid",
+        "refunded"
+      ],
+      "default": "unpaid"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "pending",
+        "preparing",
+        "ready",
+        "completed",
+        "cancelled"
+      ],
+      "default": "pending"
+    },
+    "source": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "order_no",
+    "cafe_name",
+    "total_amount"
+  ]
+}

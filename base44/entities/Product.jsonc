@@ -1,0 +1,184 @@
+{
+  "name": "Product",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "\u4e2d\u6587\u540d\u79f0\uff08\u517c\u5bb9\u65e7\u5b57\u6bb5\uff0c\u7b49\u4e8e name_zh\uff09"
+    },
+    "name_zh": {
+      "type": "string"
+    },
+    "name_en": {
+      "type": "string"
+    },
+    "category": {
+      "type": "string",
+      "enum": [
+        "\u95e8\u7968",
+        "\u8bfe\u7a0b",
+        "\u79df\u8d41",
+        "\u5957\u9910"
+      ]
+    },
+    "resort": {
+      "type": "string",
+      "enum": [
+        "\u5361\u5fb7\u7f57\u7eb3",
+        "\u4e09\u9525\u5c71",
+        "\u53cc\u96ea\u573a"
+      ],
+      "default": "\u53cc\u96ea\u573a",
+      "description": "\u9002\u7528\u96ea\u573a\uff1b\u53cc\u96ea\u573a\u8868\u793a\u4e24\u5730\u901a\u7528"
+    },
+    "summary": {
+      "type": "string"
+    },
+    "summary_zh": {
+      "type": "string"
+    },
+    "summary_en": {
+      "type": "string"
+    },
+    "description": {
+      "type": "string"
+    },
+    "description_zh": {
+      "type": "string"
+    },
+    "description_en": {
+      "type": "string"
+    },
+    "price": {
+      "type": "number"
+    },
+    "price_unit": {
+      "type": "string"
+    },
+    "price_unit_en": {
+      "type": "string"
+    },
+    "duration": {
+      "type": "string"
+    },
+    "duration_en": {
+      "type": "string"
+    },
+    "audience": {
+      "type": "string"
+    },
+    "audience_en": {
+      "type": "string"
+    },
+    "includes": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "includes_en": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "image_url": {
+      "type": "string"
+    },
+    "capacity_per_day": {
+      "type": "number"
+    },
+    "peak_multiplier": {
+      "type": "number",
+      "default": 1
+    },
+    "aspenware_product_id": {
+      "type": "string"
+    },
+    "pass_season": {
+      "type": "string",
+      "enum": [
+        "winter",
+        "summer"
+      ],
+      "default": "winter",
+      "description": "\u5b63\u7968\u6240\u5c5e\u5b63\u8282\uff0c\u51b3\u5b9a\u5b63\u7968\u9875\u5c55\u793a\u54ea\u4e00\u7c7b\u5b63\u7968\u5361"
+    },
+    "pass_prices": {
+      "type": "object",
+      "description": "\u8be5\u5b63\u7968\u4ea7\u54c1\u5404\u5e74\u9f84\u6bb5\u4ef7\u683c\uff08NZD\uff09\uff0c\u53ef\u5728\u540e\u53f0\u4ea7\u54c1\u7f16\u8f91\u4e2d\u76f4\u63a5\u4fee\u6539",
+      "properties": {
+        "adult": {
+          "type": "number"
+        },
+        "child": {
+          "type": "number"
+        },
+        "senior": {
+          "type": "number"
+        },
+        "under6": {
+          "type": "number"
+        },
+        "over75": {
+          "type": "number"
+        }
+      }
+    },
+    "rental_kind": {
+      "type": "string",
+      "enum": [
+        "none",
+        "bike"
+      ],
+      "default": "none",
+      "description": "\u79df\u8d41\u914d\u7f6e\u7c7b\u578b\uff1abike \u8868\u793a\u8fdb\u5165\u5c71\u5730\u8f66\u79df\u8d41\u914d\u7f6e\u9875"
+    },
+    "bike_types": {
+      "type": "array",
+      "description": "\u5c71\u5730\u8f66\u79df\u8d41\u53ef\u9009\u8f66\u578b\u53ca\u5176\u5168\u4ef7\uff08NZD\uff09",
+      "items": {
+        "type": "object",
+        "properties": {
+          "key": {
+            "type": "string"
+          },
+          "label_zh": {
+            "type": "string"
+          },
+          "label_en": {
+            "type": "string"
+          },
+          "price": {
+            "type": "number"
+          }
+        }
+      }
+    },
+    "lesson_kind": {
+      "type": "string",
+      "enum": [
+        "general",
+        "first_timer"
+      ],
+      "default": "general",
+      "description": "\u8bfe\u7a0b\u5f52\u7c7b\uff1afirst_timer \u8868\u793a\u9996\u65e5\u521d\u5b66\u8005\u5957\u9910\uff0c\u4ec5\u5728\u521d\u6b21\u6ed1\u96ea\u9875\u9762\u5c55\u793a"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "active",
+        "inactive"
+      ],
+      "default": "active"
+    },
+    "sort_order": {
+      "type": "number"
+    }
+  },
+  "required": [
+    "name",
+    "category",
+    "price"
+  ]
+}
