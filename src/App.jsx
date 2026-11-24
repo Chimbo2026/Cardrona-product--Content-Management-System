@@ -47,7 +47,8 @@ import CustomerExperience from '@/pages/CustomerExperience';
 import AdmissionsHome from '@/pages/AdmissionsHome';
 
 // GitHub Pages cannot serve application routes directly; keep them in the hash.
-const Router = import.meta.env.BASE_URL === '/Cardrona-product--Content-Management-System/' ? HashRouter : BrowserRouter;
+const IS_GITHUB_PAGES = import.meta.env.BASE_URL === '/Cardrona-product--Content-Management-System/';
+const Router = IS_GITHUB_PAGES ? HashRouter : BrowserRouter;
 
 const AuthenticatedApp = () => {
   const { isLoadingAuth, isLoadingPublicSettings, authError, navigateToLogin } = useAuth();
@@ -146,6 +147,7 @@ function AppRouteGate() {
     '/ski', '/support', '/snow-report', '/childcare', '/summer-shuttle',
   ]);
 
+  if (IS_GITHUB_PAGES && pathname === '/') return <Navigate to="/management/lessons" replace />;
   if (pathname === '/admissions') return <AdmissionsHome />;
 
   return (
