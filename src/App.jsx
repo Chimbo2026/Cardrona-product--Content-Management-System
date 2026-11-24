@@ -89,23 +89,23 @@ const AuthenticatedApp = () => {
           <Route path="/booking-management" element={<BookingManagement />} />
           <Route path="/payments" element={<Payments />} />
           <Route path="/gift-vouchers" element={<GiftVouchers />} />
-          <Route path="/retail" element={<Retail />} />
+          <Route path="/management/retail" element={<Retail />} />
           <Route path="/retail-inventory" element={<RetailInventory />} />
           <Route path="/refunds" element={<Refunds />} />
           <Route path="/agents" element={<Agents />} />
           <Route path="/guests" element={<Guests />} />
           <Route path="/guests/:id" element={<GuestDetail />} />
-          <Route path="/passes" element={<Passes />} />
-          <Route path="/ski" element={<Ski />} />
-          <Route path="/lessons" element={<Lessons />} />
+          <Route path="/management/passes" element={<Passes />} />
+          <Route path="/management/ski" element={<Ski />} />
+          <Route path="/management/lessons" element={<Lessons />} />
           <Route path="/operations" element={<Operations />} />
           <Route path="/dining" element={<Dining />} />
           <Route path="/staff" element={<StaffPage />} />
-          <Route path="/transport" element={<Transport />} />
+          <Route path="/management/transport" element={<Transport />} />
           <Route path="/accommodation" element={<Accommodation />} />
           <Route path="/events" element={<Events />} />
           <Route path="/reports" element={<Reports />} />
-          <Route path="/support" element={<Support />} />
+          <Route path="/management/support" element={<Support />} />
           <Route path="/analytics" element={<Analytics />} />
           <Route path="/content" element={<ContentManagement />} />
           <Route path="/website-builder" element={<WebsiteBuilder />} />

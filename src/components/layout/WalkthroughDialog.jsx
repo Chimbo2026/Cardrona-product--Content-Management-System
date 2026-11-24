@@ -9,8 +9,8 @@ export default function WalkthroughDialog({ open, onOpenChange }) {
   const STEPS = [
     { path: '/dashboard', label: `1 · ${t('管理驾驶舱', 'Executive dashboard')}`, detail: t('从今日预订、营收、人员和山况总览开始。', 'Start with today’s bookings, revenue, staffing and mountain status.') },
     { path: '/bookings', label: `2 · ${t('预订与宾客', 'Bookings & guests')}`, detail: t('创建一条预订，打开详情查看支付与宾客历史。', 'Create a booking, then open it to see payments and guest history.') },
-    { path: '/passes', label: `3 · ${t('缆车票', 'Lift passes')}`, detail: t('发放一张缆车票，观察使用中、未使用与已过期数量变化。', 'Issue a pass and watch active, unused and expired counts move.') },
-    { path: '/lessons', label: `4 · ${t('课程与排班', 'Lessons & rosters')}`, detail: t('查看每日课程表、容量预警与教练时间冲突。', 'Review the daily roster, capacity warnings and instructor overlaps.') },
+    { path: '/management/passes', label: `3 · ${t('缆车票', 'Lift passes')}`, detail: t('发放一张缆车票，观察使用中、未使用与已过期数量变化。', 'Issue a pass and watch active, unused and expired counts move.') },
+    { path: '/management/lessons', label: `4 · ${t('课程与排班', 'Lessons & rosters')}`, detail: t('查看每日课程表、容量预警与教练时间冲突。', 'Review the daily roster, capacity warnings and instructor overlaps.') },
     { path: '/operations', label: `5 · ${t('山地运营', 'Mountain operations')}`, detail: t('调整缆车与雪道状态，记录天气观测并处理事件。', 'Change lift and trail status, log a weather observation and resolve an incident.') },
     { path: '/reports', label: `6 · ${t('财务报告', 'Financial Reporting')}`, detail: t('筛选演示交易数据并导出品类汇总。', 'Filter the demo transactions and export the category summary.') },
   ];

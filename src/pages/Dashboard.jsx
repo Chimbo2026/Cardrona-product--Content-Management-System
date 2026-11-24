@@ -114,7 +114,7 @@ const demo = {
     { time: '16:00', title: 'Lift close down checklist', meta: 'All lifts · supervisors', tag: 'Operations' },
   ],
   urgent: [
-    { id: 3, title: 'Instructor double booking', meta: 'Sofia Marsh · 11:00 & 11:15', severity: 'High', to: '/lessons' },
+    { id: 3, title: 'Instructor double booking', meta: 'Sofia Marsh · 11:00 & 11:15', severity: 'High', to: '/management/lessons' },
   ],
   activity: [
     { who: 'M. Tipler', action: 'closed Trail 12 for grooming', time: '8 min ago' },

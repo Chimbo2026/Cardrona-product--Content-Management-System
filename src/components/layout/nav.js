@@ -55,22 +55,22 @@ export const NAV_SECTIONS = [
   {
     label: ['零售与缆车票', 'Retail & Passes'],
     items: [
-      { key: 'retail', label: ['零售商店', 'Retail Store'], path: '/retail', icon: Store },
+      { key: 'retail', label: ['零售商店', 'Retail Store'], path: '/management/retail', icon: Store },
       { key: 'retail_inventory', label: ['零售库存', 'Retail Inventory'], path: '/retail-inventory', icon: Warehouse },
-      { key: 'passes', label: ['缆车票', 'Lift Passes'], path: '/passes', icon: Ticket },
+      { key: 'passes', label: ['缆车票', 'Lift Passes'], path: '/management/passes', icon: Ticket },
     ],
   },
   {
     label: ['山地运营', 'On-Mountain'],
     items: [
-      { key: 'ski', label: ['滑雪', 'Ski'], path: '/ski', icon: Snowflake },
-      { key: 'lessons', label: ['滑雪学校', 'Snow School'], path: '/lessons', icon: GraduationCap },
+      { key: 'ski', label: ['滑雪', 'Ski'], path: '/management/ski', icon: Snowflake },
+      { key: 'lessons', label: ['滑雪学校', 'Snow School'], path: '/management/lessons', icon: GraduationCap },
     ],
   },
   {
     label: ['配套服务', 'Services'],
     items: [
-      { key: 'transport', label: ['交通接驳', 'Transport'], path: '/transport', icon: Bus },
+      { key: 'transport', label: ['交通接驳', 'Transport'], path: '/management/transport', icon: Bus },
       { key: 'events', label: ['活动日历', 'Events & Activities'], path: '/events', icon: PartyPopper },
       { key: 'dining', label: ['餐厅与咖啡厅', 'Restaurants & Cafés'], path: '/dining', icon: UtensilsCrossed },
     ],

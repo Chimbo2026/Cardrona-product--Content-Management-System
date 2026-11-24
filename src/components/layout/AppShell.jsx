@@ -66,7 +66,7 @@ function Shell() {
           <p className="max-w-3xl">
             {t('Cardrona Resort Management · 演示原型，数据均为虚构示例，并非 Cardrona Alpine Resort 官方系统。', 'Cardrona Resort Management · Demonstration prototype with fictional sample data. Not an official Cardrona Alpine Resort system.')}
           </p>
-          <Link to="/support" className="font-medium text-forest-700 transition-colors hover:text-forest-900">
+          <Link to="/management/support" className="font-medium text-forest-700 transition-colors hover:text-forest-900">
             {t('支持与数据所有权', 'Support & Data Ownership')}
           </Link>
         </footer>

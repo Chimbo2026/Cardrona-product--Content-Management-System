@@ -122,7 +122,7 @@ export default function GlobalSearch({ open, onOpenChange }) {
               {results.passes.map((p) => (
                 <Row
                   key={p.id}
-                  onClick={() => go('/passes')}
+                  onClick={() => go('/management/passes')}
                   title={`${p.pass_number} · ${p.guest_name}`}
                   meta={`${tx(p.pass_type, lang)} · ${tx(p.usage_status, lang)}`}
                 />

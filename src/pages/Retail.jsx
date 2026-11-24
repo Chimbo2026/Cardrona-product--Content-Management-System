@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { ArrowUpRight, Store } from 'lucide-react';
 import PageHeader from '@/components/common/PageHeader';
 import EmptyState from '@/components/common/EmptyState';
@@ -10,6 +10,7 @@ import { useLang } from '@/lib/i18n';
 import { NZD, num } from '@/lib/format';
 
 const SHOP_URL = 'https://shop.cardrona.com/collections/shop-new-arrivals';
+const PAGE_SIZE = 15;
 
 export default function Retail() {
   const { t } = useLang();
@@ -20,6 +21,11 @@ export default function Retail() {
   const [brand, setBrand] = useState('All');
   const [category, setCategory] = useState('All');
   const [sort, setSort] = useState('featured');
+  const [displayedCount, setDisplayedCount] = useState(PAGE_SIZE);
+
+  useEffect(() => {
+    setDisplayedCount(PAGE_SIZE);
+  }, [search, sport, brand, category, sort]);
 
   const brands = useMemo(() => [...new Set(products.map((p) => p.vendor).filter(Boolean))].sort(), [products]);
   const categories = useMemo(() => [...new Set(products.map((p) => p.category).filter(Boolean))].sort(), [products]);
@@ -42,6 +48,7 @@ export default function Retail() {
   }, [products, search, sport, brand, category, sort]);
 
   const lowestPrice = products.length ? Math.min(...products.map((p) => Number(p.price) || 0)) : 0;
+  const displayedProducts = visible.slice(0, displayedCount);
 
   return (
     <div>
@@ -105,10 +112,22 @@ export default function Retail() {
         <>
           <p className="mb-2 text-[11px] text-muted-foreground">{t(`显示 ${visible.length} 件商品`, `Showing ${visible.length} products`)}</p>
           <div className="grid grid-cols-2 gap-3 md:grid-cols-3 xl:grid-cols-5">
-            {visible.map((product) => (
+            {displayedProducts.map((product) => (
               <RetailProductCard key={product.id} product={product} />
             ))}
           </div>
+          {displayedCount < visible.length && (
+            <div className="mt-4 flex items-center justify-center gap-3 text-[11px] text-muted-foreground">
+              <span>{t(`显示 ${displayedProducts.length} / ${visible.length} 件商品`, `Showing ${displayedProducts.length} of ${visible.length} products`)}</span>
+              <button
+                type="button"
+                onClick={() => setDisplayedCount((count) => Math.min(count + PAGE_SIZE, visible.length))}
+                className="rounded-lg border border-border bg-card px-3 py-2 font-medium text-forest-800 shadow-sm transition-colors hover:bg-forest-50"
+              >
+                {t(`再显示 ${Math.min(PAGE_SIZE, visible.length - displayedCount)} 件`, `Show ${Math.min(PAGE_SIZE, visible.length - displayedCount)} more`)}
+              </button>
+            </div>
+          )}
         </>
       ) : (
         <EmptyState
