@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
-import { Menu, Search, Mountain, HelpCircle } from 'lucide-react';
+import { Menu, Search, HelpCircle } from 'lucide-react';
 import { ALL_NAV_ITEMS, navLabel } from './nav';
 import { useLang } from '@/lib/i18n';
 import { cn } from '@/lib/utils';
@@ -8,6 +8,7 @@ import GlobalSearch from './GlobalSearch';
 import WalkthroughDialog from './WalkthroughDialog';
 import NotificationsMenu from './NotificationsMenu';
 import ProfileMenu from './ProfileMenu';
+import BrandMark from './BrandMark';
 
 export default function Topbar({ onOpenMobile }) {
   const [searchOpen, setSearchOpen] = useState(false);
@@ -43,7 +44,7 @@ export default function Topbar({ onOpenMobile }) {
         </button>
 
         <div className="flex min-w-0 items-center gap-2 md:hidden">
-          <Mountain className="h-4 w-4 text-forest-700" />
+          <BrandMark compact />
           <span className="truncate font-heading text-[13px] font-semibold text-forest-900">
             Cardrona
           </span>

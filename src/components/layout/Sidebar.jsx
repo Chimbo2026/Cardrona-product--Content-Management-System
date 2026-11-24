@@ -1,9 +1,10 @@
 import { NavLink } from 'react-router-dom';
-import { Mountain, PanelLeftClose, PanelLeftOpen, X } from 'lucide-react';
+import { PanelLeftClose, PanelLeftOpen, X } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { NAV_SECTIONS, navLabel } from './nav';
 import { useRole } from '@/lib/RoleContext';
 import { useLang } from '@/lib/i18n';
+import BrandMark from './BrandMark';
 
 export default function Sidebar({ collapsed, mobileOpen, onToggleCollapse, onCloseMobile }) {
   const { can, roleLabel } = useRole();
@@ -25,22 +26,15 @@ export default function Sidebar({ collapsed, mobileOpen, onToggleCollapse, onClo
           mobileOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'
         )}
       >
-        <div className="flex h-16 items-center gap-2.5 border-b border-white/10 px-4">
-          <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-ice-500/15 text-ice-300 ring-1 ring-inset ring-ice-400/25">
-            <Mountain className="h-[18px] w-[18px]" strokeWidth={2} />
-          </span>
+        <div className="flex h-16 items-center gap-2.5 border-b border-white/10 px-3">
+          <BrandMark compact={collapsed} />
           {!collapsed && (
-            <div className="min-w-0 flex-1">
-              <p className="truncate font-heading text-[13.5px] font-semibold leading-tight text-white">
-                Cardrona Resort
+            <div className="min-w-0 flex-1 self-start pt-3.5">
+              <p className="truncate text-[9px] font-semibold uppercase leading-tight tracking-[0.18em] text-forest-200/90">
+                {t('管理系统', 'Management')}
               </p>
-              <span className="flex items-center gap-1.5">
-                <p className="text-[9.5px] font-semibold uppercase tracking-[0.18em] text-ice-300/80">
-                  {t('度假村管理系统', 'Management')}
-                </p>
-                <span className="rounded bg-white/10 px-1 py-px text-[8px] font-bold uppercase tracking-[0.12em] text-white/70 ring-1 ring-inset ring-white/15">
-                  {t('演示', 'Demo')}
-                </span>
+              <span className="mt-1 inline-flex rounded bg-white/10 px-1 py-px text-[8px] font-bold uppercase tracking-[0.12em] text-white/75 ring-1 ring-inset ring-white/15">
+                {t('演示', 'Demo')}
               </span>
             </div>
           )}

@@ -11,32 +11,32 @@ module.exports = {
   			sm: 'calc(var(--radius) - 4px)'
   		},
   		colors: {
-  			// Brand red scale — named `forest` for backwards compatibility across the app.
+			// Neutral alpine slate scale — named `forest` for backwards compatibility.
   			forest: {
-  				50: '#FDF5F4',
-  				100: '#FBE7E4',
-  				200: '#F6CBC5',
-  				300: '#EDA7A0',
-  				400: '#DE7A70',
-  				500: '#C94F45',
-  				600: '#B0342B',
-  				700: '#8E2721',
-  				800: '#6E1F1B',
-  				900: '#4D1613',
-  				950: '#2E0C0A'
+				50: '#F5F7F9',
+				100: '#E9EEF2',
+				200: '#D4DDE5',
+				300: '#B5C1CC',
+				400: '#8999A7',
+				500: '#657582',
+				600: '#4B5965',
+				700: '#394550',
+				800: '#28333D',
+				900: '#1C252D',
+				950: '#11181E'
   			},
-  			// Warm brand accent — named `ice` for backwards compatibility.
+			// Cardrona red accent — named `ice` for backwards compatibility.
   			ice: {
-  				50: '#FFF7F3',
-  				100: '#FFEBE3',
-  				200: '#FFD6C7',
-  				300: '#FFB59F',
-  				400: '#FF8C6E',
-  				500: '#F2653F',
-  				600: '#D94A26',
-  				700: '#B2391D',
-  				800: '#8F2F1A',
-  				900: '#74281A'
+				50: '#FFF2F2',
+				100: '#FFE2E2',
+				200: '#FFC8C8',
+				300: '#F69A9C',
+				400: '#E9676B',
+				500: '#D83B42',
+				600: '#C52C35',
+				700: '#A5222C',
+				800: '#871F27',
+				900: '#711D24'
   			},
   			background: 'hsl(var(--background))',
   			foreground: 'hsl(var(--foreground))',
